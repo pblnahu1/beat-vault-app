@@ -1,10 +1,10 @@
-import React from 'react';
+
 import { useParams, Link } from 'react-router-dom';
 import { ShoppingCart, ArrowLeft } from 'lucide-react';
 import { products } from '../data/products';
 import { useCart } from '../store/useCart';
 
-export const ProductDetail: React.FC = () => {
+export const ProductDetail = () => {
   const { id } = useParams();
   const product = products.find((p) => p.id === Number(id));
   const addItem = useCart((state) => state.addItem);
