@@ -1,0 +1,59 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: fluxshop-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234567890
+      POSTGRES_DB: db_fluxshop
+    ports:
+      - "5444:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - fluxshop-network
+    restart: always
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "db_fluxshop"]
+      interval: 5s
+      retries: 5
+      start_period: 10s
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.server
+    container_name: fluxshop-server
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgres://postgres:1234567890@postgres:5432/db_fluxshop
+      - NODE_ENV=production
+    networks:
+      - fluxshop-network
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.client
+    container_name: fluxshop-client
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    environment:
+      - VITE_BACKEND_URL=http://server:3001
+      - NODE_ENV=production
+    networks:
+      - fluxshop-network
+
+volumes:
+  postgres_data:
+
+networks:
+  fluxshop-network:
