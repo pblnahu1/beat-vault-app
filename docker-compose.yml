@@ -17,6 +17,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - fluxshop-network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "db_fluxshop"]
+      interval: 5s
+      retries: 5
+      start_period: 10s
 
   pgadmin:
     container_name: mypgadmin
@@ -42,23 +47,40 @@ services:
     #   timeout: 10s
     #   retries: 3
 
-  # server:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.server
+    container_name: server_fluxshop
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgres://postgres:pblnahupassword@postgres:5432/db_fluxshop
+      - NODE_ENV=development
+    volumes:
+      - ./server:/usr/src/app
+    networks:
+      - fluxshop-network
 
-  # web:
-  #   build: .
-  #   command: npm run dev
-  #   volumes:
-  #     - .:/usr/app
-  #   ports:
-  #     - "4000:4000"
-  #   depends_on:
-  #     - db
-  #   environment:
-  #     - DB_USER=pblnahu
-  #     - DB_PASSWORD=pblnahupassword
-  #     - DB_HOST=db
-  #     - DB_PORT=5432
-  #     - DB_DATABASE=db_fluxshop
+  web:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.client
+    container_name: client_fluxshop
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server
+    volumes:
+      - ./client:/usr/src/app
+    environment:
+      - BACKEND_URL=http://server:3000
+      - NODE_ENV=production
+    networks:
+      - fluxshop-network
 
 volumes:
   postgres_data:
@@ -67,5 +89,4 @@ volumes:
 
 networks:
   fluxshop-network:
-    name: fluxshop_network
     driver: bridge

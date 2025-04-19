@@ -14,6 +14,7 @@ import MyReviews from './pages/dashboard/MyReviews';
 import DashboardAuth from './pages/auth/DashboardAuth';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 function App() {
@@ -31,14 +32,16 @@ function App() {
               <Route path="/account/login" element={<Login />} />
             </Route>
 
-            <Route path='/dashboard/:username' element={<MainLayout />}>
-              <Route path='/dashboard/:username' element={<DashboardLayout />} />
-              <Route path='profile' element={<Profile />} />
-              <Route path='orders' element={<OrderHistory />} />
-              <Route path='wish-list' element={<Wishlist />} />
-              <Route path='addresses' element={<Addresses />} />
-              <Route path='payments' element={<PaymentMethods />} />
-              <Route path='reviews' element={<MyReviews />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path='/dashboard/:username' element={<MainLayout />}>
+                <Route path='/dashboard/:username' element={<DashboardLayout />} />
+                <Route path='profile' element={<Profile />} />
+                <Route path='orders' element={<OrderHistory />} />
+                <Route path='wish-list' element={<Wishlist />} />
+                <Route path='addresses' element={<Addresses />} />
+                <Route path='payments' element={<PaymentMethods />} />
+                <Route path='reviews' element={<MyReviews />} />
+              </Route>
             </Route>
           </Routes>
         

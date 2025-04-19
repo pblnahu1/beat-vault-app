@@ -6,6 +6,8 @@ import bodyParser from "body-parser"
 
 import {PORT, FRONTEND_URL} from "./config/config.js"
 import { query } from "./config/db.js";
+import router from "./routes/authRoutes.js";
+import { hashPassword } from "./services/hashPassword.js";
 
 const app = express()
 
@@ -15,14 +17,15 @@ app.use(cors({
     credentials: true,
 }))
 app.use(bodyParser.json());
-// app.use(express.urlencoded({extended:false}));
+// app.use(express.urlencoded({extended:true | false}));
+// app.use(express.json())
 
 // routes
 app.get("/", (req, res) => {
     res.json({message: "welcome to my app"});
 })
 
-// app.use(router);
+app.use(router);
 
 app.get("/conn", async (req, res) => {
     try {
@@ -35,6 +38,14 @@ app.get("/conn", async (req, res) => {
     }
 });
 
+hashPassword()
+    .then(() => {
+        console.log("Todas las contraseñas han sido hasheadas.");
+    })
+    .catch((error) => {
+        console.error("Aviso de contraseñas: ", error.message);
+    })
+
 
 // handling errors
 // app.use((err, req, res, next) => {
@@ -45,6 +56,6 @@ app.get("/conn", async (req, res) => {
 // });
 
 
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en puerto ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Servidor corriendo en puerto http://0.0.0.0:${PORT}`);
 })
