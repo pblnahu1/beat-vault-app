@@ -1,7 +1,12 @@
 FROM node:18
+
 WORKDIR /usr/src/app
-COPY . .
+
+COPY package*.json ./
 RUN npm install
-RUN npm run build
-EXPOSE 3001
+
+COPY . .
+
+EXPOSE 3000
+
 CMD ["sh", "-c", "if [ \"$NODE_ENV\" = \"development\" ]; then npx nodemon server.js; else node server.js; fi"]

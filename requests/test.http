@@ -1,0 +1,24 @@
+# crear usuario
+POST http://localhost:3000/account/create-account
+Content-Type: application/json
+{
+    "email": "user1@gmail.com",
+    "password": "123456",
+    "username": "user1",
+}
+
+### 
+
+### login (user registered)
+POST http://localhost:3000/account/login
+Content-Type: application/json
+{
+    "email": "user1@gmail.com",
+    "password": "123456",
+}
+
+###
+
+### dashboard (route protected)
+GET http://localhost:3000/dashboard/1
+Authorization: Bearer <TOKEN>

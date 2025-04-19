@@ -1,59 +1,92 @@
-version: '3.9'
+version: "3.8"
 
 services:
-  postgres:
-    image: postgres:latest
-    container_name: fluxshop-postgres
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234567890
-      POSTGRES_DB: db_fluxshop
+  db:
+    container_name: postgresfluxshop
+    image: postgres
+    restart: always
     ports:
       - "5444:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pblnahupassword
+      POSTGRES_DB: db_fluxshop
+      POSTGRES_HOST_AUTH_METHOD: md5 #forzar metodo de auth md5 más compatible
     volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
       - postgres_data:/var/lib/postgresql/data
     networks:
       - fluxshop-network
-    restart: always
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres", "-d", "db_fluxshop"]
       interval: 5s
       retries: 5
       start_period: 10s
 
+  pgadmin:
+    container_name: mypgadmin
+    image: dpage/pgadmin4
+    #restart: unless-stopped #mejor politica de reinicio
+    ports:
+      - "8080:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pblnahu@pblnahu.com
+      PGADMIN_DEFAULT_PASSWORD: pblnahupassword
+      #PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "True" # seguridad
+      #PGADMIN_CONFIG_LOGIN_BANNER: "Acceso restringido - Entorno de desarrollo" # mensaje personalizar
+    #volumes:
+      #- pgadmin_data:/var/lib/pgadmin # persistencia de config
+      #- ./pgadmin-servers.json:/pgadmin4/servers.json # pre config server
+    #networks:
+      #- fluxshop-network
+    #depends_on:
+      #- db
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:80/login"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+
   server:
     build:
       context: ./server
       dockerfile: Dockerfile.server
-    container_name: fluxshop-server
+    container_name: server_fluxshop
     ports:
-      - "3001:3001"
+      - "3000:3000"
     depends_on:
-      postgres:
+      db:
         condition: service_healthy
     environment:
-      - DATABASE_URL=postgres://postgres:1234567890@postgres:5432/db_fluxshop
-      - NODE_ENV=production
+      - DATABASE_URL=postgres://postgres:pblnahupassword@postgres:5432/db_fluxshop
+      - NODE_ENV=development
+    volumes:
+      - ./server:/usr/src/app
     networks:
       - fluxshop-network
 
-  client:
+  web:
     build:
       context: ./client
       dockerfile: Dockerfile.client
-    container_name: fluxshop-client
+    container_name: client_fluxshop
     ports:
-      - "80:80"
+      - "5173:5173"
     depends_on:
       - server
+    volumes:
+      - ./client:/usr/src/app
     environment:
-      - VITE_BACKEND_URL=http://server:3001
+      - BACKEND_URL=http://server:3000
       - NODE_ENV=production
     networks:
       - fluxshop-network
 
 volumes:
   postgres_data:
+  # pgadmin_data:
+  #   name: pgadmin_fluxshop_data
 
 networks:
   fluxshop-network:
+    driver: bridge
