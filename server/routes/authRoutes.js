@@ -1,6 +1,7 @@
 import express from "express";
 import { loginUser, registerUser } from "../controllers/authController.js";
 import ensureToken from "../middleware/authMiddleware.js";
+import productGetter from "../controllers/prodController.js";
 
 const router = express.Router()
 
@@ -15,5 +16,7 @@ router.get("/dashboard/:username", ensureToken, (req,res) => {
 })
 
 router.post("/account/create-account", registerUser);
+
+router.get("/products", productGetter);
 
 export default router

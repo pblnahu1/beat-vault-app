@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 dotenv.config();
 import cors from "cors";
 import express from "express"
+import path from "path";
+import { fileURLToPath } from "url";
 import bodyParser from "body-parser"
 
 import {PORT, FRONTEND_URL} from "./config/config.js"
@@ -19,6 +21,10 @@ app.use(cors({
 app.use(bodyParser.json());
 // app.use(express.urlencoded({extended:true | false}));
 // app.use(express.json())
+
+// Obtener el nombre del directorio del archivo actual
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+app.use("/static", express.static(path.join(__dirname, "public"))); // http://localhost:3000/static/products_screen/headphones.jpg
 
 // routes
 app.get("/", (req, res) => {
