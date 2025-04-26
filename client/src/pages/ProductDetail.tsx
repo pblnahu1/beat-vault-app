@@ -1,4 +1,9 @@
 
+
+//////////////////////////////////////////
+// IMPORTANTE CONFIGURAR PARA LOCALHOST //
+//////////////////////////////////////////
+
 import { useParams, Link } from 'react-router-dom';
 import { ShoppingCart, ArrowLeft } from 'lucide-react';
 import { products } from '../data/products';
