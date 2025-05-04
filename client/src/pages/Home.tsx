@@ -8,29 +8,9 @@ export const Home: React.FC = () => {
 
   const {products, loading, error} = useProducts();
 
-
-
-
-
-
-
-
-
-
-
-
   useEffect(()=>{
     console.log("products en home:", products);
   },[products]);
-
-
-
-
-
-
-
-
-
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -56,10 +36,10 @@ export const Home: React.FC = () => {
 
       {!loading && products.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((product,index) => {
-            console.log("renderizando producto con ID:", product.id);
-            return <ProductCard key={`${product.id}-${index}`} product={product} />
-          })}
+          {products.map((product,index) => (
+            // console.log("renderizando producto con ID:", product.id_p);
+            <ProductCard key={`${product.id_p}-${index}`} product={product} />
+          ))}
         </div>
       )}
     </div>
