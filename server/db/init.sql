@@ -16,6 +16,13 @@ CREATE TABLE IF NOT EXISTS fluxshop_products(
     category_p character varying(100)
 );
 
+CREATE TABLE IF NOT EXISTS cart_items (
+    id_cart SERIAL PRIMARY KEY,
+    id_u INT REFERENCES users(id_u),
+    id_p INT REFERENCES fluxshop_products(id_p),
+    quantity INT
+)
+
 -- Productos
 INSERT INTO fluxshop_products (name_p, description_p, price_p, image_p, category_p) VALUES
 ('Premium Wireless Headphones', 'High-quality wireless headphones with noise cancellation. Features include: 40-hour battery life, premium audio drivers, comfortable over-ear design, and active noise cancellation technology. Perfect for music enthusiasts and professionals who demand the best audio experience.', 299.99, 'products_screen/headphones.jpg', 'Electronics'),
@@ -28,3 +35,4 @@ INSERT INTO fluxshop_products (name_p, description_p, price_p, image_p, category
 -- ('alice@example.com', 'hashed_pw1', 'alice123'),
 -- ('bob@example.com', 'hashed_pw2', 'bobby'),
 -- ('carla@example.com', 'hashed_pw3', 'carla_dev');
+

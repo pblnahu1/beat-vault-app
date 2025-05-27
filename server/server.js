@@ -7,9 +7,11 @@ import { fileURLToPath } from "url";
 import bodyParser from "body-parser"
 
 import {PORT, FRONTEND_URL} from "./config/config.js"
-import { query } from "./config/db.js";
+// import { query } from "./config/db.js";
 import router from "./routes/authRoutes.js";
-import { hashPassword } from "./services/hashPassword.js";
+// import { hashPassword } from "./services/hashPassword.js";
+import hashPasswordExec from "./utils/hashPasswordExec.js";
+// import handlingErrors from "./utils/handlingErrors.js";
 
 const app = express()
 
@@ -27,30 +29,32 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 app.use("/static", express.static(path.join(__dirname, "public"))); // http://localhost:3000/static/products_screen/headphones.jpg
 
 // routes
-app.get("/", (req, res) => {
-    res.json({message: "welcome to my app"});
-})
+// app.get("/", (req, res) => {
+//     res.json({message: "welcome to my app"});
+// })
 
 app.use(router);
 
-app.get("/conn", async (req, res) => {
-    try {
-        const result = await query("SELECT NOW()");
-        console.log("DB Conectada y Servidor Funcionando: ", result.rows[0]);
-        res.json({message: "DB Conectada y Servidor Funcionando"})
-    } catch (error) {
-        console.error("Database connection error: ", error);
-        res.status(500).json({error: "Database connection error"})
-    }
-});
+// app.get("/conn", async (req, res) => {
+//     try {
+//         const result = await query("SELECT NOW()");
+//         console.log("DB Conectada y Servidor Funcionando: ", result.rows[0]);
+//         res.json({message: "DB Conectada y Servidor Funcionando"})
+//     } catch (error) {
+//         console.error("Database connection error: ", error);
+//         res.status(500).json({error: "Database connection error"})
+//     }
+// });
 
-hashPassword()
-    .then(() => {
-        console.log("Todas las contraseñas han sido hasheadas.");
-    })
-    .catch((error) => {
-        console.error("Aviso de contraseñas: ", error.message);
-    })
+// hashPassword()
+//     .then(() => {
+//         console.log("Todas las contraseñas han sido hasheadas.");
+//     })
+//     .catch((error) => {
+//         console.error("Aviso de contraseñas: ", error.message);
+//     })
+
+hashPasswordExec();
 
 
 // handling errors
@@ -60,6 +64,8 @@ hashPassword()
 //         message: err.message,
 //     });
 // });
+
+// handlingErrors();
 
 
 app.listen(PORT, "0.0.0.0", () => {

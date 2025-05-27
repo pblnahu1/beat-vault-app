@@ -4,6 +4,8 @@
 // con las rutas establecidas 
 
 import express from "express";
+import debugAPI from "../utils/debugAPI.js";
+import connDB from "../utils/conn.js";
 import { loginUser, registerUser } from "../controllers/authController.js";
 import ensureToken from "../middleware/authMiddleware.js";
 import productGetter, {
@@ -13,14 +15,53 @@ import productGetter, {
     updateProduct,
     deleteProduct
 } from "../controllers/prodController.js";
+import { 
+    getCartItems, 
+    addOrUpdateCartItem, 
+    removeCartItem, 
+    clearCartItems,
+    getCartItemCount
+} from '../controllers/cartController.js';
 
 const router = express.Router()
 
-///////////////////////////////////
-// USERS
-router.post("/account/login", loginUser);
 
-// ruta protegida
+// DEBUG API
+/**
+ * @route GET /
+ * @desc Verifica el estado de la API
+ * @access Public
+ */
+router.get("/", debugAPI);
+
+
+// CONEXIÓN BD
+/**
+ * @route GET /status
+ * @desc Verifica el estado de conexión de la Base de Datos
+ * @access Public
+ */
+router.get("/status", connDB);
+
+
+// USERS
+/**
+ * @route POST /account/login
+ * @desc Inicia sesión de usuario
+ * @route POST /account/create-account
+ * @desc Crea una nueva cuenta de usuario
+ * @access Public
+ */
+router.post("/account/login", loginUser);
+router.post("/account/create-account", registerUser);
+
+
+// PROTECTED ROUTE
+/**
+ * @route GET /dashboard/:username
+ * @desc Dashboard de usuario
+ * @access Private
+ */
 router.get("/dashboard/:username", ensureToken, (req,res) => {
     res.json({
         message: "Bienvenido al panel de usuario",
@@ -28,10 +69,17 @@ router.get("/dashboard/:username", ensureToken, (req,res) => {
     })
 })
 
-router.post("/account/create-account", registerUser);
 
-///////////////////////////////////
 // PRODUCTS
+/**
+ * @route GET /products
+ * @desc Obtiene todos los productos
+ * @route GET /products/:id
+ * @desc Obtiene un producto por su ID
+ * @route GET /products/category/:category
+ * @desc Obtiene todos los productos de una categoría
+ * @access Public
+ */
 // rutas para user común (este podrá ver todos los productos pero no podrá modificarlos, sólo podrá modificar su cuenta de usuario y su carrito todo dentro del dashboard de usuario)
 router.get("/products", productGetter);
 router.get('/products/:id', getProductsById);
@@ -40,5 +88,35 @@ router.get('/products/category/:category', getProductsByCategory);
 // router.post('/product', createProduct);
 // router.put('/product/:id', updateProduct);
 // router.delete('/product/:id', deleteProduct);
+
+
+// CART ITEMS
+/**
+ * @route GET /cart
+ * @desc Obtiene el carrito de compras del usuario
+ * @route POST /cart
+ * @desc Agrega un producto al carrito de compras del usuario
+ * @route DELETE /cart/:productId
+ * @desc Elimina un producto del carrito de compras del usuario
+ */
+// Todas las rutas requieren autenticación
+router.get('/cart', ensureToken, getCartItems);
+router.post('/cart', ensureToken, addOrUpdateCartItem);
+router.put('/cart/:productId', ensureToken, addOrUpdateCartItem);
+router.delete('/cart/:productId', ensureToken, removeCartItem);
+router.delete('/cart/clear', ensureToken, clearCartItems);
+router.get('/cart/count', ensureToken, getCartItemCount);
+
+/*
+
+GET    /cart          - Obtener carrito
+POST   /cart          - Agregar item
+PUT    /cart/:id      - Actualizar item
+DELETE /cart/:id      - Eliminar item
+DELETE /cart/clear    - Limpiar carrito
+GET    /cart/count    - Contar items
+
+*/
+
 
 export default router

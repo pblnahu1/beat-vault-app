@@ -1,3 +1,5 @@
+import { User } from "../types";
+
 // interfaces para los datos
 interface LoginResponse {
     token: string;
@@ -53,7 +55,12 @@ export const login = async (email: string, password: string): Promise<LoginRespo
         }
         
         const data = await response.json();
-        return data as LoginResponse; 
+        const userData = data as LoginResponse;
+        localStorage.setItem('authToken', userData.token);
+        const authService = new AuthService();
+        authService.setCurrentUser({ id_u: userData.id, name: userData.username, email: '' }, userData.token);
+
+        return userData; // retorno el token cuando lo necesite
     } catch (error) {
         if(error instanceof Error){
             throw new Error(error.message || "Error desconocido");
@@ -104,3 +111,45 @@ export const register = async (
         throw new Error("Error desconocido");
     }
 };
+
+class AuthService {
+    private currentUser: User | null = null;
+
+    getToken(): string | null {
+        return localStorage.getItem('authToken');
+    }
+
+    getCurrentUser(): User | null {
+        if (this.currentUser) {
+            return this.currentUser;
+        }
+        
+        const userStr = localStorage.getItem('currentUser');
+        if (userStr) {
+            this.currentUser = JSON.parse(userStr);
+            return this.currentUser;
+        }
+        
+        return null;
+    }
+
+    setCurrentUser(user: User, token: string): void {
+        this.currentUser = user;
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        localStorage.setItem('authToken', token);
+    }
+
+    logout(): void {
+        this.currentUser = null;
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('authToken');
+    }
+
+    isAuthenticated(): boolean {
+        const token = this.getToken();
+        const user = this.getCurrentUser();
+        return !!(token && user);
+    }
+}
+
+export default new AuthService();

@@ -15,9 +15,14 @@ import DashboardAuth from './pages/auth/DashboardAuth';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import ProtectedRoute from './components/ProtectedRoute';
+import { useCartInit } from './hooks/useCartInit';
 
 
 function App() {
+
+  // inicializo el carrito al cargar la app
+  useCartInit();
+
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-gray-50">
