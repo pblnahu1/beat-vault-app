@@ -103,15 +103,15 @@ router.get('/products/category/:category', getProductsByCategory);
 router.get('/cart', ensureToken, getCartItems);
 router.post('/cart', ensureToken, addOrUpdateCartItem);
 router.put('/cart/:productId', ensureToken, addOrUpdateCartItem);
-router.delete('/cart/:productId', ensureToken, removeCartItem);
 router.delete('/cart/clear', ensureToken, clearCartItems);
+router.delete('/cart/:productId', ensureToken, removeCartItem);
 router.get('/cart/count', ensureToken, getCartItemCount);
 
 /*
 
 GET    /cart          - Obtener carrito
 POST   /cart          - Agregar item
-PUT    /cart/:id      - Actualizar item
+PUT    /cart/:id      - Actualizar producto del carrito (por stock)
 DELETE /cart/:id      - Eliminar item
 DELETE /cart/clear    - Limpiar carrito
 GET    /cart/count    - Contar items

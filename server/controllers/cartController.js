@@ -22,8 +22,19 @@ export const getCartItems = async (req, res) => {
 
 export const addOrUpdateCartItem = async (req, res) => {
     try {
-        const userId = req.user.id_u;
+        console.log('req.user: ', req.user);
+        console.log('props user: ', Object.keys(req.user || {}));
+        // const userId = req.user?.id_u; //optional chaining
+        const userId = req.user.id_u || req.user.id || req.user.userId;
+        console.log('USER ID: ', userId);
         const { productId, quantity } = req.body;
+
+        if(!userId) {
+            return res.status(401).json({
+                success:false,
+                message: 'User not authenticated or user ID not found'
+            })
+        }
 
         if (!productId || !quantity) {
             return res.status(400).json({

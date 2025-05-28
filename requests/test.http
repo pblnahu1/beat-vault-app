@@ -3,9 +3,9 @@ POST http://localhost:3000/account/create-account
 Content-Type: application/json
 
 {
-    "email": "user5@gmail.com",
+    "email": "usertest7@gmail.com",
     "password": "123456",
-    "username": "user5"
+    "username": "usertest7"
 }
 
 ### 
@@ -15,14 +15,14 @@ POST http://localhost:3000/account/login
 Content-Type: application/json
 
 {
-    "email": "user5@gmail.com",
+    "email": "usertest7@gmail.com",
     "password": "123456"
 }
 
 ###
 
 ### dashboard (route protected)
-GET http://localhost:3000/dashboard/user5
+GET http://localhost:3000/dashboard/usertest7
 Authorization: Bearer <token>
 
 ###
@@ -39,9 +39,32 @@ Content-Type: application/json
 Authorization: Bearer <token>
 
 {
-    "id_p": 1, 
-    "quantity": 2
+    "productId": 1, 
+    "quantity": 1
 }
 
-### para eliminar productos
-DELETE /cart/item/:id
+
+### para actualizar la cantidad de productos en el carrito
+PUT http://localhost:3000/cart/11
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+    "productId": 1,
+    "quantity": 5
+}
+
+### para eliminar producto del carrito
+DELETE http://localhost:3000/cart/1
+Content-Type: application/json
+Authorization: Bearer <token>
+
+### para limpiar el carrito (borrar todo)
+DELETE http://localhost:3000/cart/clear
+Content-Type: application/json
+Authorization: Bearer <token>
+
+### para contar cuantos productos tengo
+GET http://localhost:3000/cart/count
+Content-Type: application/json
+Authorization: Bearer <token>

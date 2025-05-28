@@ -38,16 +38,25 @@ const loginUser = async (req, res) => {
             });
         }
 
+        const payload = {
+            id_u: user.id_u,
+            email: user.email
+        }
+
         // genero el token y envio respuesta
-        const token = generateToken({
-            id: user.id
-        });
+        const token = generateToken(payload);
+
         console.log("Login exitoso, token generado");
 
         res.status(200).json({
+            success: true,
             token,
-            username: user.username,
-            id: user.id_u
+            // username: user.username,
+            // id: user.id_u
+            user: {
+                id_u: user.id_u,
+                email: user.email
+            }
         })
 
 
