@@ -5,13 +5,13 @@ import express from "express"
 import path from "path";
 import { fileURLToPath } from "url";
 import bodyParser from "body-parser"
+import helmet from "helmet";
+import morgan from "morgan";
 
 import {PORT, FRONTEND_URL} from "./config/config.js"
-// import { query } from "./config/db.js";
 import router from "./routes/authRoutes.js";
-// import { hashPassword } from "./services/hashPassword.js";
 import hashPasswordExec from "./utils/hashPasswordExec.js";
-// import handlingErrors from "./utils/handlingErrors.js";
+import errorHandler, { notFoundHandler } from "./middleware/errorHandler.js";
 
 const app = express()
 
@@ -21,53 +21,24 @@ app.use(cors({
     credentials: true,
 }))
 app.use(bodyParser.json());
-// app.use(express.urlencoded({extended:true | false}));
-// app.use(express.json())
+app.use(express.json({limit: '10mb'}));
+app.use(express.urlencoded({extended:true}));
+app.use(helmet());
+app.use(morgan('combined'));
 
 // Obtener el nombre del directorio del archivo actual
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 app.use("/static", express.static(path.join(__dirname, "public"))); // http://localhost:3000/static/products_screen/headphones.jpg
 
-// routes
-// app.get("/", (req, res) => {
-//     res.json({message: "welcome to my app"});
-// })
-
 app.use(router);
-
-// app.get("/conn", async (req, res) => {
-//     try {
-//         const result = await query("SELECT NOW()");
-//         console.log("DB Conectada y Servidor Funcionando: ", result.rows[0]);
-//         res.json({message: "DB Conectada y Servidor Funcionando"})
-//     } catch (error) {
-//         console.error("Database connection error: ", error);
-//         res.status(500).json({error: "Database connection error"})
-//     }
-// });
-
-// hashPassword()
-//     .then(() => {
-//         console.log("Todas las contraseñas han sido hasheadas.");
-//     })
-//     .catch((error) => {
-//         console.error("Aviso de contraseñas: ", error.message);
-//     })
 
 hashPasswordExec();
 
-
-// handling errors
-// app.use((err, req, res, next) => {
-//     return res.status(500).json({
-//         status: "error",
-//         message: err.message,
-//     });
-// });
-
-// handlingErrors();
-
+// manejo de errores
+app.use(notFoundHandler);// error 404 para rutas no encontradas
+app.use(errorHandler); //manejo general de errorres
 
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`Servidor corriendo en puerto http://0.0.0.0:${PORT}`);
+    console.log(`Ambiente: ${process.env.NODE_ENV}` || 'development');
 })

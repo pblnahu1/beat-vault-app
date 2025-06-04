@@ -22,6 +22,15 @@ import {
     clearCartItems,
     getCartItemCount
 } from '../controllers/cartController.js';
+import {
+    errorHandler,
+    notFoundHandler,
+    setupErrorHandling,
+    AppError,
+    ValidationError,
+    NotFoundError,
+    catchAsync
+} from "../middleware/errorHandler.js";
 
 const router = express.Router()
 
@@ -117,6 +126,24 @@ DELETE /cart/clear    - Limpiar carrito
 GET    /cart/count    - Contar items
 
 */
+
+
+// RUTA DE PRUEBA PARA ERRORES
+router.get('/api/test-error', (req, res, next) => {
+    // ejemplo para distintos tipos de errores
+    const {type} = req.query;
+
+    switch(type) {
+        case 'validation': 
+            throw new ValidationError('Email format is invalid', 'email');
+        case 'notfound':
+            throw new NotFoundError('Test resource');
+        case 'server':
+            throw new AppError('Something went wrong on server', 500);
+        default:
+            throw new Error('Generic error for testing');
+    }
+})
 
 
 export default router
