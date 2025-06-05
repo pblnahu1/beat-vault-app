@@ -1,10 +1,11 @@
 # crear usuario
 POST http://localhost:3000/account/create-account
 Content-Type: application/json
+
 {
-    "email": "user1@gmail.com",
+    "email": "usertest7@gmail.com",
     "password": "123456",
-    "username": "user1",
+    "username": "usertest7"
 }
 
 ### 
@@ -12,13 +13,58 @@ Content-Type: application/json
 ### login (user registered)
 POST http://localhost:3000/account/login
 Content-Type: application/json
+
 {
-    "email": "user1@gmail.com",
-    "password": "123456",
+    "email": "usertest7@gmail.com",
+    "password": "123456"
 }
 
 ###
 
 ### dashboard (route protected)
-GET http://localhost:3000/dashboard/1
-Authorization: Bearer <TOKEN>
+GET http://localhost:3000/dashboard/usertest7
+Authorization: Bearer <token>
+
+###
+
+### carts
+
+### para recuperar el carrito
+GET http://localhost:3000/cart
+Authorization: Bearer <token>
+
+### para agregar productos al carrito
+POST http://localhost:3000/cart
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+    "productId": 1, 
+    "quantity": 1
+}
+
+
+### para actualizar la cantidad de productos en el carrito
+PUT http://localhost:3000/cart/11
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+    "productId": 1,
+    "quantity": 5
+}
+
+### para eliminar producto del carrito
+DELETE http://localhost:3000/cart/1
+Content-Type: application/json
+Authorization: Bearer <token>
+
+### para limpiar el carrito (borrar todo)
+DELETE http://localhost:3000/cart/clear
+Content-Type: application/json
+Authorization: Bearer <token>
+
+### para contar cuantos productos tengo
+GET http://localhost:3000/cart/count
+Content-Type: application/json
+Authorization: Bearer <token>

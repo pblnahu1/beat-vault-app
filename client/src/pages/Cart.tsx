@@ -26,7 +26,7 @@ export const Cart: React.FC = () => {
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="space-y-4">
           {items.map((item) => (
-            <CartItem key={item.id} item={item} />
+            <CartItem key={item.id_p} item={item} />
           ))}
         </div>
         <div className="mt-8 border-t pt-4">

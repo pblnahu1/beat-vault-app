@@ -26,6 +26,7 @@ services:
   pgadmin:
     container_name: mypgadmin
     image: dpage/pgadmin4
+    restart: always
     #restart: unless-stopped #mejor politica de reinicio
     ports:
       - "8080:80"
@@ -37,10 +38,10 @@ services:
     #volumes:
       #- pgadmin_data:/var/lib/pgadmin # persistencia de config
       #- ./pgadmin-servers.json:/pgadmin4/servers.json # pre config server
-    #networks:
-      #- fluxshop-network
-    #depends_on:
-      #- db
+    networks:
+      - fluxshop-network
+    depends_on:
+      - db
     # healthcheck:
     #   test: ["CMD", "curl", "-f", "http://localhost:80/login"]
     #   interval: 30s
