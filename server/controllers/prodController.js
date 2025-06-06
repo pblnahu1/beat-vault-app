@@ -1,6 +1,6 @@
 import { query } from "../config/db.js";
 
-export const productGetter = async (req, res) => {
+export const productGetter = async (_req, res) => {
     try {
         // const {id_p, name_p, description_p, price_p, image_p, category_p} = req.body;
 
@@ -29,7 +29,7 @@ export const productGetter = async (req, res) => {
  * Obtener todos los productos
  */
 
-export const getAllProducts = async(req,res)=>{
+export const getAllProducts = async(_req,res)=>{
     try {
         const QUERY = await query("SELECT * FROM fluxshop_products", []);
 

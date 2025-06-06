@@ -4,8 +4,8 @@
 // con las rutas establecidas 
 
 import express from "express";
-import debugAPI from "../utils/debugAPI.js";
-import connDB from "../utils/conn.js";
+import debugAPI from "../controllers/debugController.js";
+import connDB from "../controllers/healthController.js";
 import { loginUser, registerUser } from "../controllers/authController.js";
 import ensureToken from "../middleware/authMiddleware.js";
 import productGetter, {
@@ -32,7 +32,7 @@ import {
     catchAsync
 } from "../middleware/errorHandler.js";
 
-const router = express.Router()
+const r = express.Router()
 
 
 // DEBUG API
@@ -41,7 +41,7 @@ const router = express.Router()
  * @desc Verifica el estado de la API
  * @access Public
  */
-router.get("/", debugAPI);
+r.get("/api", debugAPI);
 
 
 // CONEXIÓN BD
@@ -50,7 +50,7 @@ router.get("/", debugAPI);
  * @desc Verifica el estado de conexión de la Base de Datos
  * @access Public
  */
-router.get("/status", connDB);
+r.get("/api/status", connDB);
 
 
 // USERS
@@ -61,8 +61,8 @@ router.get("/status", connDB);
  * @desc Crea una nueva cuenta de usuario
  * @access Public
  */
-router.post("/account/login", loginUser);
-router.post("/account/create-account", registerUser);
+r.post("/account/login", loginUser);
+r.post("/account/create-account", registerUser);
 
 
 // PROTECTED ROUTE
@@ -71,7 +71,7 @@ router.post("/account/create-account", registerUser);
  * @desc Dashboard de usuario
  * @access Private
  */
-router.get("/dashboard/:username", ensureToken, (req,res) => {
+r.get("/dashboard/:username", ensureToken, (req,res) => {
     res.json({
         message: "Bienvenido al panel de usuario",
         user: req.user
@@ -90,13 +90,13 @@ router.get("/dashboard/:username", ensureToken, (req,res) => {
  * @access Public
  */
 // rutas para user común (este podrá ver todos los productos pero no podrá modificarlos, sólo podrá modificar su cuenta de usuario y su carrito todo dentro del dashboard de usuario)
-router.get("/products", productGetter);
-router.get('/products/:id', getProductsById);
-router.get('/products/category/:category', getProductsByCategory);
+r.get("/products", productGetter);
+r.get('/products/:id', getProductsById);
+r.get('/products/category/:category', getProductsByCategory);
 // rutas para user admin (puede hacer todo lo de user común + administrar productos que es agregar sus propios productos y subirlos para "la venta" y que el user común pueda comprarlos)
-// router.post('/product', createProduct);
-// router.put('/product/:id', updateProduct);
-// router.delete('/product/:id', deleteProduct);
+// r.post('/product', createProduct);
+// r.put('/product/:id', updateProduct);
+// r.delete('/product/:id', deleteProduct);
 
 
 // CART ITEMS
@@ -109,12 +109,12 @@ router.get('/products/category/:category', getProductsByCategory);
  * @desc Elimina un producto del carrito de compras del usuario
  */
 // Todas las rutas requieren autenticación
-router.get('/cart', ensureToken, getCartItems);
-router.post('/cart', ensureToken, addOrUpdateCartItem);
-router.put('/cart/:productId', ensureToken, addOrUpdateCartItem);
-router.delete('/cart/clear', ensureToken, clearCartItems);
-router.delete('/cart/:productId', ensureToken, removeCartItem);
-router.get('/cart/count', ensureToken, getCartItemCount);
+r.get('/cart', ensureToken, getCartItems);
+r.post('/cart', ensureToken, addOrUpdateCartItem);
+r.put('/cart/:productId', ensureToken, addOrUpdateCartItem);
+r.delete('/cart/clear', ensureToken, clearCartItems);
+r.delete('/cart/:productId', ensureToken, removeCartItem);
+r.get('/cart/count', ensureToken, getCartItemCount);
 
 /*
 
@@ -129,7 +129,7 @@ GET    /cart/count    - Contar items
 
 
 // RUTA DE PRUEBA PARA ERRORES
-router.get('/api/test-error', (req, res, next) => {
+r.get('/api/test-error', (req, _res, _next) => {
     // ejemplo para distintos tipos de errores
     const {type} = req.query;
 
@@ -146,4 +146,4 @@ router.get('/api/test-error', (req, res, next) => {
 })
 
 
-export default router
+export default r
