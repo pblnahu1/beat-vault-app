@@ -3,9 +3,9 @@ POST http://localhost:3000/account/create-account
 Content-Type: application/json
 
 {
-    "email": "usertest7@gmail.com",
+    "email": "usertest13@gmail.com",
     "password": "123456",
-    "username": "usertest7"
+    "username": "usertest13"
 }
 
 ### 
@@ -15,14 +15,14 @@ POST http://localhost:3000/account/login
 Content-Type: application/json
 
 {
-    "email": "usertest7@gmail.com",
+    "email": "usertest13@gmail.com",
     "password": "123456"
 }
 
 ###
 
 ### dashboard (route protected)
-GET http://localhost:3000/dashboard/usertest7
+GET http://localhost:3000/dashboard/usertest13
 Authorization: Bearer <token>
 
 ###

@@ -118,7 +118,7 @@ const ErrorUtils = {
 // 3. MIDDLEWARE DE MANEJO DE ERRORES
 // ============================================
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res, _next) => {
   // Crear copia del error para evitar mutación
   let error = { ...err };
   error.message = err.message;
@@ -184,7 +184,7 @@ const errorHandler = (err, req, res, next) => {
 // 4. MIDDLEWARE PARA RUTAS NO ENCONTRADAS
 // ============================================
 
-const notFoundHandler = (req, res, next) => {
+const notFoundHandler = (req, _res, next) => {
   const error = new NotFoundError(`Route ${req.originalUrl}`);
   next(error);
 };
@@ -204,7 +204,7 @@ const catchAsync = (fn) => {
 // ============================================
 
 const validateRequest = (schema) => {
-  return (req, res, next) => {
+  return (req, _res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
       const message = error.details.map(detail => detail.message).join(', ');
@@ -218,7 +218,7 @@ const validateRequest = (schema) => {
 // 7. MIDDLEWARE DE RATE LIMITING ERRORS
 // ============================================
 
-const rateLimitErrorHandler = (req, res, next) => {
+const rateLimitErrorHandler = (_req, _res, next) => {
   const error = new AppError('Too many requests. Please try again later.', 429, 'RATE_LIMIT_EXCEEDED');
   next(error);
 };
@@ -230,7 +230,7 @@ const rateLimitErrorHandler = (req, res, next) => {
 // Ejemplo de controlador usando el sistema de errores
 const exampleController = {
   // GET /users/:id
-  getUserById: catchAsync(async (req, res, next) => {
+  getUserById: catchAsync(async (req, res, _next) => {
     const { id } = req.params;
     
     // Validación básica
@@ -252,7 +252,7 @@ const exampleController = {
   }),
 
   // POST /users
-  createUser: catchAsync(async (req, res, next) => {
+  createUser: catchAsync(async (req, res, _next) => {
     const { email, name, password } = req.body;
 
     // Validaciones
@@ -277,7 +277,7 @@ const exampleController = {
   }),
 
   // Ejemplo con autorización
-  deleteUser: catchAsync(async (req, res, next) => {
+  deleteUser: catchAsync(async (req, res, _next) => {
     const { id } = req.params;
     const currentUser = req.user;
 
@@ -312,7 +312,7 @@ const setupErrorHandling = (app) => {
   app.use(errorHandler);
   
   // Manejo de promesas rechazadas no capturadas
-  process.on('unhandledRejection', (err, promise) => {
+  process.on('unhandledRejection', (err, _promise) => {
     console.error('🚨 UNHANDLED PROMISE REJECTION:', err.message);
     console.error('Stack:', err.stack);
     
@@ -358,7 +358,7 @@ async function createUser(userData) {
   return { id: Date.now(), ...userData };
 }
 
-async function deleteUserById(id) {
+async function deleteUserById(_id) {
   // Simulación - reemplazar con tu lógica real
   return true;
 }
