@@ -8,7 +8,8 @@ import debugAPI from "../controllers/debugController.js";
 import connDB from "../controllers/healthController.js";
 import { loginUser, registerUser } from "../controllers/authController.js";
 import ensureToken from "../middleware/authMiddleware.js";
-import productGetter, {
+import {
+    getAllProducts,
     getProductsById,
     getProductsByCategory,
     createProduct,
@@ -90,7 +91,7 @@ r.get("/dashboard/:username", ensureToken, (req,res) => {
  * @access Public
  */
 // rutas para user común (este podrá ver todos los productos pero no podrá modificarlos, sólo podrá modificar su cuenta de usuario y su carrito todo dentro del dashboard de usuario)
-r.get("/products", productGetter);
+r.get("/products", getAllProducts);
 r.get('/products/:id', getProductsById);
 r.get('/products/category/:category', getProductsByCategory);
 // rutas para user admin (puede hacer todo lo de user común + administrar productos que es agregar sus propios productos y subirlos para "la venta" y que el user común pueda comprarlos)

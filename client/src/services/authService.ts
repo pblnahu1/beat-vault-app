@@ -22,10 +22,9 @@ interface RegisterResponse {
 interface ErrorResponse {
     message: string;
 }
+ 
+const BASE_URL = import.meta.env.BACKEND_URL || 'http://localhost:3000'; 
 
-// URL base para las peticiones
-// const BASE_URL = `${import.meta.env.BACKEND_URL}`; 
-const BASE_URL = "http://localhost:3000"; 
 if(!BASE_URL) {
     throw new Error("BACKEND_URL no está definido en el .env");
 }

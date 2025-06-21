@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+// niveles de profundidad
+
 export interface Product {
-  id_p: number;
-  name_p: string;
-  description_p: string;
-  price_p: number;
-  image_p: string;
-  category_p: string;
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  category: string;
 }
 
 export interface User {

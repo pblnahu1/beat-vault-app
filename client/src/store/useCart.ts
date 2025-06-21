@@ -12,7 +12,7 @@ interface CartStore {
   total: number;
   addItem: (product: Product) => Promise<void>;
   removeItem: (productId: number) => Promise<void>;
-  updateQuantity: (productId: number, quantity: number) => Promise<void>;
+  updateQuantity: (cartId: number, productCartId: number, quantity: number) => Promise<void>;
   clearCart: () => Promise<void>;
   syncWithBackend: () => Promise<void>;
   loadCart: () => Promise<void>;
@@ -47,7 +47,7 @@ export const useCart = create<CartStore>()(
               return currentUser ? currentUser.id_u : null;
             }
             const userId = getCurrentUserId();
-            const response = await cartService.addToCart(product.id_p, 1, userId || 0);
+            const response = await cartService.addToCart(product.id, 1, userId || 0);
             
             if (!response.success) {
               throw new Error(response.message || 'Failed to add item to cart');
@@ -56,12 +56,12 @@ export const useCart = create<CartStore>()(
 
           // actualiza estado local
           const items = get().items;
-          const existingItem = items.find((item) => item.id_p === product.id_p);
+          const existingItem = items.find((item) => item.id === product.id);
 
           let newItems;
           if (existingItem) {
             newItems = items.map((item) =>
-              item.id_p === product.id_p
+              item.id === product.id
                 ? { ...item, quantity: item.quantity + 1 }
                 : item
             );
@@ -84,12 +84,12 @@ export const useCart = create<CartStore>()(
           
           // si falla el backend, agregar solo localmente
           const items = get().items;
-          const existingItem = items.find((item) => item.id_p === product.id_p);
+          const existingItem = items.find((item) => item.id === product.id);
 
           let newItems;
           if (existingItem) {
             newItems = items.map((item) =>
-              item.id_p === product.id_p
+              item.id === product.id
                 ? { ...item, quantity: item.quantity + 1 }
                 : item
             );
@@ -104,7 +104,7 @@ export const useCart = create<CartStore>()(
         }
       },
 
-      removeItem: async (productId) => {
+      removeItem: async (productId: number) => {
         set({ isLoading: true, error: null });
         
         try {
@@ -119,7 +119,7 @@ export const useCart = create<CartStore>()(
           // }
 
           const currentItems = get().items;
-          const newItems = currentItems.filter((item) => item.id_p !== productId);
+          const newItems = currentItems.filter((item) => item.id !== productId);
           
           set({
             items: newItems,
@@ -136,7 +136,7 @@ export const useCart = create<CartStore>()(
           
           // elimina localmente si falla el backend
           const currentItems = get().items;
-          const newItems = currentItems.filter((item) => item.id_p !== productId);
+          const newItems = currentItems.filter((item) => item.id !== productId);
           
           set({
             items: newItems,
@@ -145,7 +145,7 @@ export const useCart = create<CartStore>()(
         }
       },
 
-      updateQuantity: async (productId, quantity) => {
+      updateQuantity: async (cartId: number, productId: number, quantity: number) => {
         set({ isLoading: true, error: null });
         
         try {
@@ -153,13 +153,15 @@ export const useCart = create<CartStore>()(
           // set({ isOnline });
 
           // if (isOnline) {
+
+
             if (quantity === 0) {
               const response = await cartService.removeFromCart(productId);
               if (!response.success) {
                 throw new Error(response.message || 'Failed to remove item');
               }
             } else {
-              const response = await cartService.updateCartItem(productId, quantity);
+              const response = await cartService.updateCartItem(cartId, productId, quantity);
               if (!response.success) {
                 throw new Error(response.message || 'Failed to update quantity');
               }
@@ -170,10 +172,10 @@ export const useCart = create<CartStore>()(
           let newItems;
           
           if (quantity === 0) {
-            newItems = currentItems.filter((item) => item.id_p !== productId);
+            newItems = currentItems.filter((item) => item.id !== productId);
           } else {
             newItems = currentItems.map((item) =>
-              item.id_p === productId ? { ...item, quantity } : item
+              item.id === productId ? { ...item, quantity } : item
             );
           }
 
@@ -195,10 +197,10 @@ export const useCart = create<CartStore>()(
           let newItems;
           
           if (quantity === 0) {
-            newItems = currentItems.filter((item) => item.id_p !== productId);
+            newItems = currentItems.filter((item) => item.id !== productId);
           } else {
             newItems = currentItems.map((item) =>
-              item.id_p === productId ? { ...item, quantity } : item
+              item.id === productId ? { ...item, quantity } : item
             );
           }
 
@@ -290,7 +292,7 @@ export const useCart = create<CartStore>()(
           
           // sincronizo cada item individualmente
           for (const item of currentItems) {
-            const response = await cartService.addToCart(item.id_p, item.quantity, userId || 0);
+            const response = await cartService.addToCart(item.id, item.quantity, userId || 0);
             
             if (!response.success) {
               throw new Error(response.message || 'Failed to sync item');
@@ -320,5 +322,5 @@ export const useCart = create<CartStore>()(
 );
 
 const calculateTotal = (items: CartItem[]): number => {
-  return items.reduce((total, item) => total + item.price_p * item.quantity, 0);
+  return items.reduce((total, item) => total + item.price * item.quantity, 0);
 };
