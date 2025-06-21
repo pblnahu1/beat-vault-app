@@ -1,29 +1,29 @@
 import { query } from "../config/db.js";
 
-export const productGetter = async (_req, res) => {
-    try {
-        // const {id_p, name_p, description_p, price_p, image_p, category_p} = req.body;
+// export const productGetter = async (_req, res) => {
+//     try {
+//         // const {id_p, name_p, description_p, price_p, image_p, category_p} = req.body;
 
-        const QUERY = await query("SELECT * FROM fluxshop_products", []);
-        // await query('SELECT * FROM fluxshop_products WHERE category_p = $1', ['Electronics']);
+//         const QUERY = await query("SELECT * FROM fluxshop_products", []);
+//         // await query('SELECT * FROM fluxshop_products WHERE category_p = $1', ['Electronics']);
 
-        const prod = QUERY.rows.map(p => ({
-            ...p,
-            image_p: `http://localhost:3000/static/${p.image_p}`
-        }))
+//         const prod = QUERY.rows.map(p => ({
+//             ...p,
+//             image_p: `http://localhost:3000/static/${p.image_p}`
+//         }))
 
-        res.json(prod);
-    } catch (error) {
-        if(error instanceof Error) {
-            throw new Error("Error al consultar datos a la tabla fluxshop_products");
-        }
-        res.status(500).json({
-            success: false,
-            error: "error fetching products"
-        })
+//         res.json(prod);
+//     } catch (error) {
+//         if(error instanceof Error) {
+//             throw new Error("Error al consultar datos a la tabla fluxshop_products");
+//         }
+//         res.status(500).json({
+//             success: false,
+//             error: "error fetching products"
+//         })
 
-    }
-}
+//     }
+// }
 
 /**
  * Obtener todos los productos
@@ -284,4 +284,4 @@ export const deleteProduct = async (req, res) => {
 
 // exporto el metodo original para compatibbilidad con código existente
 // const productGetter = getAllProducts;
-export default productGetter;
+// export default productGetter;

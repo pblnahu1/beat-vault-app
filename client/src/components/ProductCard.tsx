@@ -15,7 +15,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const [justAdded, setJustAdded] = useState(false);
 
   // verifico si el producto ya está en el carrito
-  const cartItem = items.find(item => item.id_p === product.id_p);
+  const cartItem = items.find(item => item.id === product.id);
   const quantityInCart = cartItem?.quantity || 0;
 
   const handleAddToCart = async () => {
@@ -70,14 +70,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <img
-        src={product.image_p}
-        alt={product.name_p}
-        className="w-full h-48 object-cover"
-      />
+      {product.image ? (
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-full h-48 object-cover"
+        />
+      ):(
+        <p>No hay imagen (image_p está vacío)</p>
+      )}
       <div className="p-4">
-        <h3 className="text-lg font-semibold">{product.name_p}</h3>
-        <p className="text-gray-600 mt-1">{product.description_p}</p>
+        <h3 className="text-lg font-semibold">{product.name}</h3>
+        <p className="text-gray-600 mt-1">{product.description}</p>
         
         {/* muestro la cantidad en el carrito si y solo si existe */}
         {quantityInCart > 0 && (
@@ -87,10 +91,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         )}
         
         <div className="mt-4 flex items-center justify-between">
-          <span className="text-xl font-bold">${product.price_p}</span>
+          <span className="text-xl font-bold">${product.price}</span>
           <div className="flex gap-2">
             <Link
-              to={`/product-${product.id_p}`}
+              to={`/product-${product.id}`}
               className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-200 transition-colors"
             >
               <Eye size={20} />

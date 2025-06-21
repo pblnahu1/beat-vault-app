@@ -1,11 +1,16 @@
+# ver todos los prod
+GET http://localhost:3000/products
+
+###
+
 # crear usuario
 POST http://localhost:3000/account/create-account
 Content-Type: application/json
 
 {
-    "email": "usertest13@gmail.com",
+    "email": "usertest14@gmail.com",
     "password": "123456",
-    "username": "usertest13"
+    "username": "usertest14"
 }
 
 ### 
@@ -15,14 +20,14 @@ POST http://localhost:3000/account/login
 Content-Type: application/json
 
 {
-    "email": "usertest13@gmail.com",
+    "email": "usertest14@gmail.com",
     "password": "123456"
 }
 
 ###
 
 ### dashboard (route protected)
-GET http://localhost:3000/dashboard/usertest13
+GET http://localhost:3000/dashboard/usertest14
 Authorization: Bearer <token>
 
 ###
@@ -45,7 +50,7 @@ Authorization: Bearer <token>
 
 
 ### para actualizar la cantidad de productos en el carrito
-PUT http://localhost:3000/cart/11
+PUT http://localhost:3000/cart/14
 Content-Type: application/json
 Authorization: Bearer <token>
 

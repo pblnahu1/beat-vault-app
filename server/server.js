@@ -1,3 +1,6 @@
+
+// VER QUE EL ERROR ESTÁ EN HELMET Y MORGAN Y UNAS CONFIG MÁS NO SÉ XQ.......
+
 import dotenv from "dotenv";
 dotenv.config();
 import cors from "cors";
@@ -5,33 +8,37 @@ import express from "express"
 import path from "path";
 import { fileURLToPath } from "url";
 import bodyParser from "body-parser"
-import helmet from "helmet";
-import morgan from "morgan";
+// import helmet from "helmet";
+// import morgan from "morgan";
 
 import {PORT, FRONTEND_URL} from "./config/config.js"
 import router from "./routes/authRoutes.js";
 // import hashPasswordExec from "./scripts/hashPasswordExec.js";
-import errorHandler, { notFoundHandler } from "./middleware/errorHandler.js";
+// import errorHandler, { notFoundHandler } from "./middleware/errorHandler.js";
 
 const app = express()
 
-app.use(cors({origin: FRONTEND_URL, credentials: true,}));
+app.use(cors({
+    origin: FRONTEND_URL, 
+    credentials: true
+}));
 app.use(bodyParser.json());
-app.use(express.json({limit: '10mb'}));
-app.use(express.urlencoded({extended:true}));
-app.use(helmet());
-app.use(morgan('combined'));
-app.use(router);
+// app.use(express.json({limit: '10mb'}));
+// app.use(express.urlencoded({extended:true}));
+// app.use(helmet());
+// app.use(morgan('combined'));
 
 // para los productos
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 app.use("/static", express.static(path.join(__dirname, "public"))); // http://localhost:3000/static/products_screen/headphones.jpg
 
+app.use(router);
+
 // hashPasswordExec();
 
 // manejo de errores
-app.use(notFoundHandler);
-app.use(errorHandler);
+// app.use(notFoundHandler);
+// app.use(errorHandler);
 
 // listen to port
 app.listen(PORT, "0.0.0.0", () => {

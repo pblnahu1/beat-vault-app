@@ -1,7 +1,10 @@
 import { CartResponse } from "../types";
 import AuthService from "./authService";
 
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.BACKEND_URL || 'http://localhost:3000';
+if(!API_BASE_URL) {
+    throw new Error("BACKEND_URL no está definido en el .env");
+}
 
 class CartService {
     // verificar si el usuario está autenticado
@@ -105,7 +108,7 @@ class CartService {
     }
 
     // actualizar cantidad de un item
-    async updateCartItem(productId: number, quantity: number): Promise<CartResponse> {
+    async updateCartItem(cartId: number, productId: number, quantity: number): Promise<CartResponse> {
         if (!this.ensureAuthenticated()) {
             return {
                 success: false,
@@ -114,10 +117,10 @@ class CartService {
         }
 
         try {
-            const response = await fetch(`${API_BASE_URL}/cart/${productId}`, {
+            const response = await fetch(`${API_BASE_URL}/cart/${cartId}`, {
                 method: 'PUT',
                 headers: this.getAuthHeaders(),
-                body: JSON.stringify({ quantity })
+                body: JSON.stringify({ productId, quantity })
             });
 
             const data = await response.json();
