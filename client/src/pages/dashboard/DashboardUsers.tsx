@@ -1,10 +1,11 @@
 // src/pages/dashboard/DashboardLayout.tsx
 import { Link, Outlet } from "react-router-dom";
-import { useParams } from 'react-router-dom';
+import authService from "../../services/authService"
 
 export default function DashboardLayout() {
 
-  const {username} = useParams();
+  const currentUser = authService.getCurrentUser();
+  const username = currentUser?.username;
 
   return (
     <div className="flex min-h-screen">

@@ -15,18 +15,11 @@ import DashboardAuth from './pages/auth/DashboardAuth';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import ProtectedRoute from './components/ProtectedRoute';
-// import { useCartInit } from './hooks/useCartInit';
-
 
 function App() {
-
-  // inicializo el carrito al cargar la app
-  // useCartInit();
-
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-gray-50">
-        
           <Routes>
             <Route element={<MainLayout />}>
               <Route path="/" element={<Home />} />
@@ -36,7 +29,6 @@ function App() {
               <Route path="/account/create-account" element={<Register />} />
               <Route path="/account/login" element={<Login />} />
             </Route>
-
             <Route element={<ProtectedRoute />}>
               <Route path='/dashboard/:username' element={<MainLayout />}>
                 <Route path='/dashboard/:username' element={<DashboardLayout />} />
@@ -49,7 +41,6 @@ function App() {
               </Route>
             </Route>
           </Routes>
-        
       </div>
     </BrowserRouter>
   );

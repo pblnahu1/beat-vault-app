@@ -153,9 +153,3 @@ export const getProductsByCategory = async (category: string): Promise<Product[]
         throw error;
     }
 }
-
-// completando la función original
-
-// export const ProductData = async (): Promise<Product[]> => {
-//     return getProducts();
-// }

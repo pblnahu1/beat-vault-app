@@ -9,12 +9,12 @@ export const Cart: React.FC = () => {
   if (items.length === 0) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
-        <h2 className="text-2xl font-semibold mb-4">Your cart is empty</h2>
+        <h2 className="text-2xl font-semibold mb-4">Tu carrito está vacío...</h2>
         <Link
           to="/"
           className="text-blue-600 hover:text-blue-700 font-medium"
         >
-          Continue Shopping
+          Ver catálogo
         </Link>
       </div>
     );
@@ -22,7 +22,7 @@ export const Cart: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h2 className="text-2xl font-semibold mb-8">Shopping Cart</h2>
+      <h2 className="text-2xl font-semibold mb-8">Carrito</h2>
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="space-y-4">
           {items.map((item) => (
@@ -39,10 +39,10 @@ export const Cart: React.FC = () => {
               onClick={clearCart}
               className="px-6 py-3 text-red-600 border border-red-600 rounded-lg hover:bg-red-50"
             >
-              Clear Cart
+              Limpiar carrito
             </button>
             <button className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-              Proceed to Checkout
+              Seguir con tu compra
             </button>
           </div>
         </div>

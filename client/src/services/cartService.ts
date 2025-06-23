@@ -38,18 +38,12 @@ class CartService {
 
         try {
             const currentUserId = this.getCurrentUserId();
+            
             if (!userId && currentUserId) {
                 userId = currentUserId;
 
             }
-            
-            // if (!userId) {
-            //     return {
-            //         success: false,
-            //         message: 'User ID not found'
-            //     };
-            // }
-
+        
             const response = await fetch(`${API_BASE_URL}/cart`, {
                 method: 'POST',
                 headers: this.getAuthHeaders(),
