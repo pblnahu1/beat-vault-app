@@ -40,7 +40,8 @@ const loginUser = async (req, res) => {
 
         const payload = {
             id_u: user.id_u,
-            email: user.email
+            email: user.email,
+            username: user.username
         }
 
         // genero el token y envio respuesta
@@ -55,7 +56,8 @@ const loginUser = async (req, res) => {
             // id: user.id_u
             user: {
                 id_u: user.id_u,
-                email: user.email
+                email: user.email,
+                username: user.username
             }
         })
 

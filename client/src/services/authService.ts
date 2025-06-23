@@ -1,11 +1,9 @@
 import { User } from "../types";
 
 // interfaces para los datos
-interface LoginResponse {
-    token: string;
-    username: string;
-    id: number;
-}
+// interface LoginResponse {
+//     token: string;
+// }
 
 interface RegisterRequest{
     email: string;
@@ -36,7 +34,7 @@ if(!BASE_URL) {
  * @returns token de autenticación
  */
 
-export const login = async (email: string, password: string): Promise<LoginResponse> => {
+export const login = async (email: string, password: string): Promise<User> => {
     try {
         const response = await fetch(`${BASE_URL}/account/login`, {
             method: "POST",
@@ -54,10 +52,21 @@ export const login = async (email: string, password: string): Promise<LoginRespo
         }
         
         const data = await response.json();
-        const userData = data as LoginResponse;
+
+        const token = data.token;
+        const userInfo = data.user;
+
+        const userData: User = {
+            id_u: userInfo.id_u,
+            username: userInfo.username,
+            email: userInfo.email,
+            token: token
+        }
+
         localStorage.setItem('authToken', userData.token);
+
         const authService = new AuthService();
-        authService.setCurrentUser({ id_u: userData.id, name: userData.username, email: '' }, userData.token);
+        authService.setCurrentUser(userData, token);
 
         return userData; // retorno el token cuando lo necesite
     } catch (error) {

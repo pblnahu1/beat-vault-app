@@ -1,7 +1,6 @@
 import { ProductCard } from '../components/ProductCard';
 // import { products } from '../data/products';
 import { useProducts } from '../hooks/useProducts';
-// import {useEffect } from 'react';
 
 export const Home = () => {
 
@@ -10,7 +9,7 @@ export const Home = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       
-      <h1 className="text-3xl font-bold mb-8">Featured Products</h1>
+      <h1 className="text-3xl font-bold mb-8">Catálogo</h1>
 
       {loading && (
         <div className="flex justify-center items-center py-12">

@@ -42,7 +42,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           className="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
         >
           <Check size={20} />
-          Added!
+          ¡Agregado!
         </button>
       );
     }
@@ -56,12 +56,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {isAdding ? (
           <>
             <Loader2 size={20} className="animate-spin" />
-            Adding...
+            Procesando...
           </>
         ) : (
           <>
             <ShoppingCart size={20} />
-            Add
+            Agregar
           </>
         )}
       </button>
@@ -98,7 +98,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-200 transition-colors"
             >
               <Eye size={20} />
-              Details
+              Detalles
             </Link>
             {renderAddButton()}
           </div>
@@ -108,7 +108,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {error && (
           <div className="mt-2 flex items-center gap-1 text-red-600 text-sm">
             <AlertCircle size={14} />
-            <span>Failed to add item</span>
+            <span>Ocurrió un error al agregar al carrito</span>
           </div>
         )}
       </div>

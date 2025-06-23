@@ -8,7 +8,6 @@ interface CartStore {
   items: CartItem[];
   isLoading: boolean;
   error: string | null;
-  // isOnline: boolean;
   total: number;
   addItem: (product: Product) => Promise<void>;
   removeItem: (productId: number) => Promise<void>;
@@ -26,39 +25,35 @@ export const useCart = create<CartStore>()(
       items: [],
       isLoading: false,
       error: null,
-      // isOnline: true,
       total: 0,
 
       setError: (error) => set({ error }),
+
       setLoading: (isLoading) => set({ isLoading }),
 
       addItem: async (product) => {
         set({ isLoading: true, error: null });
         
         try {
-          // Verificar conectividad
-          // const isOnline = await cartService.checkConnection();
-          // set({ isOnline });
-
-          // if (isOnline) {
-            // agregar al backend primero
-            const getCurrentUserId = (): number | null => {
-              const currentUser = AuthService.getCurrentUser();
-              return currentUser ? currentUser.id_u : null;
-            }
-            const userId = getCurrentUserId();
-            const response = await cartService.addToCart(product.id, 1, userId || 0);
-            
-            if (!response.success) {
-              throw new Error(response.message || 'Failed to add item to cart');
-            }
-          // }
+          const getCurrentUserId = (): number | null => {
+            const currentUser = AuthService.getCurrentUser();
+            return currentUser ? currentUser.id_u : null;
+          }
+          
+          const userId = getCurrentUserId();
+          
+          const response = await cartService.addToCart(product.id, 1, userId || 0);
+          
+          if (!response.success) {
+            throw new Error(response.message || 'Failed to add item to cart');
+          }
 
           // actualiza estado local
           const items = get().items;
           const existingItem = items.find((item) => item.id === product.id);
 
           let newItems;
+
           if (existingItem) {
             newItems = items.map((item) =>
               item.id === product.id
@@ -77,6 +72,7 @@ export const useCart = create<CartStore>()(
 
         } catch (error) {
           console.error('Error adding item:', error);
+          
           set({ 
             error: error instanceof Error ? error.message : 'Failed to add item',
             isLoading: false 
@@ -87,6 +83,7 @@ export const useCart = create<CartStore>()(
           const existingItem = items.find((item) => item.id === product.id);
 
           let newItems;
+          
           if (existingItem) {
             newItems = items.map((item) =>
               item.id === product.id
@@ -108,15 +105,10 @@ export const useCart = create<CartStore>()(
         set({ isLoading: true, error: null });
         
         try {
-          // const isOnline = await cartService.checkConnection();
-          // set({ isOnline });
-
-          // if (isOnline) {
-            const response = await cartService.removeFromCart(productId);
-            if (!response.success) {
-              throw new Error(response.message || 'Failed to remove item');
-            }
-          // }
+          const response = await cartService.removeFromCart(productId);
+          if (!response.success) {
+            throw new Error(response.message || 'Failed to remove item');
+          }
 
           const currentItems = get().items;
           const newItems = currentItems.filter((item) => item.id !== productId);
@@ -126,9 +118,9 @@ export const useCart = create<CartStore>()(
             total: calculateTotal(newItems),
             isLoading: false
           });
-
         } catch (error) {
           console.error('Error removing item:', error);
+          
           set({ 
             error: error instanceof Error ? error.message : 'Failed to remove item',
             isLoading: false 
@@ -149,26 +141,20 @@ export const useCart = create<CartStore>()(
         set({ isLoading: true, error: null });
         
         try {
-          // const isOnline = await cartService.checkConnection();
-          // set({ isOnline });
-
-          // if (isOnline) {
-
-
-            if (quantity === 0) {
-              const response = await cartService.removeFromCart(productId);
-              if (!response.success) {
-                throw new Error(response.message || 'Failed to remove item');
-              }
-            } else {
-              const response = await cartService.updateCartItem(cartId, productId, quantity);
-              if (!response.success) {
-                throw new Error(response.message || 'Failed to update quantity');
-              }
+          if (quantity === 0) {
+            const response = await cartService.removeFromCart(productId);
+            if (!response.success) {
+              throw new Error(response.message || 'Failed to remove item');
             }
-          // }
+          } else {
+            const response = await cartService.updateCartItem(cartId, productId, quantity);
+            if (!response.success) {
+              throw new Error(response.message || 'Failed to update quantity');
+            }
+          }
 
           const currentItems = get().items;
+          
           let newItems;
           
           if (quantity === 0) {
@@ -187,6 +173,7 @@ export const useCart = create<CartStore>()(
 
         } catch (error) {
           console.error('Error updating quantity:', error);
+          
           set({ 
             error: error instanceof Error ? error.message : 'Failed to update quantity',
             isLoading: false 
@@ -215,24 +202,20 @@ export const useCart = create<CartStore>()(
         set({ isLoading: true, error: null });
         
         try {
-          // const isOnline = await cartService.checkConnection();
-          // set({ isOnline });
-
-          // if (isOnline) {
-            const response = await cartService.clearCart();
-            if (!response.success) {
-              throw new Error(response.message || 'Failed to clear cart');
-            }
-          // }
+          const response = await cartService.clearCart();
+          
+          if (!response.success) {
+            throw new Error(response.message || 'Failed to clear cart');
+          }
 
           set({ 
             items: [], 
             total: 0, 
             isLoading: false 
           });
-
         } catch (error) {
           console.error('Error clearing cart:', error);
+          
           set({ 
             error: error instanceof Error ? error.message : 'Failed to clear cart',
             isLoading: false 
@@ -247,55 +230,103 @@ export const useCart = create<CartStore>()(
         set({ isLoading: true, error: null });
         
         try {
-          // const isOnline = await cartService.checkConnection();
-          // set({ isOnline });
+          const token = localStorage.getItem('authToken');
 
-          // if (isOnline) {
-            const response = await cartService.getCart();
-            
-            if (response.success && response.data) {
-              const items = response.data;
-              set({
-                items,
-                total: calculateTotal(items),
-                isLoading: false
-              });
-            } else {
-              throw new Error(response.message || 'Failed to load cart');
+          if(token){
+            // solo cargar desde backend si hay token
+            try {
+              const response = await cartService.getCart();
+              
+              if (response.success && response.data) {
+                const backendItems = response.data.data || response.data;
+                console.log('Loaded cart from backend: ', backendItems);
+
+                const mappedItems = backendItems.map((item: any) => ({
+                  id: item.id_p,              // producto ID
+                  id_cart: item.id_cart,      // cart item ID  
+                  name: item.name_p,          // nombre producto
+                  price: item.price_p || 0,   // precio (agregar si falta)
+                  image: item.image_p || '',  // imagen (agregar si falta)
+                  quantity: item.quantity,
+                  id_u: item.id_u
+                }));
+
+                set({
+                  items: mappedItems,
+                  total: calculateTotal(mappedItems),
+                  isLoading: false
+                });
+                
+                return; // persist se encarga de guardarlo automáticamente
+              }
+            } catch (error) {
+              console.error('Backend cart load failed:', error);
             }
-          // } else {
-            // Si no hay conexión, usar datos locales
-            // set({ isLoading: false });
-          // }
+          }
 
+          // si no hay token o falló backend, persist ya tiene los datos locales
+          set({ isLoading: false });
+          
         } catch (error) {
           console.error('Error loading cart:', error);
           set({ 
             error: error instanceof Error ? error.message : 'Failed to load cart',
-            isLoading: false 
+            isLoading: false
           });
         }
       },
 
       syncWithBackend: async () => {
+
         set({ isLoading: true, error: null });
         
         try {
+
+          const token = localStorage.getItem('authToken');
+
+          if(!token){
+            console.log('No auth token, skipping backend sync');
+            set({
+              isLoading: false
+            });
+            return;
+          }
+
           const currentItems = get().items;
           
           const getCurrentUserId = (): number | null => {
-            const currentUser = AuthService.getCurrentUser();
-            return currentUser ? currentUser.id_u : null;
+            try {
+              const currentUser = AuthService.getCurrentUser();
+              console.log('Current user from AuthService: ', currentUser);
+              return currentUser ? currentUser.id_u : null;
+            } catch(error){
+              console.error('Error getting current user:',error);
+              return null;
+            }
           }
 
           const userId = getCurrentUserId();
+
+          if(!userId){
+            console.log('No user ID found for sync');
+            set({
+              isLoading: false,
+              error: 'user not found',
+            });
+            return;
+          }
+
+          console.log('syncing cart with backend: ', currentItems);
+
+          // limpiar carrito backend (opcional)
+          // await cartService.clearCart();
           
           // sincronizo cada item individualmente
           for (const item of currentItems) {
-            const response = await cartService.addToCart(item.id, item.quantity, userId || 0);
+            const response = await cartService.addToCart(item.id, item.quantity, userId);
             
             if (!response.success) {
-              throw new Error(response.message || 'Failed to sync item');
+              throw new Error(response.message || `Failed to sync item ${item.id}`);
             }
           }
           
@@ -305,6 +336,8 @@ export const useCart = create<CartStore>()(
             isLoading: false
           });
           
+          console.log('cart sync complete successfully');
+
         } catch (error) {
           console.error('Error syncing cart:', error);
           set({ 
@@ -321,6 +354,13 @@ export const useCart = create<CartStore>()(
   )
 );
 
-const calculateTotal = (items: CartItem[]): number => {
-  return items.reduce((total, item) => total + item.price * item.quantity, 0);
+const calculateTotal = (items: CartItem[]) => {
+  console.log('Calculando el total para:', items);
+  const total = items.reduce((sum, item) => {
+    console.log(`Producto: ${item.name}, Precio: ${item.price}, Qty: ${item.quantity}`);
+    return sum + (item.price * item.quantity);
+  }, 0);
+  console.log('Total calculado:', total);
+  return total;
 };
+

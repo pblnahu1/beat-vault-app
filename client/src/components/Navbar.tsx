@@ -6,10 +6,10 @@ import LogoutButton from './LogoutButton';
 
 export const Navbar: React.FC = () => {
   const items = useCart((state) => state.items);
-  const itemCount = items.reduce((total, item) => total + item.quantity, 0);
+  const itemCount = Array.isArray(items) ? items.reduce((total, item) => total + item.quantity, 0) : 0;
   // const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("authToken");
   // const username = localStorage.getItem("username"); // opcional si querés mostrarlo
 
   // const handleLogout = () => {
@@ -24,7 +24,7 @@ export const Navbar: React.FC = () => {
         <div className="flex justify-between h-16 items-center">
           <Link to="/" className="flex items-center gap-2 text-xl font-semibold">
             <Store className="text-blue-600" />
-            ModernShop
+            FluxshopApp
           </Link>
 
           <div className="flex gap-4 items-center">
@@ -40,7 +40,7 @@ export const Navbar: React.FC = () => {
                   </span>
                 )}
               </div>
-              Cart
+              Carrito
             </Link>
 
             {token ? (
@@ -61,7 +61,7 @@ export const Navbar: React.FC = () => {
                 className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
               >
                 <UserCog2 />
-                Account
+                Cuenta
               </Link>
             )}
           </div>

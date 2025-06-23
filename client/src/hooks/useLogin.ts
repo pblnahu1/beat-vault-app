@@ -1,6 +1,7 @@
 import { useState, useEffect, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/authService";
+import { useCart } from "../store/useCart";
 
 interface UseLoginReturn {
     email: string;
@@ -22,6 +23,8 @@ export const useLogin = (): UseLoginReturn => {
     const [isSubmitDisabled, setIsSubmitDisabled] = useState<boolean>(true);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const navigate = useNavigate();
+
+    const {loadCart, syncWithBackend} = useCart();
   
     const handleTogglePassword = (): void => {
       setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -34,7 +37,23 @@ export const useLogin = (): UseLoginReturn => {
         const {token, username} = await login(email, password);
         if (token) {
           console.log("Token OK. Bienvenido!")
-          localStorage.setItem("token", token);
+          localStorage.setItem("authToken", token);
+          
+          try {
+            console.log('Inicializando el carrito después del login exitoso');
+            await loadCart();  
+
+            // tiempo de espera para sincronizacion
+            setTimeout(() => {
+              syncWithBackend();
+            }, 3000);
+
+            console.log('Carrito correctamente sincronizado')
+          } catch (error) {
+            console.error('Error inicializando el carrito: ', error);
+            // no bloquea el login si falla la sincronizacion por eso el trycatch solo para esto
+          }
+
           navigate(`/dashboard/${username}`);
         } else {
           setErrorMessage("No se recibió un token del servidor");
@@ -47,6 +66,29 @@ export const useLogin = (): UseLoginReturn => {
         }
       }
     };
+
+    // configuro listeners de conectividad una sola vez
+    useEffect(() => {
+      const handleOnline = () => {
+        console.log('Connection restored, syncing cart...');
+        const token = localStorage.getItem('authToken');
+        if(token){
+          syncWithBackend();
+        }
+      };
+
+      const handleOffline = () => {
+        console.log('Connection lost, using local storage only.');
+      };
+
+      window.addEventListener('online', handleOnline);
+      window.addEventListener('offline', handleOffline);
+
+      return () => {
+        window.removeEventListener('online', handleOnline);
+        window.removeEventListener('offline', handleOffline);
+      }
+    },[syncWithBackend]);
   
     useEffect(() => {
       document.title = "Iniciar Sesión";
