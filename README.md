@@ -1,54 +1,132 @@
 # Fluxshop
 
-Flux Shop es una aplicación de comercio electrónico sencilla pero funcional que permite a los usuarios explorar 
-productos, añadirlos al carrito y gestionar sus compras de forma eficiente. Cuenta con un sistema de autenticación 
-básico para gestionar usuarios y garantizar una experiencia personalizada.
+Fluxshop es una aplicación de comercio electrónico sencilla pero potente. Permite a los usuarios explorar productos, agregarlos al carrito y gestionar sus compras de manera eficiente. Incluye autenticación básica para una experiencia personalizada y segura.
 
 ## Características principales
 
-- Catálogo de productos con búsqueda y filtros (pending)
+- Catálogo de productos con búsqueda y filtros (próximamente)
 - Carrito de compras persistente
-- Sistema de autenticación de usuarios
-- Panel de administración para gestión de productos (pending)
-- Proceso de checkout simplificado (pending)
-- Diseño responsive para móviles y escritorio
-- Gestión de órdenes y estado de pedidos (pending)
-- Integración con sistema de pagos (pending)
+- Autenticación de usuarios
+- Panel de administración para productos (próximamente)
+- Checkout simplificado (próximamente)
+- Diseño responsive
+- Gestión de órdenes y estados de pedidos (próximamente)
+- Integración con sistemas de pago (próximamente)
 
 ## Stack Tecnológico
 
-### Frontend
-- React.js con Vite y TypeScript
-<!-- - Redux Toolkit para manejo de estado -->
-- Tailwind CSS para estilos
-- React Router para navegación
-- Axios para peticiones HTTP
+**Frontend**
+- React.js (Vite + TypeScript)
+- Tailwind CSS
+- React Router
+- Axios
 
-### Backend
-- Node.js con Express
-- Postgres como imagen de Docker para la base de datos
+**Backend**
+- Node.js + Express
+- PostgreSQL (Docker)
 - JWT para autenticación
-- Bcrypt para encriptación
+- Bcrypt para contraseñas
 
-### DevOps & Herramientas
+**DevOps & Herramientas**
 - Docker y Docker Compose
-- Git para control de versiones
-- ESLint y Prettier para formato de código
-- Jest para testing (pending)
+- Git
+- ESLint + Prettier
+- Jest (próximamente)
 
-# Instalaciones del proyecto
+---
 
-Si tenés Docker ejecutá el proyecto con:
+## Arquitectura del Proyecto
+
+El proyecto está organizado en dos grandes módulos:
+
+### 1. **Frontend (`client/`)**
+
+- **Componentes principales**: Navbar, Footer, ProductCard, CartItem, etc.
+- **Páginas**: Home, Carrito, Detalle de producto, Autenticación, Dashboard de usuario (perfil, historial, direcciones, métodos de pago, reviews).
+- **Ruteo protegido**: Solo usuarios autenticados acceden al Dashboard.
+- **Estado del carrito**: Persistente y sincronizado con backend.
+- **Estilos**: Tailwind CSS.
+- **Comunicación**: Axios para interactuar con la API REST del backend.
+
+**Ejemplo de estructura de rutas:**
+```tsx
+<Routes>
+  <Route element={<MainLayout />}>
+    <Route path="/" element={<Home />} />
+    <Route path="/cart" element={<Cart />} />
+    <Route path="/:id" element={<ProductDetail />} />
+    <Route path="/account/login" element={<Login />} />
+    <Route path="/account/create-account" element={<Register />} />
+  </Route>
+  <Route element={<ProtectedRoute />}>
+    <Route path="/dashboard/:username" element={<DashboardLayout />}>
+      <Route path="profile" element={<Profile />} />
+      <Route path="orders" element={<OrderHistory />} />
+      <Route path="wish-list" element={<Wishlist />} />
+      <Route path="addresses" element={<Addresses />} />
+      <Route path="payments" element={<PaymentMethods />} />
+      <Route path="reviews" element={<MyReviews />} />
+    </Route>
+  </Route>
+</Routes>
+```
+
+### 2. **Backend (`server/`)**
+
+- **Express**: Organización modular de rutas para autenticación, productos y carrito.
+- **Rutas principales**:
+    - `/auth`: Registro y login
+    - `/products`: Consulta y filtrado de productos
+    - `/cart`: Gestión del carrito
+- **Persistencia**: PostgreSQL, dockerizada.
+- **Seguridad**: JWT y Bcrypt.
+- **Middlewares**: Manejo de archivos estáticos y autenticación.
+
+---
+
+## Diagrama de Arquitectura (Descriptivo)
+
+```
+┌────────────┐          HTTP/API           ┌────────────┐
+│  Frontend  │ <────────────────────────→  │  Backend   │
+│ React/Vite │                             │ Express.js │
+└─────┬──────┘        JSON Responses       └─────┬──────┘
+      │                                         │
+      │                                         │
+      │        Consultas SQL (ORM/Raw)          │
+      └────────────────────────────────────────>│
+                                                │
+                                         ┌──────▼─────┐
+                                         │ PostgreSQL │
+                                         └────────────┘
+```
+
+- **Frontend:** Hace requests HTTP a la API del backend para obtener productos, autenticarse, manipular el carrito, etc.
+- **Backend:** Expone una API REST, valida y procesa las solicitudes, maneja autenticación JWT y consulta la base de datos PostgreSQL.
+- **Base de datos:** Almacena usuarios, productos, carritos y órdenes.
+
+---
+
+## Instalación rápida
+
+Con Docker:
 ```bash
 docker compose up --build
 ```
-
-Si no tenés Docker, ejecutá por consola desde /client y /server:
+Sin Docker (dos terminales):
 ```bash
-npm install && npm run dev
+cd client && npm install && npm run dev
+cd server && npm install && npm run dev
 ```
 
-# Pro Tip
-Para probar la API fácilmente, podés usar el archivo requests/test.http con el plugin REST Client de VS Code.
+---
 
-# Autor: [Pablo Torrez](https://github.com/pblnahu1)
+## Pro Tip
+
+Usá el archivo `requests/test.http` (VS Code REST Client) para probar la API fácilmente.
+
+---
+
+## Autor
+
+[Pablo Torrez](https://github.com/pblnahu1)
