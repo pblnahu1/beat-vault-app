@@ -7,7 +7,7 @@ import cors from "cors";
 import express from "express"
 import path from "path";
 import { fileURLToPath } from "url";
-import bodyParser from "body-parser"
+import bodyParser from "body-parser";
 // import helmet from "helmet";
 // import morgan from "morgan";
 

@@ -1,0 +1,27 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build containers (Docker Compose)
+        run: docker compose build
+      
+      - name: Run backend tests (opcional)
+        run: docker compose run --rm server npm test
+
+      - name: Run frontend tests (opcional)
+        run: docker compose run --rm client npm test

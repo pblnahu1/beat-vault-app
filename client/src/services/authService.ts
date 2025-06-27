@@ -1,10 +1,5 @@
 import { User } from "../types";
 
-// interfaces para los datos
-// interface LoginResponse {
-//     token: string;
-// }
-
 interface RegisterRequest{
     email: string;
     password: string;
@@ -21,7 +16,7 @@ interface ErrorResponse {
     message: string;
 }
  
-const BASE_URL = import.meta.env.BACKEND_URL || 'http://localhost:3000'; 
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'; 
 
 if(!BASE_URL) {
     throw new Error("BACKEND_URL no está definido en el .env");
@@ -121,34 +116,30 @@ export const register = async (
 };
 
 class AuthService {
-    private currentUser: User | null = null;
+    // private currentUser: User | null = null;
 
     getToken(): string | null {
         return localStorage.getItem('authToken');
     }
 
-    getCurrentUser(): User | null {
-        if (this.currentUser) {
-            return this.currentUser;
-        }
-        
+    getCurrentUser(): User | null {        
         const userStr = localStorage.getItem('currentUser');
         if (userStr) {
-            this.currentUser = JSON.parse(userStr);
-            return this.currentUser;
+            try {
+                return JSON.parse(userStr);
+            } catch {
+                return null;
+            }
         }
-        
         return null;
     }
 
     setCurrentUser(user: User, token: string): void {
-        this.currentUser = user;
         localStorage.setItem('currentUser', JSON.stringify(user));
         localStorage.setItem('authToken', token);
     }
 
     logout(): void {
-        this.currentUser = null;
         localStorage.removeItem('currentUser');
         localStorage.removeItem('authToken');
     }

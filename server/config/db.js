@@ -2,19 +2,19 @@ import pkg from "pg";
 const {Pool} = pkg;
 
 // Para local
-const pool = new Pool({
+/*const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
     database: 'db_fluxshop',
     password: 'pblnahupassword',
     port: 5444,
     ssl: false, //al estar en desarrollo desactivo
-})
+})*/
 
 /// Para Docker
-// const pool = new Pool({
-//     connectionString: process.env.DATABASE_URL,
-// })
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+})
 
 // pool.on('connect', () => console.log('DB connected')) // .on es un evento que se ejecuta cuando se conecta a la base de datos
 // pool.on('error', (err) => console.error('Lost PG connection', err)) // .on con 'error' es un evento que se ejecuta cuando se pierde la conexión a la base de datos
