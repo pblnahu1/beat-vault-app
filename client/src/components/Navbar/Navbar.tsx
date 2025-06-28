@@ -1,22 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingCart, Store, UserCog2 } from 'lucide-react';
-import { useCart } from '../store/useCart';
-import LogoutButton from './LogoutButton';
+import { useCart } from '../../store/useCart';
+import { LogoutButton } from '../LogoutButton';
 
 export const Navbar: React.FC = () => {
   const items = useCart((state) => state.items);
   const itemCount = Array.isArray(items) ? items.reduce((total, item) => total + item.quantity, 0) : 0;
-  // const navigate = useNavigate();
-
   const token = localStorage.getItem("authToken");
-  // const username = localStorage.getItem("username"); // opcional si querés mostrarlo
-
-  // const handleLogout = () => {
-  //   localStorage.removeItem("token");
-  //   localStorage.removeItem("username");
-  //   navigate("/account/login", { replace: true });
-  // };
 
   return (
     <nav className="bg-white shadow-md">
@@ -45,14 +36,6 @@ export const Navbar: React.FC = () => {
 
             {token ? (
               <>
-                {/* <Link
-                  to={`/dashboard/${username}`}
-                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
-                >
-                  <UserCog2 />
-                  Dashboard
-                </Link> */}
-
                 <LogoutButton />
               </>
             ) : (

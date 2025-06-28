@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { CartItem } from '../components/CartItem';
-import { useCart } from '../store/useCart';
+import { CartItem } from '../../components/CartItem';
+import { useCart } from '../../store/useCart';
 
 export const Cart: React.FC = () => {
   const { items, total, clearCart } = useCart();

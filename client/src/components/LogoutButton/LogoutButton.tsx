@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useCart } from "../store/useCart";
+import { useCart } from "../../store/useCart";
 
-export default function LogoutButton() {
+export function LogoutButton() {
   const navigate = useNavigate();
   const [isLogged, setIsLogged] = useState<boolean>(!!localStorage.getItem('authToken'));
 
@@ -27,7 +27,7 @@ export default function LogoutButton() {
   return (
     <button 
       onClick={handleLogout}
-      className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded"
+      className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-3xl"
     >
       Cerrar Sesión
     </button>

@@ -1,5 +1,5 @@
 import React from "react";
-import { useRegister } from "../../hooks/useRegister";
+import { useRegister } from "../../../hooks/useRegister";
 
 export default function Register(): JSX.Element {
   const {

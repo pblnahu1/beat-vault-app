@@ -2,7 +2,7 @@
 
 import { Navigate, Outlet } from "react-router-dom";
 
-export default function ProtectedRoute() {
+export function ProtectedRoute() {
   const token = localStorage.getItem("authToken");
 
   if (!token) {

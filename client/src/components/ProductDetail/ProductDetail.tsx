@@ -2,9 +2,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, ArrowLeft, Plus, Minus, Heart, Share2, Star } from 'lucide-react';
-import { products } from '../data/products';
-import CartService from '../services/cartService';
-import AuthService from '../services/authService';
+import { products } from '../../data/products';
+import CartService from '../../services/cartService';
+import AuthService from '../../services/authService';
 
 export const ProductDetail = () => {
   const { id } = useParams();
