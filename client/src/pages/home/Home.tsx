@@ -6,7 +6,7 @@ export const Home = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       
-      <h1 className="text-3xl font-bold mb-8">Catálogo</h1>
+      <h1 className="text-3xl font-bold mb-8 text-slate-50">Catálogo</h1>
 
       {loading && (
         <div className="flex justify-center items-center py-12">
@@ -15,13 +15,13 @@ export const Home = () => {
       )}
 
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+        <div className="bg-red-300 border border-red-500 text-red-700 px-4 py-3 rounded mb-6">
           <p>{error}</p>
         </div>
       )}
 
       {!loading && !error && products.length === 0 && (
-        <p className="text-gray-500 text-center py-12">No se encontraron productos disponibles.</p>
+        <p className="text-slate-50 text-center py-12">No se encontraron productos disponibles.</p>
       )}
 
 
