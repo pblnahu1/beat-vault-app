@@ -22,9 +22,9 @@ const AppRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/:id" element={<ProductDetail />} />
-        <Route path="/dashboard-auth" element={<DashboardAuth />} />
-        <Route path="/account/create-account" element={<Register />} />
-        <Route path="/account/login" element={<Login />} />
+        <Route path="/auth" element={<DashboardAuth />} />
+        <Route path="/auth/create-account" element={<Register />} />
+        <Route path="/auth/login" element={<Login />} />
       </Route>
       <Route element={<ProtectedRoute />}>
         <Route path='/dashboard/:username' element={<MainLayout />}>

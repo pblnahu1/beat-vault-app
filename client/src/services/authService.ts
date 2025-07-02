@@ -31,7 +31,7 @@ if(!BASE_URL) {
 
 export const login = async (email: string, password: string): Promise<User> => {
     try {
-        const response = await fetch(`${BASE_URL}/account/login`, {
+        const response = await fetch(`${BASE_URL}/auth/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -92,7 +92,7 @@ export const register = async (
             username
         };
 
-        const response = await fetch(`${BASE_URL}/account/create-account`, {
+        const response = await fetch(`${BASE_URL}/auth/create-account`, {
             method: "POST",
             headers:{
                 "Content-Type": "application/json",

@@ -25,7 +25,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const handleAddToCart = async () => {
     if(!isLogged){
       alert('Tenés que crearte una cuenta o iniciar sesión para poder comprar.');
-      navigate("/dashboard-auth");
+      navigate("/auth");
       return;
     }
     setIsAdding(true);
