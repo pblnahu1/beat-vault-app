@@ -18,19 +18,19 @@ export const CartItem: React.FC<CartItemProps> = ({ item }) => {
         className="w-24 h-24 object-cover rounded"
       />
       <div className="flex-1">
-        <h3 className="font-semibold">{item.name}</h3>
-        <p className="text-gray-600">${item.price}</p>
+        <h3 className="font-semibold text-slate-50">{item.name}</h3>
+        {/* <p className="text-blue-500">${item.price}</p> */}
         <div className="flex items-center gap-2 mt-2">
           <button
             onClick={() => updateQuantity(item.id_cart, item.id, Math.max(0, item.quantity - 1))} // item.id es number
-            className="p-1 hover:bg-gray-100 rounded"
+            className="p-1 bg-gray-100 hover:bg-gray-300 rounded text-black"
           >
             <Minus size={16} />
           </button>
-          <span className="w-8 text-center">{item.quantity}</span>
+          <span className="w-8 text-center text-slate-50">{item.quantity}</span>
           <button
             onClick={() => updateQuantity(item.id_cart, item.id, item.quantity + 1)}
-            className="p-1 hover:bg-gray-100 rounded"
+            className="p-1 bg-gray-100 hover:bg-gray-300 rounded text-black"
           >
             <Plus size={16} />
           </button>
@@ -43,7 +43,7 @@ export const CartItem: React.FC<CartItemProps> = ({ item }) => {
         </div>
       </div>
       <div className="text-right">
-        <p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+        <p className="font-semibold text-blue-700">${(item.price * item.quantity).toFixed(2)}</p>
       </div>
     </div>
   );

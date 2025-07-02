@@ -24,16 +24,16 @@ export const Cart: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center py-8">
-      <div className="w-full max-w-3xl bg-slate-950/90 backdrop-blur-md rounded-2xl shadow-2xl p-6 md:p-10">
+      <div className="w-full max-w-4xl bg-slate-950/90 backdrop-blur-md rounded-2xl shadow-2xl p-6 md:p-10">
         <div className="flex items-center gap-3 mb-8">
           <ShoppingCart size={32} className="text-blue-600" />
           <h2 className="text-2xl font-bold text-slate-50 uppercase">Tu Carrito</h2>
         </div>
-        <div className="divide-y divide-zinc-900">
+        {/* <div className="divide-y divide-zinc-900"> */}
           {items.map((item) => (
             <CartItem key={item.id} item={item} />
           ))}
-        </div>
+        {/* </div> */}
         <div className="mt-8 border-t pt-6">
           <div className="flex justify-between items-center mb-6">
             <span className="text-lg font-semibold text-slate-50">Total:</span>

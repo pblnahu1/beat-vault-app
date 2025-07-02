@@ -3,7 +3,7 @@ import { Store } from "lucide-react";
 
 export const AboutUs: React.FC = () => {
   return (
-      <div className="bg-zinc-900/90 rounded-3xl shadow-2xl h-[50vh] max-w-[1220px] w-full mx-auto flex flex-col items-center justify-center p-8" id="about">
+      <div className="bg-zinc-900/90 rounded-3xl shadow-2xl max-w-[1220px] w-full mx-auto my-16 flex flex-col items-center justify-center p-8" id="about">
         <Store className="text-blue-600" size={78} />
         <h1 className="text-3xl md:text-4xl font-extrabold text-slate-50 mb-4 text-center">
           Sobre Fluxshop
