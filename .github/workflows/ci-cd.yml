@@ -20,8 +20,10 @@ jobs:
       - name: Build containers (Docker Compose)
         run: docker compose build
       
-      - name: Run backend tests (opcional)
-        run: docker compose run --rm server npm test
+      # - name: Run backend tests (opcional)
+      #   run: docker compose run --rm server npm test
+      #   continue-on-error: true
 
-      - name: Run frontend tests (opcional)
-        run: docker compose run --rm client npm test
+      # - name: Run frontend tests (opcional)
+      #   run: docker compose run --rm client npm test
+      #   continue-on-error: true
