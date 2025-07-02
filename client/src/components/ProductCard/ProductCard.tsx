@@ -112,11 +112,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </p>
         )}
         
-        <div className="mt-4 flex items-center justify-between">
-          <span className="text-xl font-bold">${product.price}</span>
-          <div className="flex gap-2">
+        <div className="mt-4 flex flex-col items-center justify-between">
+          <span className="text-2xl font-bold text-blue-700 mb-6">${product.price}</span>
+          <div className="flex flex-col text-center gap-2 w-full">
             <Link
-              to={`/product-${product.id}`}
+              to={`/product/${product.id}`}
               className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-200 transition-colors"
             >
               <Eye size={20} />

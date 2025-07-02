@@ -56,14 +56,14 @@ r.get("/api/status", connDB);
 
 // USERS
 /**
- * @route POST /account/login
+ * @route POST /auth/login
  * @desc Inicia sesión de usuario
- * @route POST /account/create-account
+ * @route POST /auth/create-account
  * @desc Crea una nueva cuenta de usuario
  * @access Public
  */
-r.post("/account/login", loginUser);
-r.post("/account/create-account", registerUser);
+r.post("/auth/login", loginUser);
+r.post("/auth/create-account", registerUser);
 
 
 // PROTECTED ROUTE
