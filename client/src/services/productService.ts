@@ -2,7 +2,7 @@
 import { Product, ErrorResponseProduct } from "../types"; // CartItem también
 
 
-const BASE_URL = import.meta.env.BACKEND_URL || 'http://localhost:3000';
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
 
 if(!BASE_URL) {
     throw new Error("BACKEND_URL no está definido en el .env");

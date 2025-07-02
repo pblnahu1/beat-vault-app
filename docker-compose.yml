@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   db:
     container_name: postgresfluxshop
@@ -60,7 +58,8 @@ services:
       db:
         condition: service_healthy
     environment:
-      - DATABASE_URL=postgres://postgres:pblnahupassword@postgres:5432/db_fluxshop
+      - DATABASE_URL=postgres://postgres:pblnahupassword@db:5432/db_fluxshop
+      - FRONTEND_URL=http://localhost:5173
       - NODE_ENV=development
     volumes:
       - ./server:/usr/src/app
@@ -76,11 +75,10 @@ services:
       - "5173:5173"
     depends_on:
       - server
-    volumes:
-      - ./client:/usr/src/app
+    # volumes:
+    #   - ./client:/usr/src/app
     environment:
-      - BACKEND_URL=http://server:3000
-      - NODE_ENV=production
+      - VITE_BACKEND_URL=http://localhost:3000
     networks:
       - fluxshop-network
 

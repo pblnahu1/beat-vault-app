@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { ShoppingCart, Eye, Check, Loader2, AlertCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { Product } from '../types';
-import { useCart } from '../store/useCart';
+import { Link, useNavigate } from 'react-router-dom';
+import { Product } from '../../types';
+import { useCart } from '../../store/useCart';
 
 interface ProductCardProps {
   product: Product;
@@ -14,15 +14,24 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [justAdded, setJustAdded] = useState(false);
 
+  // detecto si el usuario está logueado
+  const isLogged = !!localStorage.getItem('authToken');
+  const navigate = useNavigate();
+
   // verifico si el producto ya está en el carrito
   const cartItem = items.find(item => item.id === product.id);
   const quantityInCart = cartItem?.quantity || 0;
 
   const handleAddToCart = async () => {
+    if(!isLogged){
+      alert('Tenés que crearte una cuenta o iniciar sesión para poder comprar.');
+      navigate("/auth");
+      return;
+    }
     setIsAdding(true);
     try {
+      // agrego
       await addItem(product);
-      
       // muestro un feedback visual
       setJustAdded(true);
       setTimeout(() => setJustAdded(false), 2000);
@@ -35,6 +44,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   // renderizo el botón según el estado
   const renderAddButton = () => {
+
+    if(!isLogged){
+      return(
+        <button
+          disabled
+          className='bg-gray-300 text-gray-500 px-4 py-2 rounded-lg flex items-center gap-2 cursor-not-allowed'
+        >
+          <ShoppingCart size={20}/>
+          Iniciá sesión para agregar
+        </button>
+      );
+    }
+
     if (justAdded) {
       return (
         <button
@@ -69,7 +91,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="bg-zinc-900 rounded-lg shadow-md overflow-hidden">
       {product.image ? (
         <img
           src={product.image}
@@ -77,11 +99,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           className="w-full h-48 object-cover"
         />
       ):(
-        <p>No hay imagen (image_p está vacío)</p>
+        <p className="text-slate-50">No hay imagen (image_p está vacío)</p>
       )}
       <div className="p-4">
-        <h3 className="text-lg font-semibold">{product.name}</h3>
-        <p className="text-gray-600 mt-1">{product.description}</p>
+        <h3 className="text-lg text-slate-50 font-semibold">{product.name}</h3>
+        <p className="text-slate-50 mt-1">{product.description}</p>
         
         {/* muestro la cantidad en el carrito si y solo si existe */}
         {quantityInCart > 0 && (

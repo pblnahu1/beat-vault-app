@@ -17,6 +17,7 @@ interface CartStore {
   loadCart: () => Promise<void>;
   setError: (error: string | null) => void;
   setLoading: (loading: boolean) => void;
+  resetCartLocal: () => void;
 }
 
 export const useCart = create<CartStore>()(
@@ -27,9 +28,22 @@ export const useCart = create<CartStore>()(
       error: null,
       total: 0,
 
+
+      // para setear
+
       setError: (error) => set({ error }),
 
       setLoading: (isLoading) => set({ isLoading }),
+
+      resetCartLocal: () => {
+        set({
+          items: [],
+          total: 0
+        });
+      },
+
+
+      // metodos asíncronos
 
       addItem: async (product) => {
         set({ isLoading: true, error: null });
@@ -197,6 +211,8 @@ export const useCart = create<CartStore>()(
           });
         }
       },
+
+      
 
       clearCart: async () => {
         set({ isLoading: true, error: null });

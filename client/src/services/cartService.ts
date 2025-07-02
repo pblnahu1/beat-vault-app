@@ -1,7 +1,7 @@
 import { CartResponse } from "../types";
 import AuthService from "./authService";
 
-const API_BASE_URL = import.meta.env.BACKEND_URL || 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
 if(!API_BASE_URL) {
     throw new Error("BACKEND_URL no está definido en el .env");
 }
