@@ -6,7 +6,7 @@ export function ProtectedRoute() {
   const token = localStorage.getItem("authToken");
 
   if (!token) {
-    return <Navigate to="/dashboard-auth" replace />;
+    return <Navigate to="/auth" replace />;
   }
 
   return <Outlet />;

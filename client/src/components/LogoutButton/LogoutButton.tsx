@@ -19,7 +19,7 @@ export function LogoutButton() {
     localStorage.removeItem("cart-storage");
     localStorage.removeItem("currentUser");
     setIsLogged(false);
-    navigate("/dashboard-auth", { replace: true }); // 2. Redirigir reemplazando el historial
+    navigate("/auth", { replace: true }); // 2. Redirigir reemplazando el historial
   };
 
   if(!isLogged) return null;

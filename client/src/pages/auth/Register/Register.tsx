@@ -17,101 +17,110 @@ export default function Register(): JSX.Element {
   } = useRegister();
 
   return (
-    <div className="max-w-md mx-auto mt-20 p-6 bg-white shadow rounded">
-      <h2 className="text-2xl font-bold mb-6">Crear Cuenta</h2>
-      
-      {error && (
-        <div className="my-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded">
-          {error}
-        </div>
-      )}
-      
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-1">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-            Email
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="tu@email.com"
-            className="w-full border p-2 rounded focus:ring-2 focus:ring-black focus:outline-none"
-            value={email}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="space-y-1">
-          <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-            Nombre de usuario
-          </label>
-          <input
-            id="username"
-            name="username"
-            type="text"
-            placeholder="usuario123"
-            className="w-full border p-2 rounded focus:ring-2 focus:ring-black focus:outline-none"
-            value={username}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="space-y-1">
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-            Contraseña
-          </label>
-          <div className="relative">
-            <input
-              id="password"
-              name="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="Contraseña segura"
-              className="w-full border p-2 rounded focus:ring-2 focus:ring-black focus:outline-none"
-              value={password}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-              required
-            />
-            <button
-              type="button"
-              onClick={handleTogglePassword}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 focus:outline-none"
-            >
-              {showPassword ? (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                  <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clipRule="evenodd" />
-                  <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
-                </svg>
-              )}
-            </button>
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="w-full max-w-2xl p-8 rounded-2xl shadow-2xl bg-zinc-900/90 backdrop-blur-md">
+        <h2 className="text-2xl font-bold mb-6 text-slate-100 text-center">Crear Cuenta</h2>
+        
+        {error && (
+          <div className="my-4 p-3 bg-red-900/30 border border-red-800 text-red-400 rounded text-sm text-center">
+            {error}
           </div>
-        </div>
+        )}
+        
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-1">
+              Email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="tu@email.com"
+              className="w-full bg-zinc-800 border border-zinc-700 text-slate-100 p-3 rounded focus:ring-2 focus:ring-blue-600 focus:outline-none transition"
+              value={email}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+            />
+          </div>
 
-        <div className="pt-2">
+          <div>
+            <label htmlFor="username" className="block text-sm font-medium text-slate-300 mb-1">
+              Nombre de usuario
+            </label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              placeholder="usuario123"
+              className="w-full bg-zinc-800 border border-zinc-700 text-slate-100 p-3 rounded focus:ring-2 focus:ring-blue-600 focus:outline-none transition"
+              value={username}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
+              required
+              autoComplete="username"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-1">
+              Contraseña
+            </label>
+            <div className="relative">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Contraseña segura"
+                className="w-full bg-zinc-800 border border-zinc-700 text-slate-100 p-3 rounded focus:ring-2 focus:ring-blue-600 focus:outline-none transition pr-10"
+                value={password}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                required
+                autoComplete="new-password"
+              />
+              <button
+                type="button"
+                onClick={handleTogglePassword}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-blue-400 focus:outline-none"
+                tabIndex={-1}
+              >
+                {showPassword ? (
+                  // Ojo abierto
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.522 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.478 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                ) : (
+                  // Ojo cerrado
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.956 9.956 0 012.293-3.95M6.634 6.634A9.956 9.956 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.956 9.956 0 01-4.507 5.294M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3l18 18" />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
+
           <button 
             type="submit" 
-            className={`w-full p-2 rounded transition-colors ${
+            className={`w-full p-3 rounded font-semibold transition-colors ${
               isSubmitDisabled 
-                ? "bg-gray-300 cursor-not-allowed" 
-                : "bg-black text-white hover:bg-gray-800"
+                ? "bg-zinc-700 text-zinc-400 cursor-not-allowed" 
+                : "bg-blue-600 text-white hover:bg-blue-700"
             }`}
             disabled={isSubmitDisabled}
           >
             Crear Cuenta
           </button>
-        </div>
+        </form>
         
-        <div className="text-center mt-4 text-sm text-gray-600">
-          <p>¿Ya tienes una cuenta? <a href="/account/login" className="text-black font-medium hover:underline">Iniciar sesión</a></p>
+        <div className="text-center mt-6 text-sm text-slate-400">
+          ¿Ya tienes una cuenta?{" "}
+          <a href="/auth/login" className="text-blue-400 font-medium hover:underline">
+            Iniciar sesión
+          </a>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

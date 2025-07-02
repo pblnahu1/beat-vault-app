@@ -25,7 +25,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const handleAddToCart = async () => {
     if(!isLogged){
       alert('Tenés que crearte una cuenta o iniciar sesión para poder comprar.');
-      navigate("/dashboard-auth");
+      navigate("/auth");
       return;
     }
     setIsAdding(true);
@@ -91,7 +91,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="bg-zinc-900 rounded-lg shadow-md overflow-hidden">
       {product.image ? (
         <img
           src={product.image}
@@ -99,11 +99,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           className="w-full h-48 object-cover"
         />
       ):(
-        <p>No hay imagen (image_p está vacío)</p>
+        <p className="text-slate-50">No hay imagen (image_p está vacío)</p>
       )}
       <div className="p-4">
-        <h3 className="text-lg font-semibold">{product.name}</h3>
-        <p className="text-gray-600 mt-1">{product.description}</p>
+        <h3 className="text-lg text-slate-50 font-semibold">{product.name}</h3>
+        <p className="text-slate-50 mt-1">{product.description}</p>
         
         {/* muestro la cantidad en el carrito si y solo si existe */}
         {quantityInCart > 0 && (
