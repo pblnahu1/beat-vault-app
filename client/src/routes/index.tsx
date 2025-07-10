@@ -5,12 +5,6 @@ import { Cart } from '../pages/cart/Cart';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 import { ProductDetail } from '../components/ProductDetail';
 import DashboardLayout from '../pages/dashboard/DashboardUsers';
-import Profile from '../pages/dashboard/Profile';
-import OrderHistory from '../pages/dashboard/OrderHistory';
-import Wishlist from '../pages/dashboard/WishList';
-import Addresses from '../pages/dashboard/Addresses';
-import PaymentMethods from '../pages/dashboard/PaymentMethods';
-import MyReviews from '../pages/dashboard/MyReviews';
 import DashboardAuth from '../pages/auth/DashboardAuth/DashboardAuth';
 import Login from '../pages/auth/Login/Login';
 import Register from '../pages/auth/Register/Register';
@@ -29,12 +23,6 @@ const AppRoutes = () => {
       <Route element={<ProtectedRoute />}>
         <Route path='/dashboard/:username' element={<MainLayout />}>
           <Route path='/dashboard/:username' element={<DashboardLayout />} />
-          <Route path='profile' element={<Profile />} />
-          <Route path='orders' element={<OrderHistory />} />
-          <Route path='wish-list' element={<Wishlist />} />
-          <Route path='addresses' element={<Addresses />} />
-          <Route path='payments' element={<PaymentMethods />} />
-          <Route path='reviews' element={<MyReviews />} />
         </Route>
       </Route>
     </Routes>
