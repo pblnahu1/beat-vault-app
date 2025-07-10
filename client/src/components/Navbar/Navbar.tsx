@@ -4,16 +4,19 @@ import { ShoppingCart, Store, UserCog2, Menu, X } from 'lucide-react';
 import { useCart } from '../../store/useCart';
 import { LogoutButton } from '../LogoutButton';
 import { SearchBar } from '../UI/SearchComponent';
+import { ButtonGestion } from '../UI/Buttons/ButtonGestionProps';
+import authService from '../../services/authService';
 
 export const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const items = useCart((state) => state.items);
   const itemCount = Array.isArray(items) ? items.reduce((total, item) => total + item.quantity, 0) : 0;
   const token = localStorage.getItem("authToken");
+  const currentUser = authService.getCurrentUser();
+  const username = currentUser?.username;
 
   const navLinks = [
     { to: "/", label: "Inicio" },
-    { to: "/#about", label: "Sobre Nosotros" },
     { to: "/cart", label: "Carrito", icon: <ShoppingCart />, badge: itemCount > 0 ? itemCount : null }
   ];
 
@@ -54,8 +57,15 @@ export const Navbar: React.FC = () => {
                 {label}
               </Link>
             ))}
-            {token ? (
-              <LogoutButton />
+            {token && username ? (
+              <>
+                <ButtonGestion 
+                  username={username} 
+                  className="ml-2" 
+                  children={<UserCog2 />}
+                />
+                <LogoutButton />
+              </>
             ) : (
               <Link
                 to="/auth"
@@ -80,7 +90,7 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden bg-zinc-950/95 fixed inset-0 z-50 flex flex-col">
+        <div className="md:hidden bg-zinc-950/95 backdrop-blur-md fixed inset-0 z-50 flex flex-col">
           <div className="flex items-center justify-between px-4 py-4 border-b border-zinc-800">
             <Link to="/" className="flex items-center gap-2 text-xl font-semibold" onClick={() => setMenuOpen(false)}>
               <Store className="text-blue-600" />
@@ -119,16 +129,15 @@ export const Navbar: React.FC = () => {
               ))}
             </nav>
             <div className="mt-auto flex flex-col gap-2">
-              {token ? (
-                <button
-                  onClick={() => {
-                    setMenuOpen(false);
-                    // Si LogoutButton es un botón, se puede llamar acá o dejarlo como está
-                  }}
-                  className="w-full"
-                >
+              {token && username ? (
+                <>
+                  <ButtonGestion 
+                    username={username} 
+                    className="ml-2" 
+                    children="Gestioná tu cuenta"   
+                  />
                   <LogoutButton />
-                </button>
+                </>
               ) : (
                 <Link
                   to="/auth"
