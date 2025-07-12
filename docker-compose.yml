@@ -11,8 +11,8 @@ services:
       POSTGRES_DB: db_fluxshop
       POSTGRES_HOST_AUTH_METHOD: md5 #forzar metodo de auth md5 más compatible
     volumes:
-      - ./server/db/init.sql:/docker-entrypoint-initdb.d/init.sql
-      # - ./database-tools/backups/db_fluxshop_backup_*.sql:/docker-entrypoint-initdb.d/db_fluxshop_backup_*.sql
+      # - ./server/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./database-tools/backups/db_fluxshop_backup_2025-07-02T23-59-47.sql:/docker-entrypoint-initdb.d/db_fluxshop_backup_2025-07-02T23-59-47.sql
       - postgres_data:/var/lib/postgresql/data
     networks:
       - fluxshop-network

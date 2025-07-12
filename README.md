@@ -107,6 +107,18 @@ El proyecto está organizado en dos grandes módulos:
 
 ---
 
+## Tests (server)
+
+### Ejecutar tests:
+```bash
+npm run tests
+```
+
+### Test de conexión a la DB
+El archivo `tests/connection-status.test.js` contiene un test básico que verifica si la base de datos está accesible y operativa. Se realiza una consulta SQL simple (`SELECT 1 + 1`) y se valida que la respuesta sea correcta. Este test sirve para asegurar que la conexión esté funcionando antes de ejecutar tests más complejos.
+
+---
+
 ## Instalación rápida
 
 Con Docker:
