@@ -30,7 +30,7 @@ app.use(bodyParser.json());
 
 // para los productos
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-app.use("/static", express.static(path.join(__dirname, "public"))); // http://localhost:3000/static/products_screen/headphones.jpg
+app.use("/static", express.static(path.join(__dirname, "public")));
 
 app.use(router);
 
@@ -43,5 +43,5 @@ app.use(router);
 // listen to port
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`Servidor corriendo en puerto http://0.0.0.0:${PORT}`);
-    console.log(`Ambiente: ${process.env.NODE_ENV}` || 'development');
+    console.log(`Ambiente: ${process.env.NODE_ENV}`);
 })
