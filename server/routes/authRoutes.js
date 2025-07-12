@@ -11,10 +11,10 @@ import ensureToken from "../middleware/authMiddleware.js";
 import {
     getAllProducts,
     getProductsById,
-    getProductsByCategory,
-    createProduct,
-    updateProduct,
-    deleteProduct
+    getProductsByCategory
+    // createProduct,
+    // updateProduct,
+    // deleteProduct
 } from "../controllers/prodController.js";
 import { 
     getCartItems, 
@@ -23,15 +23,15 @@ import {
     clearCartItems,
     getCartItemCount
 } from '../controllers/cartController.js';
-import {
-    errorHandler,
-    notFoundHandler,
-    setupErrorHandling,
-    AppError,
-    ValidationError,
-    NotFoundError,
-    catchAsync
-} from "../middleware/errorHandler.js";
+// import {
+//     errorHandler,
+//     notFoundHandler,
+//     setupErrorHandling,
+//     AppError,
+//     ValidationError,
+//     NotFoundError,
+//     catchAsync
+// } from "../middleware/errorHandler.js";
 
 const r = express.Router()
 
@@ -130,7 +130,7 @@ GET    /cart/count    - Contar items
 
 
 // RUTA DE PRUEBA PARA ERRORES
-r.get('/api/test-error', (req, _res, _next) => {
+/*r.get('/api/test-error', (req, _res, _next) => {
     // ejemplo para distintos tipos de errores
     const {type} = req.query;
 
@@ -144,7 +144,7 @@ r.get('/api/test-error', (req, _res, _next) => {
         default:
             throw new Error('Generic error for testing');
     }
-})
+})*/
 
 
 export default r

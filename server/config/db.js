@@ -3,11 +3,11 @@ const {Pool} = pkg;
 
 // Para local
 /*const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'db_fluxshop',
-    password: 'pblnahupassword',
-    port: 5444,
+    user: '',
+    host: '',
+    database: '',
+    password: '',
+    port: ,
     ssl: false, //al estar en desarrollo desactivo
 })*/
 
