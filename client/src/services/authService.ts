@@ -31,7 +31,7 @@ if(!BASE_URL) {
 
 export const login = async (email: string, password: string): Promise<User> => {
     try {
-        const response = await fetch(`${BASE_URL}/auth/login`, {
+        const response = await fetch(`${BASE_URL}/api/auth/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -92,7 +92,7 @@ export const register = async (
             username
         };
 
-        const response = await fetch(`${BASE_URL}/auth/create-account`, {
+        const response = await fetch(`${BASE_URL}/api/auth/create-account`, {
             method: "POST",
             headers:{
                 "Content-Type": "application/json",
@@ -140,8 +140,34 @@ class AuthService {
     }
 
     logout(): void {
-        localStorage.removeItem('currentUser');
         localStorage.removeItem('authToken');
+        localStorage.removeItem('cart-storage');
+        localStorage.removeItem('currentUser');
+    }
+
+    paused_account_and_logout(): void {
+        const userStr = localStorage.getItem('currentUser');
+        const user = userStr ? JSON.parse(userStr) : null;
+
+        if(user?.id_u) {
+            fetch(`${BASE_URL}/api/paused-account`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({id_u: user.id_u})
+            }).catch((err) => {
+                console.error("Error al pausar cuenta en el servidor: ", err);
+            });
+        }
+
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('cart-storage');
+        localStorage.removeItem('currentUser');
+    }
+
+    delete_account_forever(): void {
+        /** todo: code */
     }
 
     isAuthenticated(): boolean {
