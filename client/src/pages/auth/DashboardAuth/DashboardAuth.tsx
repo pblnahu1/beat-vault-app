@@ -18,13 +18,13 @@ export default function DashboardAuth() {
 
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <Link
-            to="/auth/create-account"
+            to="/api/auth/create-account"
             className="bg-blue-600 text-slate-50 px-6 py-3 rounded-lg font-semibold shadow hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-zinc-900"
           >
             Crear cuenta
           </Link>
           <Link
-            to="/auth/login"
+            to="/api/auth/login"
             className="border border-slate-100 text-slate-50 px-6 py-3 rounded-lg font-semibold shadow hover:bg-blue-50 hover:text-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-zinc-900"
           >
             Iniciar sesión
