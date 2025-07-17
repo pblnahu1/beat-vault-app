@@ -1,27 +1,50 @@
+# estado de la api
+GET http://localhost:3000/api
+
+###
+
+# estado de la bd
+GET http://localhost:3000/api/status
+
+###
+
 # ver todos los prod
 GET http://localhost:3000/products
 
 ###
 
+# ver todos los usuarios (crear endpoint)
+GET http://localhost:3000/users
+
+###
+
 # crear usuario
-POST http://localhost:3000/account/create-account
+POST http://localhost:3000/api/auth/create-account
 Content-Type: application/json
 
 {
-    "email": "usertest14@gmail.com",
-    "password": "123456",
-    "username": "usertest14"
+  "email": "juancito@example.com",
+  "password": "123456",
+  "username": "juancito"
 }
 
 ### 
 
 ### login (user registered)
-POST http://localhost:3000/account/login
+POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "usertest14@gmail.com",
+    "email": "pablotorrez@gmail.com",
     "password": "123456"
+}
+
+### pausar la cuenta, `is-active` de la bd se actualiza
+POST http://localhost:3000/api/paused-account
+Content-Type: application/json
+
+{
+    "id_u": ""
 }
 
 ###
