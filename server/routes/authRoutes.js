@@ -6,7 +6,7 @@
 import express from "express";
 import debugAPI from "../controllers/debugController.js";
 import connDB from "../controllers/healthController.js";
-import { loginUser, registerUser } from "../controllers/authController.js";
+import { pausedAccountAndLogout, loginUser, registerUser } from "../controllers/authController.js";
 import ensureToken from "../middleware/authMiddleware.js";
 import {
     getAllProducts,
@@ -62,8 +62,10 @@ r.get("/api/status", connDB);
  * @desc Crea una nueva cuenta de usuario
  * @access Public
  */
-r.post("/auth/login", loginUser);
-r.post("/auth/create-account", registerUser);
+r.post("/api/auth/login", loginUser);
+r.post("/api/auth/create-account", registerUser);
+r.post("/api/paused-account", pausedAccountAndLogout);
+r.delete("api/delete-account", deleteAccountForever);
 
 
 // PROTECTED ROUTE
