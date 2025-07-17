@@ -6,7 +6,7 @@ export function ProtectedRoute() {
   const token = localStorage.getItem("authToken");
 
   if (!token) {
-    return <Navigate to="/auth" replace />;
+    return <Navigate to="/api/auth" replace />;
   }
 
   return <Outlet />;

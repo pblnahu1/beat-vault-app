@@ -116,7 +116,7 @@ export default function Register(): JSX.Element {
         
         <div className="text-center mt-6 text-sm text-slate-400">
           ¿Ya tienes una cuenta?{" "}
-          <a href="/auth/login" className="text-blue-400 font-medium hover:underline">
+          <a href="/api/auth/login" className="text-blue-400 font-medium hover:underline">
             Iniciar sesión
           </a>
         </div>
