@@ -1,6 +1,6 @@
 import { useState, useEffect, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../services/authService";
+import authService, { login } from "../services/authService";
 import { useCart } from "../store/useCart";
 
 interface UseLoginReturn {
@@ -33,8 +33,49 @@ export const useLogin = (): UseLoginReturn => {
     const handleSubmit = async (e: FormEvent): Promise<void> => {
       e.preventDefault();
       setErrorMessage(null);
+
       try {
-        const {token, username} = await login(email, password);
+        const {token, username, id_u, needsReactivation} = await login(email, password);
+
+        // guardo el usuario para futuros accesos
+        const user = { id_u, email, username, token };
+        localStorage.setItem("currentUser", JSON.stringify(user));
+
+
+        if (needsReactivation) {
+          const confirmReactivate = window.confirm("Tu cuenta está desactivada. ¿Querés reactivarla?");
+          if (confirmReactivate) {
+            try {
+              const userId = user?.id_u ?? await authService.getUserIdByEmail(email);
+              const { token: newToken, username: reactivatedUsername } = await authService.reactivate_account_and_login(String(userId));
+
+              const updatedUser = { id_u: userId, email, username: reactivatedUsername, token: newToken }
+              localStorage.setItem("authToken", newToken);
+              localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+              console.log("Cuenta reactivada y login exitoso");
+
+              await loadCart();
+              setTimeout(() => syncWithBackend(), 3000);
+
+              return navigate(`/dashboard/${reactivatedUsername}`);
+            } catch (error) {
+              console.error("Error al reactivar la cuenta:", error);
+              return setErrorMessage("No se pudo reactivar la cuenta");
+            }
+          } else {
+            return setErrorMessage("La cuenta sigue desactivada");
+          }
+        }
+
+        // usuario activo, login normal
+        // const user = { id_u, email, username, token };
+        // localStorage.setItem("authToken", token);
+        // localStorage.setItem("currentUser", JSON.stringify(user));
+
+        // await loadCart();
+        // setTimeout(() => syncWithBackend(), 3000);
+        // return navigate(`/dashboard/${username}`);
+
         if (token) {
           console.log("Token OK. Bienvenido!")
           localStorage.setItem("authToken", token);
@@ -60,6 +101,35 @@ export const useLogin = (): UseLoginReturn => {
         }
       } catch (error) {
         if (error instanceof Error) {
+          if(error.message === "REACTIVATION_REQUIRED") {
+            const confirmReactivate = window.confirm("Tu cuenta está desactivada. ¿Querés reactivarla?");
+            if(confirmReactivate) {
+              try {
+                const userStr = localStorage.getItem("currentUser");
+                const user = userStr ? JSON.parse(userStr) : null;
+
+                // en caso de que no exista el id del  usuairo podría
+                // necesitar hacer una consulta extra o ajustar desde el backend
+                // const authServiceInstance = new authService();
+                const userId = user?.id_u ?? await authService.getUserIdByEmail(email);
+                await authService.reactivate_account_and_login(String(userId));
+
+                // retry login después de la reactivación
+                const {token, username} = await login(email, password)
+                if (!token) {
+                  throw new Error("Token no recibido después de reactivar cuenta");
+                }
+                return navigate(`/dashboard/${username}`)
+              } catch (error) {
+                console.error("Error al reactivar la cuenta:", error);
+                setErrorMessage("No se pudo reactivar la cuenta");
+                return;
+              }
+            } else {
+              setErrorMessage("La cuenta sigue desactivada");
+              return;
+            }
+          }
           setErrorMessage(error.message);
         } else {
           setErrorMessage("Error desconocido al iniciar sesión");

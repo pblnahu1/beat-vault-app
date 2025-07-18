@@ -18,14 +18,19 @@ GET http://localhost:3000/users
 
 ###
 
+# ver id según email
+GET http://localhost:3000/api/users/id-by-email?email=pablonhtorrez@gmail.com
+
+###
+
 # crear usuario
 POST http://localhost:3000/api/auth/create-account
 Content-Type: application/json
 
 {
-  "email": "juancito@example.com",
+  "email": "oliver123@example.com",
   "password": "123456",
-  "username": "juancito"
+  "username": "Oliver"
 }
 
 ### 
@@ -35,19 +40,29 @@ POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "pablotorrez@gmail.com",
+    "email": "oliver123@example.com",
     "password": "123456"
 }
 
-### pausar la cuenta, `is-active` de la bd se actualiza
-POST http://localhost:3000/api/paused-account
+###
+
+# pausar la cuenta, `is-active = false`
+POST http://localhost:3000/api/users/paused-account
 Content-Type: application/json
 
 {
-    "id_u": ""
+    "id_u": 29
 }
 
 ###
+
+# reactivar la cuenta, `is-active = true`
+PATCH http://localhost:3000/api/users/29/reactivate-account
+
+###
+
+# eliminar cuenta
+DELETE http://localhost:3000/api/users/29
 
 ### dashboard (route protected)
 GET http://localhost:3000/dashboard/usertest14

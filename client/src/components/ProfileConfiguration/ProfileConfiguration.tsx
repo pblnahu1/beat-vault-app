@@ -6,6 +6,7 @@ import {
   Trash2,
   AlertTriangle
 } from 'lucide-react'
+import authService from "../../services/authService";
 
 export const ProfileConfiguration = () => {
 
@@ -22,6 +23,7 @@ export const ProfileConfiguration = () => {
   });
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showPauseModal, setShowPauseModal] = useState(false);
 
   const handleInputChange = (e) => {
     setFormData(prev => ({
@@ -31,7 +33,7 @@ export const ProfileConfiguration = () => {
   };
 
   const handleSave = () => {
-    console.log('Actualizando:',formData);
+    console.log('Actualizando:', formData);
     setUserData(prev => ({
       ...prev,
       username: formData.username,
@@ -40,11 +42,28 @@ export const ProfileConfiguration = () => {
     alert('Perfil actualizado');
   }
 
-  const handleDelete = () => {
-    // conecto mi api para eliminar
-    console.log('Eliminando cuenta...');
-    alert('Cuenta eliminada');
-    setShowDeleteModal(false);
+  const handleDelete = async () => {
+    try {
+      authService.delete_account_forever();
+      alert("Cuenta eliminada exitosamente");
+      window.location.href="/api/auth";
+    } catch (error) {
+      console.error("Error al eliminar la cuenta: ", error);
+      alert("Hubo un problema al eliminar la cuenta.");
+    } finally {
+      setShowDeleteModal(false)
+    }
+  }
+
+  const handlePauseAccount = async () => {
+    try {
+      authService.paused_account_and_logout()
+      alert("Cuenta pausada correctamente. Serás desconectado");
+      window.location.href="/api/auth";
+    } catch (error) {
+      console.error("Error: ", error)
+      alert("Hubo un problema al pausar la cuenta.");
+    }
   }
 
   return (
@@ -104,49 +123,87 @@ export const ProfileConfiguration = () => {
         </div>
 
       </div>
-        {/* Zona Peligrosa */}
-        <div className="max-w-2xl mx-auto mt-8 p-4 bg-red-900/20 border border-red-800 rounded-2xl">
-          <h3 className="text-red-400 font-semibold mb-2">Zona Peligrosa</h3>
-          <p className="text-gray-400 text-sm mb-4">
-            Eliminar tu cuenta es permanente y no se puede deshacer.
-          </p>
-          <button
-            onClick={() => setShowDeleteModal(true)}
-            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded flex items-center gap-2"
-          >
-            <Trash2 size={16} />
-            Eliminar Cuenta
-          </button>
-        </div>
+      {/* Zona Peligrosa */}
+      <div className="max-w-2xl mx-auto mt-8 p-4 bg-red-900/20 border border-red-800 rounded-2xl">
+        <h3 className="text-red-400 font-semibold mb-2">Zona Peligrosa</h3>
+        <p className="text-gray-400 text-sm mb-4">
+          Eliminar tu cuenta es permanente y no se puede deshacer.
+        </p>
+        <button
+          onClick={() => setShowDeleteModal(true)}
+          className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded flex items-center gap-2"
+        >
+          <Trash2 size={16} />
+          Eliminar Cuenta
+        </button>
+        <button
+          onClick={() => setShowPauseModal(true)}
+          className="mt-4 bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded flex items-center gap-2"
+        >
+          <AlertTriangle size={16} />
+          Pausar Cuenta
+        </button>
 
-        {/* Modal de confirmación */}
-        {showDeleteModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-gray-800 rounded-lg p-6 max-w-sm w-full">
-              <div className="flex items-center gap-3 mb-4">
-                <AlertTriangle className="text-red-500" size={24} />
-                <h3 className="text-lg font-bold text-white">¿Eliminar cuenta?</h3>
-              </div>
-              <p className="text-gray-300 mb-6">
-                Esta acción no se puede deshacer. Perderás todos tus datos permanentemente.
-              </p>
-              <div className="flex gap-3">
-                <button
-                  onClick={handleDelete}
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
-                >
-                  Sí, eliminar
-                </button>
-                <button
-                  onClick={() => setShowDeleteModal(false)}
-                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded"
-                >
-                  Cancelar
-                </button>
-              </div>
+      </div>
+
+      {/* Modal de confirmación */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-gray-800 rounded-lg p-6 max-w-sm w-full">
+            <div className="flex items-center gap-3 mb-4">
+              <AlertTriangle className="text-red-500" size={24} />
+              <h3 className="text-lg font-bold text-white">¿Eliminar cuenta?</h3>
+            </div>
+            <p className="text-gray-300 mb-6">
+              Esta acción no se puede deshacer. Perderás todos tus datos permanentemente.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={handleDelete}
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+              >
+                Sí, eliminar
+              </button>
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded"
+              >
+                Cancelar
+              </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
+
+      {/* modal de pausar */}
+      {showPauseModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-gray-800 rounded-lg p-6 max-w-sm w-full">
+            <div className="flex items-center gap-3 mb-4">
+              <AlertTriangle className="text-yellow-500" size={24} />
+              <h3 className="text-lg font-bold text-white">¿Pausar cuenta?</h3>
+            </div>
+            <p className="text-gray-300 mb-6">
+              Esta acción desactivará temporalmente tu cuenta. Podrás reactivarla luego iniciando sesión.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={handlePauseAccount}
+                className="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded"
+              >
+                Sí, pausar
+              </button>
+              <button
+                onClick={() => setShowPauseModal(false)}
+                className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }
