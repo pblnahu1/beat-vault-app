@@ -1,28 +1,34 @@
-
-// importante antes probar en postman o insomnia para 
+// importante antes probar en postman o insomnia para
 // asegurarse de que estamos haciendo las requests correctamente
-// con las rutas establecidas 
+// con las rutas establecidas
 
 import express from "express";
 import debugAPI from "../controllers/debugController.js";
 import connDB from "../controllers/healthController.js";
-import { pausedAccountAndLogout, loginUser, registerUser } from "../controllers/authController.js";
+import {
+  pausedAccountAndLogout,
+  loginUser,
+  registerUser,
+  reactivateAccount,
+  deleteAccountForever,
+  getUserIdByEmail
+} from "../controllers/authController.js";
 import ensureToken from "../middleware/authMiddleware.js";
 import {
-    getAllProducts,
-    getProductsById,
-    getProductsByCategory
-    // createProduct,
-    // updateProduct,
-    // deleteProduct
+  getAllProducts,
+  getProductsById,
+  getProductsByCategory,
+  // createProduct,
+  // updateProduct,
+  // deleteProduct
 } from "../controllers/prodController.js";
-import { 
-    getCartItems, 
-    addOrUpdateCartItem, 
-    removeCartItem, 
-    clearCartItems,
-    getCartItemCount
-} from '../controllers/cartController.js';
+import {
+  getCartItems,
+  addOrUpdateCartItem,
+  removeCartItem,
+  clearCartItems,
+  getCartItemCount,
+} from "../controllers/cartController.js";
 // import {
 //     errorHandler,
 //     notFoundHandler,
@@ -33,8 +39,7 @@ import {
 //     catchAsync
 // } from "../middleware/errorHandler.js";
 
-const r = express.Router()
-
+const r = express.Router();
 
 // DEBUG API
 /**
@@ -44,7 +49,6 @@ const r = express.Router()
  */
 r.get("/api", debugAPI);
 
-
 // CONEXIÓN BD
 /**
  * @route GET /status
@@ -52,7 +56,6 @@ r.get("/api", debugAPI);
  * @access Public
  */
 r.get("/api/status", connDB);
-
 
 // USERS
 /**
@@ -64,9 +67,11 @@ r.get("/api/status", connDB);
  */
 r.post("/api/auth/login", loginUser);
 r.post("/api/auth/create-account", registerUser);
-r.post("/api/paused-account", pausedAccountAndLogout);
-r.delete("api/delete-account", deleteAccountForever);
 
+r.post("/api/users/paused-account", pausedAccountAndLogout);
+r.patch("/api/users/:id/reactivate-account", reactivateAccount);
+r.delete("/api/users/:id", deleteAccountForever);
+r.get("/api/users/id-by-email", getUserIdByEmail);
 
 // PROTECTED ROUTE
 /**
@@ -74,13 +79,12 @@ r.delete("api/delete-account", deleteAccountForever);
  * @desc Dashboard de usuario
  * @access Private
  */
-r.get("/dashboard/:username", ensureToken, (req,res) => {
-    res.json({
-        message: "Bienvenido al panel de usuario",
-        user: req.user
-    })
-})
-
+r.get("/dashboard/:username", ensureToken, (req, res) => {
+  res.json({
+    message: "Bienvenido al panel de usuario",
+    user: req.user,
+  });
+});
 
 // PRODUCTS
 /**
@@ -94,13 +98,12 @@ r.get("/dashboard/:username", ensureToken, (req,res) => {
  */
 // rutas para user común (este podrá ver todos los productos pero no podrá modificarlos, sólo podrá modificar su cuenta de usuario y su carrito todo dentro del dashboard de usuario)
 r.get("/products", getAllProducts);
-r.get('/products/:id', getProductsById);
-r.get('/products/category/:category', getProductsByCategory);
+r.get("/products/:id", getProductsById);
+r.get("/products/category/:category", getProductsByCategory);
 // rutas para user admin (puede hacer todo lo de user común + administrar productos que es agregar sus propios productos y subirlos para "la venta" y que el user común pueda comprarlos)
 // r.post('/product', createProduct);
 // r.put('/product/:id', updateProduct);
 // r.delete('/product/:id', deleteProduct);
-
 
 // CART ITEMS
 /**
@@ -112,12 +115,12 @@ r.get('/products/category/:category', getProductsByCategory);
  * @desc Elimina un producto del carrito de compras del usuario
  */
 // Todas las rutas requieren autenticación
-r.get('/cart', ensureToken, getCartItems);
-r.post('/cart', ensureToken, addOrUpdateCartItem);
-r.put('/cart/:productId', ensureToken, addOrUpdateCartItem);
-r.delete('/cart/clear', ensureToken, clearCartItems);
-r.delete('/cart/:productId', ensureToken, removeCartItem);
-r.get('/cart/count', ensureToken, getCartItemCount);
+r.get("/cart", ensureToken, getCartItems);
+r.post("/cart", ensureToken, addOrUpdateCartItem);
+r.put("/cart/:productId", ensureToken, addOrUpdateCartItem);
+r.delete("/cart/clear", ensureToken, clearCartItems);
+r.delete("/cart/:productId", ensureToken, removeCartItem);
+r.get("/cart/count", ensureToken, getCartItemCount);
 
 /*
 
@@ -129,7 +132,6 @@ DELETE /cart/clear    - Limpiar carrito
 GET    /cart/count    - Contar items
 
 */
-
 
 // RUTA DE PRUEBA PARA ERRORES
 /*r.get('/api/test-error', (req, _res, _next) => {
@@ -148,5 +150,4 @@ GET    /cart/count    - Contar items
     }
 })*/
 
-
-export default r
+export default r;

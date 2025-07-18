@@ -1,6 +1,7 @@
 import { generateToken } from "../utils/generateToken.js";
 import { query } from "../config/db.js";
 import bcrypt from "bcryptjs";
+import { findUserByEmail } from "../services/userService.js";
 
 const loginUser = async (req, res) => {
   try {
@@ -29,7 +30,23 @@ const loginUser = async (req, res) => {
     // verifico si el usuario está activo
     if (!user.is_active) {
       console.log("Usuario inactivo");
-      return res.status(403).json({ message: "Tu cuenta está desactivada" });
+      const payload = {
+        id_u: user.id_u,
+        email: user.email,
+        username: user.username,
+        role_id: user.role_id,
+      };
+      const {token} = generateToken(payload);
+      return res.status(200).json({ 
+        message: "Tu cuenta está desactivada.",
+        needsReactivation: true,        
+        user:{
+          id_u:user.id_u,
+          email:user.email,
+          username:user.username
+        },
+        token
+      });
     }
 
     console.log("Contraseña encriptada en BD: ", user.hashed_password);
@@ -163,6 +180,22 @@ const registerUser = async (req, res) => {
   }
 };
 
+const getUserIdByEmail = async (req, res, next) => {
+  try {
+    const {email} = req.query;
+    if(!email){
+      return res.status(400).json({message:"Email es requerido"});
+    }
+    const user = await findUserByEmail(email);
+    if(!user) {
+      return res.status(404).json({message:"Usuario no encontrado"});
+    }
+    return res.status(200).json({id_u:user.id_u})
+  } catch (err) {
+    next(err);
+  }
+}
+
 const pausedAccountAndLogout = async (req, res, next) => {
   try {
     const { id_u } = req.body;
@@ -177,7 +210,9 @@ const pausedAccountAndLogout = async (req, res, next) => {
     await query("UPDATE users SET is_active = false WHERE id_u = $1", [id_u]);
     console.log(`Usuario ${id_u} desactivado correctamente.`);
 
-    return res.status(200).json({ message: "Cuenta pausada (usuario inactivo)." });
+    return res
+      .status(200)
+      .json({ message: "Cuenta pausada (usuario inactivo)." });
   } catch (error) {
     console.error("Error en Pausar Cuenta: ", error);
     res.status(500).json({ message: "Error en Pausar Cuenta" });
@@ -185,4 +220,72 @@ const pausedAccountAndLogout = async (req, res, next) => {
   }
 };
 
-export { loginUser, registerUser, pausedAccountAndLogout };
+const reactivateAccount = async (req, res, next) => {
+  try {
+    const { id_u } = req.body;
+    if (!id_u) {
+      return res
+        .status(400)
+        .json({ message: "ID de usuario requerido para reactivar la cuenta" });
+    }
+
+    // actualizo el usuario
+    const updateResult = await query("UPDATE users SET is_active = true, last_login = CURRENT_TIMESTAMP WHERE id_u = $1 RETURNING id_u, email, username", [id_u]);
+    
+    if(updateResult.rowCount === 0) {
+      return res.status(404).json({
+        message: "Usuario no encontrado"
+      })
+    }
+
+    const user = updateResult.rows[0];
+
+    // genera token y devuelve
+    const token = generateToken({
+      id_u: user.id_u,
+      email: user.email,
+      username: user.username
+    })
+
+    return res.status(200).json({ 
+      message: "Cuenta reactivada exitosamente.",
+      token,
+      user
+    });
+  } catch (error) {
+    console.error("Error al reactivar la cuenta: ", error);
+    res.status(500).json({ message: "Error al reactivar la cuenta" });
+    next(error);
+  }
+};
+
+const deleteAccountForever = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({
+        message: "ID de usuario requerido para eliminar la cuenta",
+      });
+    }
+
+    await query("DELETE FROM users WHERE id_u = $1", [id]);
+    console.log(`Usuario ${id} eliminado permanentemente`);
+
+    return res.status(200).json({
+      message: "Cuenta eliminada definitivamente",
+    });
+  } catch (error) {
+    console.error("Error al eliminar la cuenta: ", error);
+    res.status(500).json({ message: "Error al eliminar la cuenta" });
+    next(error);
+  }
+};
+
+export {
+  loginUser,
+  registerUser,
+  pausedAccountAndLogout,
+  reactivateAccount,
+  deleteAccountForever,
+  getUserIdByEmail
+};

@@ -16,6 +16,7 @@ export interface User {
   email: string;
   username: string;
   token: string;
+  needsReactivation?:boolean;
 }
 
 export interface CartItem extends Product {

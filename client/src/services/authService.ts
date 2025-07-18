@@ -39,14 +39,20 @@ export const login = async (email: string, password: string): Promise<User> => {
             body: JSON.stringify({email, password}),
         });
 
-        if(!response.ok){
-            if(response.status === 401) {
-                throw new Error("Credenciales incorrectas"); // devuelve 401
-            }
-            throw new Error("Error en el servidor"); // 500
-        }
         
         const data = await response.json();
+        
+        if(!response.ok){
+            if(response.status === 401 && data.reactivable) {
+                throw new Error("REACTIVATION_REQUIRED")
+            }
+
+            if(response.status === 401) {
+                throw new Error("Credenciales incorrectas");
+            }
+
+            throw new Error(data.message || "Error en el servidor"); //500
+        }
 
         const token = data.token;
         const userInfo = data.user;
@@ -134,6 +140,15 @@ class AuthService {
         return null;
     }
 
+    async getUserIdByEmail(email: string): Promise<string> {
+        const res = await fetch(`${BASE_URL}/api/users/id-by-email?email=${email}`);
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.message || "No se pudo obtener el ID de usuario");
+        return data.id_u;
+    }
+
+
     setCurrentUser(user: User, token: string): void {
         localStorage.setItem('currentUser', JSON.stringify(user));
         localStorage.setItem('authToken', token);
@@ -150,7 +165,7 @@ class AuthService {
         const user = userStr ? JSON.parse(userStr) : null;
 
         if(user?.id_u) {
-            fetch(`${BASE_URL}/api/paused-account`, {
+            fetch(`${BASE_URL}/api/users/paused-account`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -167,8 +182,46 @@ class AuthService {
     }
 
     delete_account_forever(): void {
-        /** todo: code */
+        const userStr = localStorage.getItem('currentUser');
+        const user = userStr ? JSON.parse(userStr) : null;
+
+        if(user?.id_u){
+            fetch(`${BASE_URL}/api/users/${user.id_u}`, {
+                method: 'DELETE',
+            }).catch(err => console.error("Error al eliminar la cuenta: ", err));
+        }
+
+        //limpieza total
+        this.logout()
     }
+
+    async reactivate_account_and_login(userId: string): Promise<{ token: string, username: string }> {
+        const res = await fetch(`${BASE_URL}/api/users/${userId}/reactivate-account`, {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id_u: userId })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.message || "Error al reactivar la cuenta");
+        }
+
+        if (!data.token || !data.username) {
+            throw new Error("Faltan datos después de la reactivación");
+        }
+
+        localStorage.setItem("authToken", data.token);
+
+        return {
+            token: data.token,
+            username: data.username
+        };
+    }
+
 
     isAuthenticated(): boolean {
         const token = this.getToken();
