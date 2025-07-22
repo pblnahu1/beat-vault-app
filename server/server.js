@@ -10,11 +10,10 @@ import { fileURLToPath } from "url";
 import bodyParser from "body-parser";
 // import helmet from "helmet";
 // import morgan from "morgan";
-
 import {PORT, FRONTEND_URL} from "./config/config.js"
-import router from "./routes/authRoutes.js";
+import publicRoutes from "./routes/publicRoutes.js";
+// import adminRoutes from "./routes/adminRoutes.js";
 // import hashPasswordExec from "./scripts/hashPasswordExec.js";
-// import errorHandler, { notFoundHandler } from "./middleware/errorHandler.js";
 
 const app = express()
 
@@ -32,15 +31,11 @@ app.use(bodyParser.json());
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 app.use("/static", express.static(path.join(__dirname, "public")));
 
-app.use(router);
+app.use(publicRoutes);
+// app.use("/admin", adminRoutes);
 
 // hashPasswordExec();
 
-// manejo de errores
-// app.use(notFoundHandler);
-// app.use(errorHandler);
-
-// listen to port
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`Servidor corriendo en puerto http://0.0.0.0:${PORT}`);
     console.log(`Ambiente: ${process.env.NODE_ENV}`);

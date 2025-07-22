@@ -1,46 +1,26 @@
 import { query } from "../config/db.js";
-
-// export const productGetter = async (_req, res) => {
-//     try {
-//         // const {id_p, name_p, description_p, price_p, image_p, category_p} = req.body;
-
-//         const QUERY = await query("SELECT * FROM fluxshop_products", []);
-//         // await query('SELECT * FROM fluxshop_products WHERE category_p = $1', ['Electronics']);
-
-//         const prod = QUERY.rows.map(p => ({
-//             ...p,
-//             image_p: `http://localhost:3000/static/${p.image_p}`
-//         }))
-
-//         res.json(prod);
-//     } catch (error) {
-//         if(error instanceof Error) {
-//             throw new Error("Error al consultar datos a la tabla fluxshop_products");
-//         }
-//         res.status(500).json({
-//             success: false,
-//             error: "error fetching products"
-//         })
-
-//     }
-// }
-
 /**
  * Obtener todos los productos
  */
+
+// constante base para URL de imágenes (mejor que hardcodear directamente dentro del map)
+const IMAGE_BASE_URL = "http://localhost:3000/static";
 
 export const getAllProducts = async(_req,res)=>{
     try {
         const QUERY = await query("SELECT * FROM fluxshop_products", []);
 
-        const products = QUERY.rows.map(p => ({
+        // formatea los resultados para enviar solo los campos relevantes al cliente
+        const products = QUERY.rows.map((p) => ({
             id: p.id_p,
             name: p.name_p,
             description: p.description_p,
             price: p.price_p,
-            image: `http://localhost:3000/static/${p.image_p}`,
+            image: `${IMAGE_BASE_URL}/${p.image_p}`,
             category: p.category_p
         }));
+
+        // envía los productos en formato JSON
         res.json(products);
     } catch (error) {
         console.error("Error al obtener productos:",error);
@@ -74,7 +54,7 @@ export const getProductsById = async (req,res)=>{
             name: p.name_p,
             description: p.description_p,
             price: p.price_p,
-            image: `http://localhost:3000/static/${p.image_p}`,
+            image: `${IMAGE_BASE_URL}/${p.image_p}`,
             category: p.category_p
         };
 
@@ -103,7 +83,7 @@ export const getProductsByCategory = async (req,res) => {
             name: p.name_p,
             description: p.description_p,
             price: p.price_p,
-            image: `http://localhost:3000/static/${p.image_p}`,
+            image: `${IMAGE_BASE_URL}/${p.image_p}`,
             category: p.category_p
         }));
 
@@ -142,7 +122,7 @@ export const createProduct = async (req, res) => {
             name: p.name_p,
             description: p.description_p,
             price: p.price_p,
-            image: `http://localhost:3000/static/${p.image_p}`,
+            image: `${IMAGE_BASE_URL}/${p.image_p}`,
             category: p.category_p
         }
 
@@ -235,7 +215,7 @@ export const updateProduct = async (req, res) => {
             name: p.name_p,
             description: p.description_p,
             price: p.price_p,
-            image: `http://localhost:3000/static/${p.image_p}`,
+            image: `${IMAGE_BASE_URL}/${p.image_p}`,
             category: p.category_p
         };
 
