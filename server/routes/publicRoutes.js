@@ -18,7 +18,7 @@ import {
   getAllProducts,
   getProductsById,
   getProductsByCategory,
-} from "../controllers/prodController.js";
+} from "../controllers/public/prodController.js";
 import {
   getCartItems,
   addOrUpdateCartItem,

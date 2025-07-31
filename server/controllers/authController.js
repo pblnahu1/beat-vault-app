@@ -9,6 +9,7 @@ import {
   roleCheckId,
   updateLastLogin,
   updateUserStatus,
+  authenticateUser
 } from "../services/userService.js";
 
 // 🔐 LOGIN
@@ -22,34 +23,37 @@ const loginUser = async (req, res) => {
       });
     }
 
-    const user = await findUserByEmail(email);
+    const user = await authenticateUser(email, password);
+
     if (!user) {
-      return res.status(401).json({ message: "Usuario no encontrado" });
+      return res.status(401).json({
+        message: "Usuario no encontrado o credenciales inválidas.",
+      });
     }
 
     if (!user.is_active) {
+      const reactivation = await reactivateUserAccount(user.id_u);
       const token = generateToken({
-        id_u: user.id_u,
-        email: user.email,
-        username: user.username,
-        role_id: user.role_id,
+        id_u: reactivation.id_u,
+        email: reactivation.email,
+        username: reactivation.username,
+        role_id: user.id_role,
+        permissions: user.permissions,
       });
 
       return res.status(200).json({
-        message: "Tu cuenta está desactivada.",
-        needsReactivation: true,
-        user: {
-          id_u: user.id_u,
-          email: user.email,
-          username: user.username,
-        },
+        message: "Tu cuenta estaba desactivada, se reactivó automáticamente.",
+        reactivated: true,
         token,
+        user: {
+          id_u: reactivation.id_u,
+          email: reactivation.email,
+          username: reactivation.username,
+          role_id: user.id_role,
+          role: user.name_role,
+          permissions: user.permissions,
+        },
       });
-    }
-
-    const isPasswordValid = await bcrypt.compare(password, user.hashed_password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: "Contraseña incorrecta" });
     }
 
     await updateLastLogin(user.id_u);
@@ -58,7 +62,8 @@ const loginUser = async (req, res) => {
       id_u: user.id_u,
       email: user.email,
       username: user.username,
-      role_id: user.role_id,
+      role_id: user.id_role,
+      permissions: user.permissions,
     });
 
     res.status(200).json({
@@ -68,7 +73,9 @@ const loginUser = async (req, res) => {
         id_u: user.id_u,
         email: user.email,
         username: user.username,
-        role_id: user.role_id,
+        role_id: user.id_role,
+        role: user.name_role,
+        permissions: user.permissions,
         last_login: new Date().toISOString(),
       },
     });
@@ -87,8 +94,8 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ message: "Todos los campos son obligatorios" });
     }
 
-    const userExists = await findUserByEmail(email);
-    if (userExists) {
+    const existingUser = await findUserByEmail(email);
+    if (existingUser) {
       return res.status(400).json({ message: "El usuario ya está registrado" });
     }
 
@@ -108,9 +115,17 @@ const registerUser = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await insertUser(email, hashedPassword, username, finalRoleId, true);
+    const userId = await insertUser(email, hashedPassword, username, finalRoleId, true);
 
-    res.status(201).json({ message: "Usuario creado con éxito" });
+    res.status(201).json({
+      message: "Usuario creado con éxito",
+      user: {
+        id_u: userId,
+        email,
+        username,
+        role_id: finalRoleId,
+      },
+    });
   } catch (error) {
     console.error("Error en registerUser: ", error);
     res.status(500).json({ message: "Error en el servidor" });

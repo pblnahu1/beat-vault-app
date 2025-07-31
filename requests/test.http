@@ -19,7 +19,7 @@ GET http://localhost:3000/users
 ###
 
 # ver id según email
-GET http://localhost:3000/api/users/id-by-email?email=pablonhtorrez@gmail.com
+GET http://localhost:3000/api/users/id-by-email?email=cliente01@example.com
 
 ###
 
@@ -65,7 +65,7 @@ PATCH http://localhost:3000/api/users/29/reactivate-account
 DELETE http://localhost:3000/api/users/29
 
 ### dashboard (route protected)
-GET http://localhost:3000/dashboard/usertest14
+GET http://localhost:3000/dashboard/pabli_adin
 Authorization: Bearer <token>
 
 ###

@@ -1,0 +1,82 @@
+# CREO UN NUEVO USUARIO con ROLE de ADMIN
+POST http://localhost:3000/api/auth/create-account
+Content-Type: application/json
+
+{
+    "email":"torrezadmin@gmail.com",
+    "password":"123456",
+    "username":"pabli_adin",
+    "role_id":1
+}
+
+###
+
+# Inicio SESION de ADMIN
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "torrezadmin@gmail.com",
+    "password": "123456"
+}
+
+## -> RESPUESTA ESPERADA:
+# {
+#   "success": true,
+#   "token": <TOKEN_GENERADO>,
+#   "user": {
+#     "id_u": 37,
+#     "email": "torrezadmin@gmail.com",
+#     "username": "pabli_adin",
+#     "role_id": 1,
+#     "role": "admin",
+#     "permissions": [
+#       "manage_users",
+#       "view_users",
+#       "create_users",
+#       "update_users",
+#       "delete_users",
+#       "view_products",
+#       "manage_products",
+#       "create_products",
+#       "update_products",
+#       "delete_products",
+#       "view_orders",
+#       "manage_orders"
+#     ],
+#     "last_login": "2025-07-31T12:20:34.002Z"
+#   }
+# }
+
+
+###
+
+# CREO UN PRODUCTO como ADMINSITRADOR
+POST http://localhost:3000/admin/products/create
+Content-Type: application/json
+Authorization: bearer <token>
+
+{
+    "name": "Logo personalizado",
+    "description": "Este es un logo personalizado que podés usar en tu portfolio",
+    "price": 9.99,
+    "image": "products_screen/dark.jpg",
+    "category": "Diseño Gráfico"
+}
+
+###
+
+# ACTUALIZO un PRODUCTO EXISTENTE COMO ADMINISTRADOR
+PUT http://localhost:3000/admin/products/update/6
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjozNywiZW1haWwiOiJ0b3JyZXphZG1pbkBnbWFpbC5jb20iLCJ1c2VybmFtZSI6InBhYmxpX2FkaW4iLCJyb2xlX2lkIjoxLCJwZXJtaXNzaW9ucyI6WyJtYW5hZ2VfdXNlcnMiLCJ2aWV3X3VzZXJzIiwiY3JlYXRlX3VzZXJzIiwidXBkYXRlX3VzZXJzIiwiZGVsZXRlX3VzZXJzIiwidmlld19wcm9kdWN0cyIsIm1hbmFnZV9wcm9kdWN0cyIsImNyZWF0ZV9wcm9kdWN0cyIsInVwZGF0ZV9wcm9kdWN0cyIsImRlbGV0ZV9wcm9kdWN0cyIsInZpZXdfb3JkZXJzIiwibWFuYWdlX29yZGVycyJdLCJpYXQiOjE3NTM5ODA4NzMsImV4cCI6MTc1Mzk4NDQ3M30.H66N3EujkgXpAtRRgUhn-VAtiYAUt6JUTatxQiiAf48
+
+{
+    "price": 10.00
+}
+
+###
+
+# ELIMINO UN PRODUCTO EXISTENTE COMO ADMINISTRADOR
+DELETE http://localhost:3000/admin/products/delete/6
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjozNywiZW1haWwiOiJ0b3JyZXphZG1pbkBnbWFpbC5jb20iLCJ1c2VybmFtZSI6InBhYmxpX2FkaW4iLCJyb2xlX2lkIjoxLCJwZXJtaXNzaW9ucyI6WyJtYW5hZ2VfdXNlcnMiLCJ2aWV3X3VzZXJzIiwiY3JlYXRlX3VzZXJzIiwidXBkYXRlX3VzZXJzIiwiZGVsZXRlX3VzZXJzIiwidmlld19wcm9kdWN0cyIsIm1hbmFnZV9wcm9kdWN0cyIsImNyZWF0ZV9wcm9kdWN0cyIsInVwZGF0ZV9wcm9kdWN0cyIsImRlbGV0ZV9wcm9kdWN0cyIsInZpZXdfb3JkZXJzIiwibWFuYWdlX29yZGVycyJdLCJpYXQiOjE3NTM5ODA4NzMsImV4cCI6MTc1Mzk4NDQ3M30.H66N3EujkgXpAtRRgUhn-VAtiYAUt6JUTatxQiiAf48

@@ -12,7 +12,7 @@ import bodyParser from "body-parser";
 // import morgan from "morgan";
 import {PORT, FRONTEND_URL} from "./config/config.js"
 import publicRoutes from "./routes/publicRoutes.js";
-// import adminRoutes from "./routes/adminRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 // import hashPasswordExec from "./scripts/hashPasswordExec.js";
 
 const app = express()
@@ -32,7 +32,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 app.use("/static", express.static(path.join(__dirname, "public")));
 
 app.use(publicRoutes);
-// app.use("/admin", adminRoutes);
+app.use("/admin", adminRoutes);
 
 // hashPasswordExec();
 
