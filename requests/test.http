@@ -19,7 +19,7 @@ GET http://localhost:3000/users
 ###
 
 # ver id según email
-GET http://localhost:3000/api/users/id-by-email?email=cliente01@example.com
+GET http://localhost:3000/api/users/id-by-email?email=torrezito@gmail.com
 
 ###
 
@@ -66,7 +66,7 @@ DELETE http://localhost:3000/api/users/29
 
 ### dashboard (route protected)
 GET http://localhost:3000/dashboard/pabli_adin
-Authorization: Bearer <token>
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjoyLCJlbWFpbCI6ImNsaWVudGUwMUBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoiQ2xpZW50ZVNpblJvbCIsInJvbGVfaWQiOjIsInBlcm1pc3Npb25zIjpbInZpZXdfcHJvZHVjdHMiXSwiaWF0IjoxNzU0MTk0MzA4LCJleHAiOjE3NTQxOTc5MDh9.Tmr6yxdeYCr3HdYqUmp1ptORLyQGafGEpxf7Ui8sdnw
 
 ###
 
@@ -74,12 +74,12 @@ Authorization: Bearer <token>
 
 ### para recuperar el carrito
 GET http://localhost:3000/cart
-Authorization: Bearer <token>
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjoyLCJlbWFpbCI6ImNsaWVudGUwMUBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoiQ2xpZW50ZVNpblJvbCIsInJvbGVfaWQiOjIsInBlcm1pc3Npb25zIjpbInZpZXdfcHJvZHVjdHMiXSwiaWF0IjoxNzU0MTk0MzA4LCJleHAiOjE3NTQxOTc5MDh9.Tmr6yxdeYCr3HdYqUmp1ptORLyQGafGEpxf7Ui8sdnw
 
 ### para agregar productos al carrito
 POST http://localhost:3000/cart
 Content-Type: application/json
-Authorization: Bearer <token>
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjoyLCJlbWFpbCI6ImNsaWVudGUwMUBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoiQ2xpZW50ZVNpblJvbCIsInJvbGVfaWQiOjIsInBlcm1pc3Npb25zIjpbInZpZXdfcHJvZHVjdHMiXSwiaWF0IjoxNzU0MTk0MzA4LCJleHAiOjE3NTQxOTc5MDh9.Tmr6yxdeYCr3HdYqUmp1ptORLyQGafGEpxf7Ui8sdnw
 
 {
     "productId": 1, 
@@ -90,7 +90,7 @@ Authorization: Bearer <token>
 ### para actualizar la cantidad de productos en el carrito
 PUT http://localhost:3000/cart/14
 Content-Type: application/json
-Authorization: Bearer <token>
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjoyLCJlbWFpbCI6ImNsaWVudGUwMUBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoiQ2xpZW50ZVNpblJvbCIsInJvbGVfaWQiOjIsInBlcm1pc3Npb25zIjpbInZpZXdfcHJvZHVjdHMiXSwiaWF0IjoxNzU0MTk0MzA4LCJleHAiOjE3NTQxOTc5MDh9.Tmr6yxdeYCr3HdYqUmp1ptORLyQGafGEpxf7Ui8sdnw
 
 {
     "productId": 1,
@@ -100,14 +100,14 @@ Authorization: Bearer <token>
 ### para eliminar producto del carrito
 DELETE http://localhost:3000/cart/1
 Content-Type: application/json
-Authorization: Bearer <token>
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjoyLCJlbWFpbCI6ImNsaWVudGUwMUBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoiQ2xpZW50ZVNpblJvbCIsInJvbGVfaWQiOjIsInBlcm1pc3Npb25zIjpbInZpZXdfcHJvZHVjdHMiXSwiaWF0IjoxNzU0MTk0MzA4LCJleHAiOjE3NTQxOTc5MDh9.Tmr6yxdeYCr3HdYqUmp1ptORLyQGafGEpxf7Ui8sdnw
 
 ### para limpiar el carrito (borrar todo)
 DELETE http://localhost:3000/cart/clear
 Content-Type: application/json
-Authorization: Bearer <token>
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjoyLCJlbWFpbCI6ImNsaWVudGUwMUBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoiQ2xpZW50ZVNpblJvbCIsInJvbGVfaWQiOjIsInBlcm1pc3Npb25zIjpbInZpZXdfcHJvZHVjdHMiXSwiaWF0IjoxNzU0MTk0MzA4LCJleHAiOjE3NTQxOTc5MDh9.Tmr6yxdeYCr3HdYqUmp1ptORLyQGafGEpxf7Ui8sdnw
 
 ### para contar cuantos productos tengo
 GET http://localhost:3000/cart/count
 Content-Type: application/json
-Authorization: Bearer <token>
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjoyLCJlbWFpbCI6ImNsaWVudGUwMUBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoiQ2xpZW50ZVNpblJvbCIsInJvbGVfaWQiOjIsInBlcm1pc3Npb25zIjpbInZpZXdfcHJvZHVjdHMiXSwiaWF0IjoxNzU0MTk0MzA4LCJleHAiOjE3NTQxOTc5MDh9.Tmr6yxdeYCr3HdYqUmp1ptORLyQGafGEpxf7Ui8sdnw
