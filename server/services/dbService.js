@@ -1,5 +1,6 @@
 import {query} from "../config/db.js"
 
+// función asincrona para automatización, testing de despliegues, o CI/CD
 export const testConnection = async () => {
     try {
         const result = await query("SELECT NOW()");

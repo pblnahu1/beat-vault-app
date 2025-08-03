@@ -1,8 +1,8 @@
 // protege rutas (verifica jwt)
 
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
+import jwt from "jsonwebtoken";
 
 const ensureToken = (req, res, next) => {
   const token = req.header("Authorization")?.split(" ")[1]; // bearer <token> !!! importante
@@ -16,7 +16,7 @@ const ensureToken = (req, res, next) => {
   try {
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET || "my_secret_key"
+      process.env.JWT_SECRET
     );
     req.user = decoded;
     next();

@@ -135,7 +135,7 @@ cd server && npm install && npm run dev
 
 ## Pro Tip
 
-Usá el archivo `requests/test.http` (VS Code REST Client) para probar la API fácilmente.
+Usá el archivo `requests/test.http` (VS Code REST Client o Postman) para probar la API fácilmente.
 
 ---
 

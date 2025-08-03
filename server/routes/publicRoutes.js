@@ -18,10 +18,7 @@ import {
   getAllProducts,
   getProductsById,
   getProductsByCategory,
-  // createProduct,
-  // updateProduct,
-  // deleteProduct
-} from "../controllers/prodController.js";
+} from "../controllers/public/prodController.js";
 import {
   getCartItems,
   addOrUpdateCartItem,
@@ -29,15 +26,6 @@ import {
   clearCartItems,
   getCartItemCount,
 } from "../controllers/cartController.js";
-// import {
-//     errorHandler,
-//     notFoundHandler,
-//     setupErrorHandling,
-//     AppError,
-//     ValidationError,
-//     NotFoundError,
-//     catchAsync
-// } from "../middleware/errorHandler.js";
 
 const r = express.Router();
 
@@ -67,13 +55,12 @@ r.get("/api/status", connDB);
  */
 r.post("/api/auth/login", loginUser);
 r.post("/api/auth/create-account", registerUser);
-
 r.post("/api/users/paused-account", pausedAccountAndLogout);
 r.patch("/api/users/:id/reactivate-account", reactivateAccount);
 r.delete("/api/users/:id", deleteAccountForever);
 r.get("/api/users/id-by-email", getUserIdByEmail);
 
-// PROTECTED ROUTE
+// PROTECTED ROUTE (user dashboard)
 /**
  * @route GET /dashboard/:username
  * @desc Dashboard de usuario
@@ -100,10 +87,6 @@ r.get("/dashboard/:username", ensureToken, (req, res) => {
 r.get("/products", getAllProducts);
 r.get("/products/:id", getProductsById);
 r.get("/products/category/:category", getProductsByCategory);
-// rutas para user admin (puede hacer todo lo de user común + administrar productos que es agregar sus propios productos y subirlos para "la venta" y que el user común pueda comprarlos)
-// r.post('/product', createProduct);
-// r.put('/product/:id', updateProduct);
-// r.delete('/product/:id', deleteProduct);
 
 // CART ITEMS
 /**
@@ -121,33 +104,5 @@ r.put("/cart/:productId", ensureToken, addOrUpdateCartItem);
 r.delete("/cart/clear", ensureToken, clearCartItems);
 r.delete("/cart/:productId", ensureToken, removeCartItem);
 r.get("/cart/count", ensureToken, getCartItemCount);
-
-/*
-
-GET    /cart          - Obtener carrito
-POST   /cart          - Agregar item
-PUT    /cart/:id      - Actualizar producto del carrito (por stock)
-DELETE /cart/:id      - Eliminar item
-DELETE /cart/clear    - Limpiar carrito
-GET    /cart/count    - Contar items
-
-*/
-
-// RUTA DE PRUEBA PARA ERRORES
-/*r.get('/api/test-error', (req, _res, _next) => {
-    // ejemplo para distintos tipos de errores
-    const {type} = req.query;
-
-    switch(type) {
-        case 'validation': 
-            throw new ValidationError('Email format is invalid', 'email');
-        case 'notfound':
-            throw new NotFoundError('Test resource');
-        case 'server':
-            throw new AppError('Something went wrong on server', 500);
-        default:
-            throw new Error('Generic error for testing');
-    }
-})*/
 
 export default r;

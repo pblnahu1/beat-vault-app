@@ -35,10 +35,10 @@ export const useLogin = (): UseLoginReturn => {
       setErrorMessage(null);
 
       try {
-        const {token, username, id_u, needsReactivation} = await login(email, password);
+        const {token, username, id_u, needsReactivation, id_role} = await login(email, password);
 
         // guardo el usuario para futuros accesos
-        const user = { id_u, email, username, token };
+        const user = { id_u, email, username, token, needsReactivation, id_role };
         localStorage.setItem("currentUser", JSON.stringify(user));
 
 
