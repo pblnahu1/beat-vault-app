@@ -4,12 +4,14 @@ interface RegisterRequest{
     email: string;
     password: string;
     username: string;
+    role_id?: number;
 }
 
 interface RegisterResponse {
     id?: number | string;
     email?: string;
     username?: string;
+    role_id?: number;
 }
 
 interface ErrorResponse {
@@ -61,7 +63,8 @@ export const login = async (email: string, password: string): Promise<User> => {
             id_u: userInfo.id_u,
             username: userInfo.username,
             email: userInfo.email,
-            token: token
+            token: token,
+            id_role: userInfo.id_role
         }
 
         localStorage.setItem('authToken', userData.token);
@@ -89,13 +92,16 @@ export const login = async (email: string, password: string): Promise<User> => {
 export const register = async (
     email: string,
     password: string,
-    username: string
+    username: string,
+    role: number
 ): Promise<RegisterResponse> => {
     try {
+        const role_id = role ? Number(role) : undefined;
         const userData: RegisterRequest = {
             email,
             password,
-            username
+            username,
+            role_id
         };
 
         const response = await fetch(`${BASE_URL}/api/auth/create-account`, {
