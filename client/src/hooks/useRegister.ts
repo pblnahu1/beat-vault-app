@@ -13,6 +13,8 @@ interface UseRegisterReturn {
     setShowPassword: (showPassword: boolean) => void;
     isSubmitDisabled: boolean;
     error: string | null;
+    role: number;
+    setRole: (role: number) => void;
     handleTogglePassword: () => void;
     handleSubmit: (e: FormEvent) => Promise<void>;
 }
@@ -24,6 +26,7 @@ export const useRegister = (): UseRegisterReturn => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [isSubmitDisabled, setIsSubmitDisabled] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [role, setRole] = useState<number>(2);
     const navigate = useNavigate();
 
     const handleTogglePassword = (): void => {
@@ -33,7 +36,7 @@ export const useRegister = (): UseRegisterReturn => {
     const handleSubmit = async (e: FormEvent): Promise<void> => {
         e.preventDefault();
         try {
-            await register(email,password,username);
+            await register(email, password, username, role);
             navigate(`/dashboard/${username}`)
         } catch (error) {
             if(error instanceof Error){
@@ -72,5 +75,7 @@ export const useRegister = (): UseRegisterReturn => {
         error,
         handleTogglePassword,
         handleSubmit,
+        role,
+        setRole
     }
 }
