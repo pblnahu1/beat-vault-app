@@ -1,15 +1,13 @@
 import { generateToken } from "../utils/generateToken.js";
 import bcrypt from "bcryptjs";
 import {
-  deleteAccount,
   findUserByEmail,
   getCustomerRoleId,
   insertUser,
   reactivateUserAccount,
   roleCheckId,
   updateLastLogin,
-  updateUserStatus,
-  authenticateUser
+  authenticateUser,
 } from "../services/userService.js";
 
 // 🔐 LOGIN
@@ -91,7 +89,9 @@ const registerUser = async (req, res) => {
     const { email, password, username, role_id } = req.body;
 
     if (!email || !password || !username) {
-      return res.status(400).json({ message: "Todos los campos son obligatorios" });
+      return res
+        .status(400)
+        .json({ message: "Todos los campos son obligatorios" });
     }
 
     const existingUser = await findUserByEmail(email);
@@ -104,18 +104,28 @@ const registerUser = async (req, res) => {
     if (role_id) {
       const roleExists = await roleCheckId(role_id);
       if (!roleExists) {
-        return res.status(400).json({ message: "El rol seleccionado no existe" });
+        return res
+          .status(400)
+          .json({ message: "El rol seleccionado no existe" });
       }
     } else {
       const defaultRoleId = await getCustomerRoleId("customer");
       if (!defaultRoleId) {
-        return res.status(500).json({ message: "Rol por defecto no encontrado en la BD" });
+        return res
+          .status(500)
+          .json({ message: "Rol por defecto no encontrado en la BD" });
       }
       finalRoleId = defaultRoleId;
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const userId = await insertUser(email, hashedPassword, username, finalRoleId, true);
+    const userId = await insertUser(
+      email,
+      hashedPassword,
+      username,
+      finalRoleId,
+      true
+    );
 
     res.status(201).json({
       message: "Usuario creado con éxito",
@@ -132,108 +142,4 @@ const registerUser = async (req, res) => {
   }
 };
 
-// GET USER ID BY EMAIL
-const getUserIdByEmail = async (req, res) => {
-  try {
-    const { email } = req.query;
-    if (!email) {
-      return res.status(400).json({ message: "Email es requerido" });
-    }
-
-    const user = await findUserByEmail(email);
-    if (!user) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
-    }
-
-    res.status(200).json({ id_u: user.id_u });
-  } catch (error) {
-    console.error("Error en getUserIdByEmail: ", error);
-    res.status(500).json({ message: "Error en el servidor" });
-  }
-};
-
-// PAUSE ACCOUNT
-const pausedAccountAndLogout = async (req, res) => {
-  try {
-    const { id_u } = req.body;
-
-    if (!id_u) {
-      return res.status(400).json({
-        message: "ID de usuario requerido para pausar la cuenta",
-      });
-    }
-
-    await updateUserStatus(id_u);
-
-    res.status(200).json({ message: "Cuenta pausada (usuario inactivo)." });
-  } catch (error) {
-    console.error("Error en pausedAccountAndLogout: ", error);
-    res.status(500).json({ message: "Error en el servidor" });
-  }
-};
-
-// REACTIVATE ACCOUNT
-const reactivateAccount = async (req, res) => {
-  try {
-    const { id_u } = req.body;
-
-    if (!id_u) {
-      return res.status(400).json({
-        message: "ID de usuario requerido para reactivar la cuenta",
-      });
-    }
-
-    const user = await reactivateUserAccount(id_u);
-    if (!user) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
-    }
-
-    const token = generateToken({
-      id_u: user.id_u,
-      email: user.email,
-      username: user.username,
-      role_id: user.role_id,
-    });
-
-    res.status(200).json({
-      message: "Cuenta reactivada exitosamente.",
-      token,
-      user,
-    });
-  } catch (error) {
-    console.error("Error en reactivateAccount: ", error);
-    res.status(500).json({ message: "Error en el servidor" });
-  }
-};
-
-// DELETE ACCOUNT
-const deleteAccountForever = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    if (!id) {
-      return res.status(400).json({
-        message: "ID de usuario requerido para eliminar la cuenta",
-      });
-    }
-
-    const deleted = await deleteAccount(id);
-    if (!deleted) {
-      return res.status(404).json({ message: "Usuario no encontrado o ya eliminado" });
-    }
-
-    res.status(200).json({ message: "Cuenta eliminada definitivamente" });
-  } catch (error) {
-    console.error("Error en deleteAccountForever: ", error);
-    res.status(500).json({ message: "Error en el servidor" });
-  }
-};
-
-export {
-  loginUser,
-  registerUser,
-  pausedAccountAndLogout,
-  reactivateAccount,
-  deleteAccountForever,
-  getUserIdByEmail,
-};
+export { loginUser, registerUser };
