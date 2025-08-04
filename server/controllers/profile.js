@@ -4,8 +4,44 @@ import {
   updateProfileUser,
   deleteAccount,
   reactivateUserAccount,
+  findUserById,
 } from "../services/userService.js";
 import { generateToken } from "../utils/generateToken.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+
+/**
+ * 
+ */
+export const getProfileUser = async(req,res)=>{
+  try {
+    const authHeader = req.headers.authorization;
+    if(!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        message: "Ocurrió un error al recuperar los headers de autorización y el token"
+      })
+    }
+
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await findUserById(decoded.id_u); //id del token
+    if(!user) return res.status(404).json({message: "Usuario no encontrado"})
+
+    // envio dato relevante
+    return res.json({
+      id_u: user.id_u,
+      username: user.username,
+      email: user.email,
+      token,
+      role_id: user.role_id
+    });
+  } catch (error) {
+      console.error(error);
+      return res.status(401).json({
+        message: error.message
+      })
+  }
+}
 
 // GET USER ID BY EMAIL
 const getUserIdByEmail = async (req, res) => {
@@ -49,14 +85,36 @@ const pausedAccountAndLogout = async (req, res) => {
 
 // UPDATE PROFILE (email, username, password)
 const updateUserController = async (req, res) => {
-  const {id: id_u} = req.params;
+  const { id } = req.params;
   const { email, username, password } = req.body;
 
-  const result = await updateProfileUser(id_u, { email, username, password });
-  if (result.success) {
-    res.status(200).json(result.user);
-  } else {
-    res.status(400).json({ error: result.message });
+  try {
+    const user = await findUserById(id);
+    if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
+
+    const updates = {};
+
+    if (email && email !== user.email) updates.email = email;
+    if (username && username !== user.username) updates.username = username;
+    if (password) updates.hashed_password = await bcrypt.hash(password, 10);
+
+    if (Object.keys(updates).length === 0)
+      return res.status(400).json({ message: "No hay cambios para aplicar" });
+
+    const updatedUser = await updateProfileUser(id, updates);
+
+    return res.json({
+      message: "Perfil actualizado correctamente",
+      data: {
+        id_u: updatedUser.id,
+        email: updatedUser.email,
+        username: updatedUser.username
+      }
+    });
+
+  } catch (error) {
+    console.error("Error al actualizar perfil:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
   }
 };
 
