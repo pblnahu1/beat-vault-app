@@ -70,6 +70,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjoyLCJlbWFpb
 
 ###
 
+# actualizar perfil
+PUT http://localhost:3000/api/users/4
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91Ijo0LCJlbWFpbCI6InBhYmxvdG9ycmV6QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicGJsbmFodTEwIiwicm9sZV9pZCI6MSwicGVybWlzc2lvbnMiOlsibWFuYWdlX3VzZXJzIiwidmlld191c2VycyIsImNyZWF0ZV91c2VycyIsInVwZGF0ZV91c2VycyIsImRlbGV0ZV91c2VycyIsInZpZXdfcHJvZHVjdHMiLCJtYW5hZ2VfcHJvZHVjdHMiLCJjcmVhdGVfcHJvZHVjdHMiLCJ1cGRhdGVfcHJvZHVjdHMiLCJkZWxldGVfcHJvZHVjdHMiLCJ2aWV3X29yZGVycyIsIm1hbmFnZV9vcmRlcnMiXSwiaWF0IjoxNzU0MzI0MTc2LCJleHAiOjE3NTQzMjc3NzZ9.joL2xujrh84OS7nznOMMnDEaWCOZrkLotSFhd3PtgMw
+
+{
+    "username": "pblnahutorrez10"
+}
+
 ### carts
 
 ### para recuperar el carrito
