@@ -23,9 +23,9 @@ export const ProfileConfiguration = () => {
   });
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showPauseModal, setShowPauseModal] = useState(false);
+  // const [showPauseModal, setShowPauseModal] = useState(false);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
@@ -55,16 +55,16 @@ export const ProfileConfiguration = () => {
     }
   }
 
-  const handlePauseAccount = async () => {
-    try {
-      authService.paused_account_and_logout()
-      alert("Cuenta pausada correctamente. Serás desconectado");
-      window.location.href="/api/auth";
-    } catch (error) {
-      console.error("Error: ", error)
-      alert("Hubo un problema al pausar la cuenta.");
-    }
-  }
+  // const handlePauseAccount = async () => {
+  //   try {
+  //     authService.paused_account_and_logout()
+  //     alert("Cuenta pausada correctamente. Serás desconectado");
+  //     window.location.href="/api/auth";
+  //   } catch (error) {
+  //     console.error("Error: ", error)
+  //     alert("Hubo un problema al pausar la cuenta.");
+  //   }
+  // }
 
   return (
     <div className=" bg-gray-900 p-4">
@@ -136,13 +136,13 @@ export const ProfileConfiguration = () => {
           <Trash2 size={16} />
           Eliminar Cuenta
         </button>
-        <button
+        {/* <button
           onClick={() => setShowPauseModal(true)}
           className="mt-4 bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded flex items-center gap-2"
         >
           <AlertTriangle size={16} />
           Pausar Cuenta
-        </button>
+        </button> */}
 
       </div>
 
@@ -176,7 +176,7 @@ export const ProfileConfiguration = () => {
       )}
 
       {/* modal de pausar */}
-      {showPauseModal && (
+      {/*{showPauseModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-gray-800 rounded-lg p-6 max-w-sm w-full">
             <div className="flex items-center gap-3 mb-4">
@@ -202,7 +202,7 @@ export const ProfileConfiguration = () => {
             </div>
           </div>
         </div>
-      )}
+      )}*/}
 
     </div>
   )
