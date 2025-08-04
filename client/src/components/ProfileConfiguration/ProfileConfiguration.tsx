@@ -1,5 +1,5 @@
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   User,
   Save,
@@ -11,42 +11,78 @@ import authService from "../../services/authService";
 export const ProfileConfiguration = () => {
 
   const [userData, setUserData] = useState({
-    id: 1,
-    username: 'usuario_ejemplo',
-    email: 'usuario@ejemplo.com'
+    id: 0,
+    username: '',
+    email: ''
   });
 
   const [formData, setFormData] = useState({
-    username: userData.username,
-    email: userData.email,
+    username: '',
+    email: '',
     newPassword: '',
   });
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showPauseModal, setShowPauseModal] = useState(false);
+  // const [showPauseModal, setShowPauseModal] = useState(false);
 
-  const handleInputChange = (e) => {
+  useEffect(()=>{
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        if (!token) throw new Error("No hay token disponible");
+        const { data } = await authService.getProfile(token);
+        const { id_u, username, email } = data;
+        const storedUser = authService.getCurrentUser();
+        authService.setCurrentUser({
+          id_u,
+          username, 
+          email,
+          token, 
+          role_id: storedUser?.role_id ?? 2,
+        }, token);
+
+        setUserData({ id: id_u, username, email });
+        setFormData({ username, email, newPassword: "" });
+      } catch (error) {
+        console.error("Error al obtener perfil:", error);
+      }
+    };
+
+    fetchProfile();
+  },[])
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
     }));
   };
 
-  const handleSave = () => {
-    console.log('Actualizando:', formData);
-    setUserData(prev => ({
-      ...prev,
-      username: formData.username,
-      email: formData.email
-    }));
-    alert('Perfil actualizado');
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) throw new Error("No hay un token disponible");
+      const payload: { username?: string; email?: string; password?: string } = {};
+
+      if (formData.username !== userData.username) payload.username = formData.username;
+      if (formData.email !== userData.email) payload.email = formData.email;
+      if (formData.newPassword.trim() !== "") payload.password = formData.newPassword;
+
+      const { data } = await authService.updateProfile(userData.id, payload, token);
+      const { id_u, email, username } = data;
+      setUserData({ id: id_u, email, username });
+      alert("Perfil actualizado correctamente");
+    } catch (error) {
+      console.error(error);
+      alert("No se pudo actualizar el perfil");
+    }
   }
 
   const handleDelete = async () => {
     try {
       authService.delete_account_forever();
       alert("Cuenta eliminada exitosamente");
-      window.location.href="/api/auth";
+      window.location.href = "/api/auth";
     } catch (error) {
       console.error("Error al eliminar la cuenta: ", error);
       alert("Hubo un problema al eliminar la cuenta.");
@@ -55,16 +91,16 @@ export const ProfileConfiguration = () => {
     }
   }
 
-  const handlePauseAccount = async () => {
-    try {
-      authService.paused_account_and_logout()
-      alert("Cuenta pausada correctamente. Serás desconectado");
-      window.location.href="/api/auth";
-    } catch (error) {
-      console.error("Error: ", error)
-      alert("Hubo un problema al pausar la cuenta.");
-    }
-  }
+  // const handlePauseAccount = async () => {
+  //   try {
+  //     authService.paused_account_and_logout()
+  //     alert("Cuenta pausada correctamente. Serás desconectado");
+  //     window.location.href="/api/auth";
+  //   } catch (error) {
+  //     console.error("Error: ", error)
+  //     alert("Hubo un problema al pausar la cuenta.");
+  //   }
+  // }
 
   return (
     <div className=" bg-gray-900 p-4">
@@ -136,13 +172,13 @@ export const ProfileConfiguration = () => {
           <Trash2 size={16} />
           Eliminar Cuenta
         </button>
-        <button
+        {/* <button
           onClick={() => setShowPauseModal(true)}
           className="mt-4 bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded flex items-center gap-2"
         >
           <AlertTriangle size={16} />
           Pausar Cuenta
-        </button>
+        </button> */}
 
       </div>
 
@@ -176,7 +212,7 @@ export const ProfileConfiguration = () => {
       )}
 
       {/* modal de pausar */}
-      {showPauseModal && (
+      {/*{showPauseModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-gray-800 rounded-lg p-6 max-w-sm w-full">
             <div className="flex items-center gap-3 mb-4">
@@ -202,7 +238,7 @@ export const ProfileConfiguration = () => {
             </div>
           </div>
         </div>
-      )}
+      )}*/}
 
     </div>
   )

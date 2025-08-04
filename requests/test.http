@@ -23,6 +23,11 @@ GET http://localhost:3000/api/users/id-by-email?email=torrezito@gmail.com
 
 ###
 
+GET http://localhost:3000/api/auth/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91Ijo0LCJlbWFpbCI6InBhYmxvdG9ycmV6QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoidG9ycmV6UGFibG8yNSIsInJvbGVfaWQiOjEsInBlcm1pc3Npb25zIjpbIm1hbmFnZV91c2VycyIsInZpZXdfdXNlcnMiLCJjcmVhdGVfdXNlcnMiLCJ1cGRhdGVfdXNlcnMiLCJkZWxldGVfdXNlcnMiLCJ2aWV3X3Byb2R1Y3RzIiwibWFuYWdlX3Byb2R1Y3RzIiwiY3JlYXRlX3Byb2R1Y3RzIiwidXBkYXRlX3Byb2R1Y3RzIiwiZGVsZXRlX3Byb2R1Y3RzIiwidmlld19vcmRlcnMiLCJtYW5hZ2Vfb3JkZXJzIl0sImlhdCI6MTc1NDMzNTU1MCwiZXhwIjoxNzU0MzM5MTUwfQ.bW38SxclvCAQDzIoimriSrAzqIytbpeyQQfnRaUZsVo
+
+###
+
 # crear usuario
 POST http://localhost:3000/api/auth/create-account
 Content-Type: application/json
@@ -40,7 +45,7 @@ POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "oliver123@example.com",
+    "email": "pablotorrez@gmail.com",
     "password": "123456"
 }
 
@@ -69,6 +74,15 @@ GET http://localhost:3000/dashboard/pabli_adin
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjoyLCJlbWFpbCI6ImNsaWVudGUwMUBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoiQ2xpZW50ZVNpblJvbCIsInJvbGVfaWQiOjIsInBlcm1pc3Npb25zIjpbInZpZXdfcHJvZHVjdHMiXSwiaWF0IjoxNzU0MTk0MzA4LCJleHAiOjE3NTQxOTc5MDh9.Tmr6yxdeYCr3HdYqUmp1ptORLyQGafGEpxf7Ui8sdnw
 
 ###
+
+# actualizar perfil
+PUT http://localhost:3000/api/users/4
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91Ijo0LCJlbWFpbCI6InBhYmxvdG9ycmV6QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicGJsbmFodXRvcnJlejEwIiwicm9sZV9pZCI6MSwicGVybWlzc2lvbnMiOlsibWFuYWdlX3VzZXJzIiwidmlld191c2VycyIsImNyZWF0ZV91c2VycyIsInVwZGF0ZV91c2VycyIsImRlbGV0ZV91c2VycyIsInZpZXdfcHJvZHVjdHMiLCJtYW5hZ2VfcHJvZHVjdHMiLCJjcmVhdGVfcHJvZHVjdHMiLCJ1cGRhdGVfcHJvZHVjdHMiLCJkZWxldGVfcHJvZHVjdHMiLCJ2aWV3X29yZGVycyIsIm1hbmFnZV9vcmRlcnMiXSwiaWF0IjoxNzU0MzI4NjU2LCJleHAiOjE3NTQzMzIyNTZ9.Ol8RG2vdt8QaZjLluwtoZSymslBeDn3OLPMV271A8qY
+
+{
+    "username": "torrezPablo25"
+}
 
 ### carts
 

@@ -1,4 +1,4 @@
-import { User } from "../types";
+import { User, UpdateProfilePayload, UpdateProfileResponse } from "../types/user.ts";
 
 interface RegisterRequest{
     email: string;
@@ -64,7 +64,7 @@ export const login = async (email: string, password: string): Promise<User> => {
             username: userInfo.username,
             email: userInfo.email,
             token: token,
-            id_role: userInfo.id_role
+            role_id: userInfo.role_id
         }
 
         localStorage.setItem('authToken', userData.token);
@@ -134,6 +134,23 @@ class AuthService {
         return localStorage.getItem('authToken');
     }
 
+    async getProfile(token: string): Promise<{ data: User }> {
+        const response = await fetch(`${BASE_URL}/api/auth/profile`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || "No se pudo obtener el perfil del usuario");
+        }
+
+        const data: User = await response.json();
+        return {data};
+    }
+
+
     getCurrentUser(): User | null {        
         const userStr = localStorage.getItem('currentUser');
         if (userStr) {
@@ -201,7 +218,7 @@ class AuthService {
         this.logout()
     }
 
-    async reactivate_account_and_login(userId: string): Promise<{ token: string, username: string }> {
+    async reactivate_account_and_login(userId: string): Promise<{ token: string, username: string, role_id: number }> {
         const res = await fetch(`${BASE_URL}/api/users/${userId}/reactivate-account`, {
             method: 'PATCH',
             headers: {
@@ -224,7 +241,8 @@ class AuthService {
 
         return {
             token: data.token,
-            username: data.username
+            username: data.username,
+            role_id: data.role_id || 2 // default value
         };
     }
 
@@ -233,6 +251,25 @@ class AuthService {
         const token = this.getToken();
         const user = this.getCurrentUser();
         return !!(token && user);
+    }
+
+    async updateProfile(id_u: number, payload: UpdateProfilePayload, token: string): Promise<UpdateProfileResponse> {
+        const res = await fetch(`${BASE_URL}/api/users/${id_u}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) {
+            const error = await res.json();
+            throw new Error(error?.message || "Error al actualizar el perfil");
+        }
+
+        const data = await res.json();
+        return { data, token };
     }
 }
 

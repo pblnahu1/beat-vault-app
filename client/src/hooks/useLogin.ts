@@ -35,10 +35,10 @@ export const useLogin = (): UseLoginReturn => {
       setErrorMessage(null);
 
       try {
-        const {token, username, id_u, needsReactivation, id_role} = await login(email, password);
+        const {token, username, id_u, needsReactivation, role_id} = await login(email, password);
 
         // guardo el usuario para futuros accesos
-        const user = { id_u, email, username, token, needsReactivation, id_role };
+        const user = { id_u, email, username, token, needsReactivation, role_id };
         localStorage.setItem("currentUser", JSON.stringify(user));
 
 
@@ -47,9 +47,9 @@ export const useLogin = (): UseLoginReturn => {
           if (confirmReactivate) {
             try {
               const userId = user?.id_u ?? await authService.getUserIdByEmail(email);
-              const { token: newToken, username: reactivatedUsername } = await authService.reactivate_account_and_login(String(userId));
+              const { token: newToken, username: reactivatedUsername, role_id: reactivatedRole } = await authService.reactivate_account_and_login(String(userId));
 
-              const updatedUser = { id_u: userId, email, username: reactivatedUsername, token: newToken }
+              const updatedUser = { id_u: userId, email, username: reactivatedUsername, token: newToken, role_id: reactivatedRole }
               localStorage.setItem("authToken", newToken);
               localStorage.setItem("currentUser", JSON.stringify(updatedUser));
               console.log("Cuenta reactivada y login exitoso");
@@ -112,14 +112,28 @@ export const useLogin = (): UseLoginReturn => {
                 // necesitar hacer una consulta extra o ajustar desde el backend
                 // const authServiceInstance = new authService();
                 const userId = user?.id_u ?? await authService.getUserIdByEmail(email);
-                await authService.reactivate_account_and_login(String(userId));
+                const {token: newToken, username: reactivatedUsername, role_id: reactivatedRole} = await authService.reactivate_account_and_login(String(userId));
 
                 // retry login después de la reactivación
-                const {token, username} = await login(email, password)
-                if (!token) {
-                  throw new Error("Token no recibido después de reactivar cuenta");
-                }
-                return navigate(`/dashboard/${username}`)
+                // const {token, username} = await login(email, password)
+                // if (!token) {
+                //   throw new Error("Token no recibido después de reactivar cuenta");
+                // }
+                const updatedUser = {
+                  id_u: userId,
+                  email,
+                  username: reactivatedUsername,
+                  token: newToken,
+                  role_id: reactivatedRole
+                };
+                
+                localStorage.setItem("authToken", newToken);
+                localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+
+                await loadCart();
+                setTimeout(() => syncWithBackend(), 3000);
+
+                return navigate(`/dashboard/${reactivatedUsername}`)
               } catch (error) {
                 console.error("Error al reactivar la cuenta:", error);
                 setErrorMessage("No se pudo reactivar la cuenta");

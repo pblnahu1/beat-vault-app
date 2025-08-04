@@ -16,7 +16,7 @@ export default function DashboardLayout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const prevUserRef = useRef(currentUser?.id_u);
   const username = currentUser?.username;
-  const role_id = currentUser?.id_role;
+  const role_id = currentUser?.role_id;
 
   useEffect(() => {
     const handleStorage = () => setCurrentUser(authService.getCurrentUser());

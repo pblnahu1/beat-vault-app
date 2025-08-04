@@ -11,15 +11,6 @@ export interface Product {
   category: string;
 }
 
-export interface User {
-  id_u: number;
-  email: string;
-  username: string;
-  token: string;
-  needsReactivation?:boolean;
-  id_role: number; // Agregado para manejar roles
-}
-
 export interface CartItem extends Product {
   quantity: number;
   id_cart: number;

@@ -5,14 +5,7 @@
 import express from "express";
 import debugAPI from "../controllers/debugController.js";
 import connDB from "../controllers/healthController.js";
-import {
-  pausedAccountAndLogout,
-  loginUser,
-  registerUser,
-  reactivateAccount,
-  deleteAccountForever,
-  getUserIdByEmail
-} from "../controllers/authController.js";
+import { loginUser, registerUser } from "../controllers/authController.js";
 import ensureToken from "../middleware/authMiddleware.js";
 import {
   getAllProducts,
@@ -26,6 +19,14 @@ import {
   clearCartItems,
   getCartItemCount,
 } from "../controllers/cartController.js";
+import {
+  updateUserController,
+  reactivateAccount,
+  deleteAccountForever,
+  getUserIdByEmail,
+  pausedAccountAndLogout,
+  getProfileUser
+} from "../controllers/profile.js";
 
 const r = express.Router();
 
@@ -55,10 +56,13 @@ r.get("/api/status", connDB);
  */
 r.post("/api/auth/login", loginUser);
 r.post("/api/auth/create-account", registerUser);
-r.post("/api/users/paused-account", pausedAccountAndLogout);
-r.patch("/api/users/:id/reactivate-account", reactivateAccount);
-r.delete("/api/users/:id", deleteAccountForever);
-r.get("/api/users/id-by-email", getUserIdByEmail);
+// administración del perfil (pausar, eliminar, reactivar, actualizar, tomar id del email)
+r.post("/api/users/paused-account", ensureToken, pausedAccountAndLogout);
+r.patch("/api/users/:id/reactivate-account", ensureToken, reactivateAccount);
+r.delete("/api/users/:id", ensureToken, deleteAccountForever);
+r.get("/api/auth/profile", ensureToken, getProfileUser);
+r.get("/api/users/id-by-email", ensureToken, getUserIdByEmail);
+r.put("/api/users/:id", ensureToken, updateUserController);
 
 // PROTECTED ROUTE (user dashboard)
 /**
