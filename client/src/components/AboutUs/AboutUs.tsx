@@ -1,10 +1,9 @@
-import React from "react";
-import { Store } from "lucide-react";
+import { FC } from "react";
 
-export const AboutUs: React.FC = () => {
+export const AboutUs: FC = () => {
   return (
       <div className="bg-zinc-900/90 rounded-3xl shadow-2xl max-w-[1220px] w-full mx-auto my-16 flex flex-col items-center justify-center p-8" id="about">
-        <Store className="text-blue-600" size={78} />
+        <img src="/logo_cart.svg" alt="Logo Cart" className="w-16 h-16 bg-white rounded-full mb-2" />
         <h1 className="text-3xl md:text-4xl font-extrabold text-slate-50 mb-4 text-center">
           Sobre Fluxshop
         </h1>
