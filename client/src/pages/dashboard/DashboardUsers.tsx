@@ -88,11 +88,6 @@ export default function DashboardLayout() {
     setIsMobileMenuOpen(false);
   }
 
-  useEffect(() => {
-  console.log("Current user:", currentUser);
-  console.log("Role ID:", role_id);
-}, [currentUser, role_id]);
-
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       {/* Header Principal */}
