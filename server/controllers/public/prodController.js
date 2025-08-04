@@ -1,4 +1,5 @@
-process.loadEnvFile();
+import dotenv from "dotenv";
+dotenv.config();
 import { query } from "../../config/db.js";
 /**
  * Obtener todos los productos

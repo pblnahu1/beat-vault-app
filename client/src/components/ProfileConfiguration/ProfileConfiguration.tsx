@@ -32,6 +32,14 @@ export const ProfileConfiguration = () => {
         if (!token) throw new Error("No hay token disponible");
         const { data } = await authService.getProfile(token);
         const { id_u, username, email } = data;
+        const storedUser = authService.getCurrentUser();
+        authService.setCurrentUser({
+          id_u,
+          username, 
+          email,
+          token, 
+          role_id: storedUser?.role_id ?? 2,
+        }, token);
 
         setUserData({ id: id_u, username, email });
         setFormData({ username, email, newPassword: "" });
