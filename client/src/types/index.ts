@@ -17,7 +17,7 @@ export interface User {
   username: string;
   token: string;
   needsReactivation?:boolean;
-  id_role: number; // Agregado para manejar roles
+  role_id: number; // Agregado para manejar roles
 }
 
 export interface CartItem extends Product {

@@ -64,7 +64,7 @@ export const login = async (email: string, password: string): Promise<User> => {
             username: userInfo.username,
             email: userInfo.email,
             token: token,
-            id_role: userInfo.id_role
+            role_id: userInfo.role_id
         }
 
         localStorage.setItem('authToken', userData.token);
@@ -201,7 +201,7 @@ class AuthService {
         this.logout()
     }
 
-    async reactivate_account_and_login(userId: string): Promise<{ token: string, username: string }> {
+    async reactivate_account_and_login(userId: string): Promise<{ token: string, username: string, role_id: number }> {
         const res = await fetch(`${BASE_URL}/api/users/${userId}/reactivate-account`, {
             method: 'PATCH',
             headers: {
@@ -224,7 +224,8 @@ class AuthService {
 
         return {
             token: data.token,
-            username: data.username
+            username: data.username,
+            role_id: data.role_id || 2 // default value
         };
     }
 

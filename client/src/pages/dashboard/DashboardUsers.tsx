@@ -16,7 +16,7 @@ export default function DashboardLayout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const prevUserRef = useRef(currentUser?.id_u);
   const username = currentUser?.username;
-  const role_id = currentUser?.id_role;
+  const role_id = currentUser?.role_id;
 
   useEffect(() => {
     const handleStorage = () => setCurrentUser(authService.getCurrentUser());
@@ -87,6 +87,11 @@ export default function DashboardLayout() {
     setActiveSection(sectionId);
     setIsMobileMenuOpen(false);
   }
+
+  useEffect(() => {
+  console.log("Current user:", currentUser);
+  console.log("Role ID:", role_id);
+}, [currentUser, role_id]);
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
