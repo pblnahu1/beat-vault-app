@@ -1,4 +1,4 @@
-import { User } from "../types";
+import { User, UpdateProfilePayload, UpdateProfileResponse } from "../types/user.ts";
 
 interface RegisterRequest{
     email: string;
@@ -134,6 +134,23 @@ class AuthService {
         return localStorage.getItem('authToken');
     }
 
+    async getProfile(token: string): Promise<{ data: User }> {
+        const response = await fetch(`${BASE_URL}/api/auth/profile`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || "No se pudo obtener el perfil del usuario");
+        }
+
+        const data: User = await response.json();
+        return {data};
+    }
+
+
     getCurrentUser(): User | null {        
         const userStr = localStorage.getItem('currentUser');
         if (userStr) {
@@ -234,6 +251,25 @@ class AuthService {
         const token = this.getToken();
         const user = this.getCurrentUser();
         return !!(token && user);
+    }
+
+    async updateProfile(id_u: number, payload: UpdateProfilePayload, token: string): Promise<UpdateProfileResponse> {
+        const res = await fetch(`${BASE_URL}/api/users/${id_u}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) {
+            const error = await res.json();
+            throw new Error(error?.message || "Error al actualizar el perfil");
+        }
+
+        const data = await res.json();
+        return { data, token };
     }
 }
 
