@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useCart } from "../../store/useCart";
-import authService from "../../services/authService";
+import { useCart } from "../../../../store/useCart";
+import authService from "../../../../services/authService";
 
 export function LogoutButton() {
   const navigate = useNavigate();
