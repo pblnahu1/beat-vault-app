@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ShoppingCart, Eye, Check, Loader2, AlertCircle } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Product } from '../../types';
+import { Product } from '../../types/prodCart';
 import { useCart } from '../../store/useCart';
 
 interface ProductCardProps {
