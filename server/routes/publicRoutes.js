@@ -25,6 +25,7 @@ import {
   deleteAccountForever,
   getUserIdByEmail,
   pausedAccountAndLogout,
+  getProfileUser
 } from "../controllers/profile.js";
 
 const r = express.Router();
@@ -59,6 +60,7 @@ r.post("/api/auth/create-account", registerUser);
 r.post("/api/users/paused-account", ensureToken, pausedAccountAndLogout);
 r.patch("/api/users/:id/reactivate-account", ensureToken, reactivateAccount);
 r.delete("/api/users/:id", ensureToken, deleteAccountForever);
+r.get("/api/auth/profile", ensureToken, getProfileUser);
 r.get("/api/users/id-by-email", ensureToken, getUserIdByEmail);
 r.put("/api/users/:id", ensureToken, updateUserController);
 
