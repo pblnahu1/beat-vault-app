@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useCart } from "../../../../store/useCart";
+import authService from "../../../../services/authService";
 
 export function LogoutButton() {
   const navigate = useNavigate();
@@ -14,12 +15,10 @@ export function LogoutButton() {
   },[]);
 
   const handleLogout = () => {
-    useCart.getState().resetCartLocal(); //limpio el carrito local en zustand
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("cart-storage");
-    localStorage.removeItem("currentUser");
-    setIsLogged(false);
-    navigate("/auth", { replace: true }); // 2. Redirigir reemplazando el historial
+    useCart.getState().resetCartLocal(); //limpio el carrito local (zustand)
+    authService.logout(); // notifica al backend y limpia el localstorage
+    setIsLogged(false); // actualizo estado local
+    navigate("/api/auth", { replace: true }); //redirigir al login reemplazando el historial
   };
 
   if(!isLogged) return null;

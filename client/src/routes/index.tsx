@@ -16,9 +16,9 @@ const AppRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/auth" element={<DashboardAuth />} />
-        <Route path="/auth/create-account" element={<Register />} />
-        <Route path="/auth/login" element={<Login />} />
+        <Route path="/api/auth" element={<DashboardAuth />} />
+        <Route path="/api/auth/create-account" element={<Register />} />
+        <Route path="/api/auth/login" element={<Login />} />
       </Route>
       <Route element={<ProtectedRoute />}>
         <Route path='/dashboard/:username' element={<MainLayout />}>

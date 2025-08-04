@@ -73,7 +73,7 @@ export const Navbar: React.FC = () => {
               </>
             ) : (
               <Link
-                to="/auth"
+                to="/api/auth"
                 className="flex items-center gap-2 text-slate-50 hover:text-slate-400"
               >
                 <UserCog2 />

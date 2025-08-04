@@ -9,6 +9,8 @@ export default function Register(): JSX.Element {
     setPassword,
     username,
     setUsername,
+    role,
+    setRole,
     showPassword,
     isSubmitDisabled,
     error,
@@ -20,13 +22,13 @@ export default function Register(): JSX.Element {
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-2xl p-8 rounded-2xl shadow-2xl bg-zinc-900/90 backdrop-blur-md">
         <h2 className="text-2xl font-bold mb-6 text-slate-100 text-center">Crear Cuenta</h2>
-        
+
         {error && (
           <div className="my-4 p-3 bg-red-900/30 border border-red-800 text-red-400 rounded text-sm text-center">
             {error}
           </div>
         )}
-        
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-1">
@@ -101,22 +103,39 @@ export default function Register(): JSX.Element {
             </div>
           </div>
 
-          <button 
-            type="submit" 
-            className={`w-full p-3 rounded font-semibold transition-colors ${
-              isSubmitDisabled 
-                ? "bg-zinc-700 text-zinc-400 cursor-not-allowed" 
+          <div>
+            <label htmlFor="role" className="block text-sm font-medium text-slate-300 mb-1">
+              Rol
+            </label>
+            <select
+              id="role"
+              name="role"
+              className="w-full bg-zinc-800 border border-zinc-700 text-slate-100 p-3 rounded focus:ring-2 focus:ring-blue-600 focus:outline-none transition"
+              value={role}
+              onChange={e => setRole(Number(e.target.value))}
+              required
+            >
+              <option value="">Selecciona un rol</option>
+              <option value={1}>Administrador</option>
+              <option value={2}>Cliente</option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            className={`w-full p-3 rounded font-semibold transition-colors ${isSubmitDisabled
+                ? "bg-zinc-700 text-zinc-400 cursor-not-allowed"
                 : "bg-blue-600 text-white hover:bg-blue-700"
-            }`}
+              }`}
             disabled={isSubmitDisabled}
           >
             Crear Cuenta
           </button>
         </form>
-        
+
         <div className="text-center mt-6 text-sm text-slate-400">
           ¿Ya tienes una cuenta?{" "}
-          <a href="/auth/login" className="text-blue-400 font-medium hover:underline">
+          <a href="/api/auth/login" className="text-blue-400 font-medium hover:underline">
             Iniciar sesión
           </a>
         </div>

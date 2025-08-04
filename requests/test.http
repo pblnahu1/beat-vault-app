@@ -1,34 +1,72 @@
+# estado de la api
+GET http://localhost:3000/api
+
+###
+
+# estado de la bd
+GET http://localhost:3000/api/status
+
+###
+
 # ver todos los prod
 GET http://localhost:3000/products
 
 ###
 
+# ver todos los usuarios (crear endpoint)
+GET http://localhost:3000/users
+
+###
+
+# ver id según email
+GET http://localhost:3000/api/users/id-by-email?email=torrezito@gmail.com
+
+###
+
 # crear usuario
-POST http://localhost:3000/account/create-account
+POST http://localhost:3000/api/auth/create-account
 Content-Type: application/json
 
 {
-    "email": "usertest14@gmail.com",
-    "password": "123456",
-    "username": "usertest14"
+  "email": "oliver123@example.com",
+  "password": "123456",
+  "username": "Oliver"
 }
 
 ### 
 
 ### login (user registered)
-POST http://localhost:3000/account/login
+POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "usertest14@gmail.com",
+    "email": "oliver123@example.com",
     "password": "123456"
 }
 
 ###
 
+# pausar la cuenta, `is-active = false`
+POST http://localhost:3000/api/users/paused-account
+Content-Type: application/json
+
+{
+    "id_u": 29
+}
+
+###
+
+# reactivar la cuenta, `is-active = true`
+PATCH http://localhost:3000/api/users/29/reactivate-account
+
+###
+
+# eliminar cuenta
+DELETE http://localhost:3000/api/users/29
+
 ### dashboard (route protected)
-GET http://localhost:3000/dashboard/usertest14
-Authorization: Bearer <token>
+GET http://localhost:3000/dashboard/pabli_adin
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjoyLCJlbWFpbCI6ImNsaWVudGUwMUBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoiQ2xpZW50ZVNpblJvbCIsInJvbGVfaWQiOjIsInBlcm1pc3Npb25zIjpbInZpZXdfcHJvZHVjdHMiXSwiaWF0IjoxNzU0MTk0MzA4LCJleHAiOjE3NTQxOTc5MDh9.Tmr6yxdeYCr3HdYqUmp1ptORLyQGafGEpxf7Ui8sdnw
 
 ###
 
@@ -36,12 +74,12 @@ Authorization: Bearer <token>
 
 ### para recuperar el carrito
 GET http://localhost:3000/cart
-Authorization: Bearer <token>
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjoyLCJlbWFpbCI6ImNsaWVudGUwMUBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoiQ2xpZW50ZVNpblJvbCIsInJvbGVfaWQiOjIsInBlcm1pc3Npb25zIjpbInZpZXdfcHJvZHVjdHMiXSwiaWF0IjoxNzU0MTk0MzA4LCJleHAiOjE3NTQxOTc5MDh9.Tmr6yxdeYCr3HdYqUmp1ptORLyQGafGEpxf7Ui8sdnw
 
 ### para agregar productos al carrito
 POST http://localhost:3000/cart
 Content-Type: application/json
-Authorization: Bearer <token>
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjoyLCJlbWFpbCI6ImNsaWVudGUwMUBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoiQ2xpZW50ZVNpblJvbCIsInJvbGVfaWQiOjIsInBlcm1pc3Npb25zIjpbInZpZXdfcHJvZHVjdHMiXSwiaWF0IjoxNzU0MTk0MzA4LCJleHAiOjE3NTQxOTc5MDh9.Tmr6yxdeYCr3HdYqUmp1ptORLyQGafGEpxf7Ui8sdnw
 
 {
     "productId": 1, 
@@ -52,7 +90,7 @@ Authorization: Bearer <token>
 ### para actualizar la cantidad de productos en el carrito
 PUT http://localhost:3000/cart/14
 Content-Type: application/json
-Authorization: Bearer <token>
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjoyLCJlbWFpbCI6ImNsaWVudGUwMUBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoiQ2xpZW50ZVNpblJvbCIsInJvbGVfaWQiOjIsInBlcm1pc3Npb25zIjpbInZpZXdfcHJvZHVjdHMiXSwiaWF0IjoxNzU0MTk0MzA4LCJleHAiOjE3NTQxOTc5MDh9.Tmr6yxdeYCr3HdYqUmp1ptORLyQGafGEpxf7Ui8sdnw
 
 {
     "productId": 1,
@@ -62,14 +100,14 @@ Authorization: Bearer <token>
 ### para eliminar producto del carrito
 DELETE http://localhost:3000/cart/1
 Content-Type: application/json
-Authorization: Bearer <token>
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjoyLCJlbWFpbCI6ImNsaWVudGUwMUBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoiQ2xpZW50ZVNpblJvbCIsInJvbGVfaWQiOjIsInBlcm1pc3Npb25zIjpbInZpZXdfcHJvZHVjdHMiXSwiaWF0IjoxNzU0MTk0MzA4LCJleHAiOjE3NTQxOTc5MDh9.Tmr6yxdeYCr3HdYqUmp1ptORLyQGafGEpxf7Ui8sdnw
 
 ### para limpiar el carrito (borrar todo)
 DELETE http://localhost:3000/cart/clear
 Content-Type: application/json
-Authorization: Bearer <token>
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjoyLCJlbWFpbCI6ImNsaWVudGUwMUBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoiQ2xpZW50ZVNpblJvbCIsInJvbGVfaWQiOjIsInBlcm1pc3Npb25zIjpbInZpZXdfcHJvZHVjdHMiXSwiaWF0IjoxNzU0MTk0MzA4LCJleHAiOjE3NTQxOTc5MDh9.Tmr6yxdeYCr3HdYqUmp1ptORLyQGafGEpxf7Ui8sdnw
 
 ### para contar cuantos productos tengo
 GET http://localhost:3000/cart/count
 Content-Type: application/json
-Authorization: Bearer <token>
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjoyLCJlbWFpbCI6ImNsaWVudGUwMUBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoiQ2xpZW50ZVNpblJvbCIsInJvbGVfaWQiOjIsInBlcm1pc3Npb25zIjpbInZpZXdfcHJvZHVjdHMiXSwiaWF0IjoxNzU0MTk0MzA4LCJleHAiOjE3NTQxOTc5MDh9.Tmr6yxdeYCr3HdYqUmp1ptORLyQGafGEpxf7Ui8sdnw

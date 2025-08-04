@@ -97,7 +97,7 @@ export default function Login(): JSX.Element {
         
         <div className="text-center mt-6 text-sm text-slate-400">
           ¿No tienes una cuenta?{" "}
-          <a href="/auth/create-account" className="text-blue-400 font-medium hover:underline">
+          <a href="/api/auth/create-account" className="text-blue-400 font-medium hover:underline">
             Regístrate
           </a>
         </div>

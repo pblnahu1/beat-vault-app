@@ -1,0 +1,67 @@
+# CREO UN NUEVO USUARIO
+POST http://localhost:3000/api/auth/create-account
+Content-Type: application/json
+
+{
+    "email":"torrezito@gmail.com",
+    "password":"123456",
+    "username":"pablitorrez",
+    "role_id":2
+}
+
+###
+
+#Registrar usuario sin rol (usa customer por defecto)
+POST http://localhost:3000/api/auth/create-account
+Content-Type: application/json
+
+{
+  "email": "cliente01@example.com",
+  "password": "ClientePass123!",
+  "username": "ClienteSinRol"
+}
+
+###
+
+# Inicio SESION de CUSTOMER
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "cliente01@example.com",
+    "password": "ClientePass123!"
+}
+
+## -> RESPUESTA ESPERADA:
+# {
+#   "success": true,
+#   "token": <TOKEN_GENERADO>,
+#   "user": {
+#     "id_u": 38,
+#     "email": "cliente01@example.com",
+#     "username": "ClienteSinRol",
+#     "role_id": 2,
+#     "role": "customer",
+#     "permissions": [
+#       "view_products"
+#     ],
+#     "last_login": "2025-07-31T12:19:12.108Z"
+#   }
+# }
+
+
+###
+
+# INTENTO CREAR UN PRODUCTO como CUSTOMER
+# CREO UN PRODUCTO como ADMINSITRADOR
+POST http://localhost:3000/admin/products
+Content-Type: application/json
+Authorization: bearer <token>
+
+{
+    "name": "Logo personalizado",
+    "description": "Este es un logo personalizado que podés usar en tu portfolio",
+    "price": 9.99,
+    "image": "products_screen/dark.jpg",
+    "category": "Diseño Gráfico"
+}

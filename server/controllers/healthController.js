@@ -1,6 +1,7 @@
 
 import { testConnection } from "../services/dbService.js";
 
+// funcion asincrona para  monitoreo o para acceder vía HTTP a la salud del backend y DB
 const connDB = async (_req, res) => {
     const connectionStatus = await testConnection();
 

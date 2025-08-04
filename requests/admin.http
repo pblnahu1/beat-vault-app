@@ -1,0 +1,83 @@
+# CREO UN NUEVO USUARIO con ROLE de ADMIN
+POST http://localhost:3000/api/auth/create-account
+Content-Type: application/json
+
+{
+    "email":"torrezadmin@gmail.com",
+    "password":"123456",
+    "username":"pabli_adin",
+    "role_id":1
+}
+
+###
+
+# Inicio SESION de ADMIN
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "torrezadmin@gmail.com",
+    "password": "123456"
+}
+
+## -> RESPUESTA ESPERADA:
+# {
+#   "success": true,
+#   "token": <TOKEN_GENERADO>,
+#   "user": {
+#     "id_u": 37,
+#     "email": "torrezadmin@gmail.com",
+#     "username": "pabli_adin",
+#     "role_id": 1,
+#     "role": "admin",
+#     "permissions": [
+#       "manage_users",
+#       "view_users",
+#       "create_users",
+#       "update_users",
+#       "delete_users",
+#       "view_products",
+#       "manage_products",
+#       "create_products",
+#       "update_products",
+#       "delete_products",
+#       "view_orders",
+#       "manage_orders"
+#     ],
+#     "last_login": "2025-07-31T12:20:34.002Z"
+#   }
+# }
+
+
+###
+
+# CREO UN PRODUCTO como ADMINSITRADOR
+POST http://localhost:3000/admin/products/create
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjozLCJlbWFpbCI6InRvcnJlemFkbWluQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicGFibGlfYWRpbiIsInJvbGVfaWQiOjEsInBlcm1pc3Npb25zIjpbIm1hbmFnZV91c2VycyIsInZpZXdfdXNlcnMiLCJjcmVhdGVfdXNlcnMiLCJ1cGRhdGVfdXNlcnMiLCJkZWxldGVfdXNlcnMiLCJ2aWV3X3Byb2R1Y3RzIiwibWFuYWdlX3Byb2R1Y3RzIiwiY3JlYXRlX3Byb2R1Y3RzIiwidXBkYXRlX3Byb2R1Y3RzIiwiZGVsZXRlX3Byb2R1Y3RzIiwidmlld19vcmRlcnMiLCJtYW5hZ2Vfb3JkZXJzIl0sImlhdCI6MTc1NDE5NDU3NiwiZXhwIjoxNzU0MTk4MTc2fQ.OBz5tF11uNDzvqNouclbnfIxYqaz2hN5O6xg2e0JP7E
+
+{
+    "id_p": 5,
+    "name": "Logo personalizado",
+    "description": "Este es un logo personalizado que podés usar en tu portfolio",
+    "price": 9.99,
+    "image": "products_screen/dark.jpg",
+    "category": "Diseño Gráfico"
+}
+
+###
+
+# ACTUALIZO un PRODUCTO EXISTENTE COMO ADMINISTRADOR
+PUT http://localhost:3000/admin/products/update/5
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjozLCJlbWFpbCI6InRvcnJlemFkbWluQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicGFibGlfYWRpbiIsInJvbGVfaWQiOjEsInBlcm1pc3Npb25zIjpbIm1hbmFnZV91c2VycyIsInZpZXdfdXNlcnMiLCJjcmVhdGVfdXNlcnMiLCJ1cGRhdGVfdXNlcnMiLCJkZWxldGVfdXNlcnMiLCJ2aWV3X3Byb2R1Y3RzIiwibWFuYWdlX3Byb2R1Y3RzIiwiY3JlYXRlX3Byb2R1Y3RzIiwidXBkYXRlX3Byb2R1Y3RzIiwiZGVsZXRlX3Byb2R1Y3RzIiwidmlld19vcmRlcnMiLCJtYW5hZ2Vfb3JkZXJzIl0sImlhdCI6MTc1NDE5NDU3NiwiZXhwIjoxNzU0MTk4MTc2fQ.OBz5tF11uNDzvqNouclbnfIxYqaz2hN5O6xg2e0JP7E
+
+{
+    "price": 10.00
+}
+
+###
+
+# ELIMINO UN PRODUCTO EXISTENTE COMO ADMINISTRADOR
+DELETE http://localhost:3000/admin/products/delete/5
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91IjozLCJlbWFpbCI6InRvcnJlemFkbWluQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicGFibGlfYWRpbiIsInJvbGVfaWQiOjEsInBlcm1pc3Npb25zIjpbIm1hbmFnZV91c2VycyIsInZpZXdfdXNlcnMiLCJjcmVhdGVfdXNlcnMiLCJ1cGRhdGVfdXNlcnMiLCJkZWxldGVfdXNlcnMiLCJ2aWV3X3Byb2R1Y3RzIiwibWFuYWdlX3Byb2R1Y3RzIiwiY3JlYXRlX3Byb2R1Y3RzIiwidXBkYXRlX3Byb2R1Y3RzIiwiZGVsZXRlX3Byb2R1Y3RzIiwidmlld19vcmRlcnMiLCJtYW5hZ2Vfb3JkZXJzIl0sImlhdCI6MTc1NDE5NDU3NiwiZXhwIjoxNzU0MTk4MTc2fQ.OBz5tF11uNDzvqNouclbnfIxYqaz2hN5O6xg2e0JP7E

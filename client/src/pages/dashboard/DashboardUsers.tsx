@@ -16,6 +16,7 @@ export default function DashboardLayout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const prevUserRef = useRef(currentUser?.id_u);
   const username = currentUser?.username;
+  const role_id = currentUser?.id_role;
 
   useEffect(() => {
     const handleStorage = () => setCurrentUser(authService.getCurrentUser());
@@ -77,6 +78,11 @@ export default function DashboardLayout() {
     }
   ];
 
+  const roleNames: Record<number, string> = {
+    1: "Administrador",
+    2: "Usuario Común",
+  };
+
   const handleSectionChange = (sectionId: string) => {
     setActiveSection(sectionId);
     setIsMobileMenuOpen(false);
@@ -91,7 +97,7 @@ export default function DashboardLayout() {
             {/* Logo/Brand */}
             <div className="flex items-center space-x-4">
               <div className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-                Administración de Cuenta - Rol: Usuario Común
+                Administración de Cuenta - Rol: {role_id ? roleNames[role_id] ?? 'Desconocido' : 'Desconocido'}
               </div>
             </div>
 
