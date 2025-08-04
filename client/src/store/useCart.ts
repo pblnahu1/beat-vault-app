@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { CartItem, Product } from '../types';
+import { CartItem, Product } from '../types/prodCart';
 import cartService from '../services/cartService';
 import AuthService from '../services/authService';
 
