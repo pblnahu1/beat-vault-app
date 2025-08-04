@@ -2,6 +2,16 @@ import bcrypt from "bcryptjs";
 import { query } from "../config/db.js";
 
 /**
+ * Busco el id solamente del usuario
+ * @param {number} id
+ * @returns
+ */
+export const findUserById = async (id) => {
+  const result = await query("SELECT * FROM users WHERE id_u = $1", [id]);
+  return result.rows[0];
+};
+
+/**
  * Busca un usuario por su email en la base de datos
  * @param {string} email - email del usuario a buscar
  * @returns {object|null} - usuario encontrado o null
@@ -250,47 +260,28 @@ export const hasPermission = async (id_u, permissionName) => {
  * Actualizar perfil -> usuario, email, contraseña
  */
 
-export const updateProfileUser = async (
-  id_u,
-  { email, username, password }
-) => {
+export const updateProfileUser = async (id_u, updates) => {
   try {
-    const fieldContentUpdate = [];
+    const fields = [];
     const values = [];
-    let i = 1;
-    if (email) {
-      fieldContentUpdate.push(`email = $${i++}`);
-      values.push(email);
-    }
+    let idx = 1;
 
-    if (username) {
-      fieldContentUpdate.push(`username = $${i++}`);
-      values.push(username);
-    }
-
-    if (password) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      fieldContentUpdate.push(`hashed_password = $${i++}`);
-      values.push(hashedPassword);
-    }
-
-    if (fieldContentUpdate.length === 0) {
-      throw new Error("No field to update");
+    for (const key in updates) {
+      fields.push(`${key} = $${idx}`);
+      values.push(updates[key]);
+      idx++;
     }
 
     values.push(id_u);
     const sql = `
             UPDATE users
-            SET ${fieldContentUpdate.join(", ")}
-            WHERE id_u = $${i}
+            SET ${fields.join(", ")}
+            WHERE id_u = $${idx}
             RETURNING id_u, email, username
         `;
 
     const result = await query(sql, values);
-    return {
-      success: true,
-      user: result.rows[0],
-    };
+    return result.rows[0];
   } catch (error) {
     console.error("Error al actualizar el perfil: ", error);
     return {
