@@ -2,10 +2,15 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingCart, UserCog2, Menu, X } from 'lucide-react';
 import { useCart } from '../../store/useCart';
-import { LogoutButton } from '../LogoutButton';
+// import { LogoutButton } from '../LogoutButton';
 import { SearchBar } from '../UI/SearchComponent';
-import { ButtonGestion } from '../UI/Buttons/ButtonGestionProps';
+// import { ButtonGestion } from '../UI/Buttons/ButtonGestionProps';
 import authService from '../../services/authService';
+
+import { NavLinks } from './NavLinks';
+import { AccountActions } from './AccountActions';
+import { MobileMenu } from './MobileMenu';
+import { MobileMenuButton } from '../UI/Buttons/MobileMenuButton';
 
 export const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -38,7 +43,7 @@ export const Navbar: React.FC = () => {
             <div className='w-64 mr-6'>
               <SearchBar onSearch={handleSearch} />
             </div>
-            {navLinks.map(({ to, label, icon, badge }) => (
+            {/* {navLinks.map(({ to, label, icon, badge }) => (
               <Link
                 key={to}
                 to={to}
@@ -56,8 +61,8 @@ export const Navbar: React.FC = () => {
                 )}
                 {label}
               </Link>
-            ))}
-            {token && username ? (
+            ))} */}
+            {/* {token && username ? (
               <>
                 <ButtonGestion 
                   username={username} 
@@ -74,17 +79,20 @@ export const Navbar: React.FC = () => {
                 <UserCog2 />
                 <span>Cuenta</span>
               </Link>
-            )}
+            )} */}
+            <NavLinks navLinks={navLinks} />
+            <AccountActions token={token} username={username} />
           </div>
 
           {/* Mobile menu button */}
-          <button
+          {/* <button
             className="md:hidden text-slate-50 focus:outline-none"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Abrir menú"
           >
             {menuOpen ? <X size={28} /> : <Menu size={28} />}
-          </button>
+          </button> */}
+          <MobileMenuButton menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
         </div>
       </div>
 
