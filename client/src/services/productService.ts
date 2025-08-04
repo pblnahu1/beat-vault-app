@@ -1,5 +1,5 @@
 // interfaces para los productos
-import { Product, ErrorResponseProduct } from "../types"; // CartItem también
+import { Product, ErrorResponseProduct } from "../types/prodCart"; // CartItem también
 
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';

@@ -1,4 +1,4 @@
-import { CartResponse } from "../types";
+import { CartResponse } from "../types/prodCart";
 import AuthService from "./authService";
 
 const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
