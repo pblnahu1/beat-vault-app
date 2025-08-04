@@ -1,5 +1,5 @@
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   User,
   Save,
@@ -11,19 +11,37 @@ import authService from "../../services/authService";
 export const ProfileConfiguration = () => {
 
   const [userData, setUserData] = useState({
-    id: 1,
-    username: 'usuario_ejemplo',
-    email: 'usuario@ejemplo.com'
+    id: 0,
+    username: '',
+    email: ''
   });
 
   const [formData, setFormData] = useState({
-    username: userData.username,
-    email: userData.email,
+    username: '',
+    email: '',
     newPassword: '',
   });
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   // const [showPauseModal, setShowPauseModal] = useState(false);
+
+  useEffect(()=>{
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        if (!token) throw new Error("No hay token disponible");
+        const { data } = await authService.getProfile(token);
+        const { id_u, username, email } = data;
+
+        setUserData({ id: id_u, username, email });
+        setFormData({ username, email, newPassword: "" });
+      } catch (error) {
+        console.error("Error al obtener perfil:", error);
+      }
+    };
+
+    fetchProfile();
+  },[])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -32,21 +50,31 @@ export const ProfileConfiguration = () => {
     }));
   };
 
-  const handleSave = () => {
-    console.log('Actualizando:', formData);
-    setUserData(prev => ({
-      ...prev,
-      username: formData.username,
-      email: formData.email
-    }));
-    alert('Perfil actualizado');
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) throw new Error("No hay un token disponible");
+      const payload: { username?: string; email?: string; password?: string } = {};
+
+      if (formData.username !== userData.username) payload.username = formData.username;
+      if (formData.email !== userData.email) payload.email = formData.email;
+      if (formData.newPassword.trim() !== "") payload.password = formData.newPassword;
+
+      const { data } = await authService.updateProfile(userData.id, payload, token);
+      const { id_u, email, username } = data;
+      setUserData({ id: id_u, email, username });
+      alert("Perfil actualizado correctamente");
+    } catch (error) {
+      console.error(error);
+      alert("No se pudo actualizar el perfil");
+    }
   }
 
   const handleDelete = async () => {
     try {
       authService.delete_account_forever();
       alert("Cuenta eliminada exitosamente");
-      window.location.href="/api/auth";
+      window.location.href = "/api/auth";
     } catch (error) {
       console.error("Error al eliminar la cuenta: ", error);
       alert("Hubo un problema al eliminar la cuenta.");
