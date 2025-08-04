@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Store, UserCog2, Menu, X } from 'lucide-react';
+import { ShoppingCart, UserCog2, Menu, X } from 'lucide-react';
 import { useCart } from '../../store/useCart';
 import { LogoutButton } from '../LogoutButton';
 import { SearchBar } from '../UI/SearchComponent';
@@ -29,7 +29,7 @@ export const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <Link to="/" className="flex items-center gap-2 text-xl font-semibold">
-            <Store className="text-blue-600" />
+            <img src="/logo_cart.svg" alt="Logo Cart" className="w-6 h-6 bg-white rounded-xl" />
             <span className="text-slate-50 uppercase">Fluxshop</span>
           </Link>
 
@@ -93,7 +93,7 @@ export const Navbar: React.FC = () => {
         <div className="md:hidden bg-zinc-950/95 backdrop-blur-md fixed inset-0 z-50 flex flex-col">
           <div className="flex items-center justify-between px-4 py-4 border-b border-zinc-800">
             <Link to="/" className="flex items-center gap-2 text-xl font-semibold" onClick={() => setMenuOpen(false)}>
-              <Store className="text-blue-600" />
+              <img src="/logo_cart.svg" alt="Logo Cart" className="w-6 h-6 bg-white rounded-xl" />
               <span className="text-slate-50 uppercase">Fluxshop</span>
             </Link>
             <button
