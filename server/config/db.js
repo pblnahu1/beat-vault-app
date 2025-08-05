@@ -43,6 +43,7 @@ if (NODE_ENV === "local") {
     ssl: {
       rejectUnauthorized: false,
     },
+    host: "db.fiytqkeoolnmspmbjijo.supabase.co"
   });
 } else {
   throw new Error(
