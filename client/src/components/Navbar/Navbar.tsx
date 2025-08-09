@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, UserCog2, Menu, X } from 'lucide-react';
+import { ShoppingCart, UserCog2, X } from 'lucide-react';
 import { useCart } from '../../store/useCart';
-// import { LogoutButton } from '../LogoutButton';
 import { SearchBar } from '../UI/SearchComponent';
-// import { ButtonGestion } from '../UI/Buttons/ButtonGestionProps';
+import { LogoutButton } from '../UI/Buttons/LogoutButton';
+import { ButtonGestion } from '../UI/Buttons/ButtonGestionProps';
 import authService from '../../services/authService';
 
 import { NavLinks } from './NavLinks';
 import { AccountActions } from './AccountActions';
-import { MobileMenu } from './MobileMenu';
+// import { MobileMenu } from './MobileMenu';
 import { MobileMenuButton } from '../UI/Buttons/MobileMenuButton';
 
 export const Navbar: React.FC = () => {

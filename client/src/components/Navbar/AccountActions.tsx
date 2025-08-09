@@ -15,7 +15,7 @@ export const AccountActions = ({ token, username, onClose }: {
         </>
     ) : (
         <Link
-            to="/auth"
+            to="/api/auth"
             className="flex items-center gap-2 text-slate-50 hover:text-slate-400"
             onClick={onClose}
         >
