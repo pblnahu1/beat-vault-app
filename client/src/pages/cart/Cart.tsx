@@ -1,27 +1,31 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { CartItem } from '../../components/CartItem';
 import { useCart } from '../../store/useCart';
 import { ShoppingCart, Trash2, ArrowRight } from 'lucide-react';
+import { CartEmpty } from './CartEmpty';
+import handleBuyClick from "./handleBuyClick";
+import { useLoader } from '../../hooks/useLoader';
 
 export const Cart: React.FC = () => {
   const { items, total, clearCart } = useCart();
+  const { loading } = useLoader();
 
-  if (items.length === 0) {
+  // 1) Si está cargando mostramos un loader global o un placeholder
+  if (loading) {
     return (
-      <div className="min-h-[60vh] flex flex-col justify-center items-center text-center">
-        <ShoppingCart size={48} className='text-blue-600 mb-4' />
-        <h2 className="text-2xl font-semibold mb-4 text-slate-200">Tu carrito está vacío... ¡Agregá ahora tus productos preferidos!</h2>
-        <Link
-          to="/"
-          className="p-4 rounded-lg bg-blue-950 text-blue-200 hover:text-blue-300 font-medium underline"
-        >
-          Ver catálogo
-        </Link>
+      <div className="min-h-screen flex items-center justify-center">
+        {/* Aquí podrías usar tu componente Loader global */}
+        <div>Cargando...</div>
       </div>
     );
   }
 
+  // 2) Si no hay items mostramos CartEmpty
+  if (items.length === 0) {
+    return <CartEmpty items={items} loading={loading} />;
+  }
+
+  // 3) Si hay items, mostramos la UI del carrito
   return (
     <div className="min-h-screen flex items-center justify-center py-8">
       <div className="w-full max-w-4xl bg-slate-950/90 backdrop-blur-md rounded-2xl shadow-2xl p-6 md:p-10">
@@ -29,11 +33,11 @@ export const Cart: React.FC = () => {
           <ShoppingCart size={32} className="text-blue-600" />
           <h2 className="text-2xl font-bold text-slate-50 uppercase">Tu Carrito</h2>
         </div>
-        {/* <div className="divide-y divide-zinc-900"> */}
-          {items.map((item) => (
-            <CartItem key={item.id} item={item} />
-          ))}
-        {/* </div> */}
+
+        {items.map((item) => (
+          <CartItem key={item.id} item={item} />
+        ))}
+
         <div className="mt-8 border-t pt-6">
           <div className="flex justify-between items-center mb-6">
             <span className="text-lg font-semibold text-slate-50">Total:</span>
@@ -46,7 +50,10 @@ export const Cart: React.FC = () => {
             >
               <Trash2 size={20} />
             </button>
-            <button className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold">
+            <button
+              onClick={() => handleBuyClick({ clearCart })}
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold"
+            >
               Seguir con tu compra <ArrowRight size={20} />
             </button>
           </div>
