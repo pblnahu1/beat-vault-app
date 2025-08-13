@@ -1,5 +1,8 @@
 import React from "react";
 import { useRegister } from "../../../hooks/useRegister";
+import { Loader } from "../../../components/UI/Loader";
+import { useLoader } from "../../../hooks/useLoader";
+import { Link } from "react-router-dom";
 
 export default function Register(): JSX.Element {
   const {
@@ -15,13 +18,22 @@ export default function Register(): JSX.Element {
     isSubmitDisabled,
     error,
     handleTogglePassword,
-    handleSubmit
+    handleSubmit,
+    successMessage
   } = useRegister();
+
+  const { loading } = useLoader();
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-2xl p-8 rounded-2xl shadow-2xl bg-zinc-900/90 backdrop-blur-md">
         <h2 className="text-2xl font-bold mb-6 text-slate-100 text-center">Crear Cuenta</h2>
+
+        {successMessage && (
+          <div className="bg-green-200 text-green-800 p-3 rounded mb-4 text-center">
+            {successMessage}
+          </div>
+        )}
 
         {error && (
           <div className="my-4 p-3 bg-red-900/30 border border-red-800 text-red-400 rounded text-sm text-center">
@@ -124,20 +136,31 @@ export default function Register(): JSX.Element {
           <button
             type="submit"
             className={`w-full p-3 rounded font-semibold transition-colors ${isSubmitDisabled
-                ? "bg-zinc-700 text-zinc-400 cursor-not-allowed"
-                : "bg-blue-600 text-white hover:bg-blue-700"
+              ? "bg-zinc-700 text-zinc-400 cursor-not-allowed"
+              : "bg-blue-600 text-white hover:bg-blue-700"
               }`}
-            disabled={isSubmitDisabled}
+            disabled={isSubmitDisabled || loading}
           >
-            Crear Cuenta
+            {loading ? (
+              <Loader />
+            ) : (
+              "Crear Cuenta"
+            )}
           </button>
         </form>
 
         <div className="text-center mt-6 text-sm text-slate-400">
           ¿Ya tienes una cuenta?{" "}
-          <a href="/api/auth/login" className="text-blue-400 font-medium hover:underline">
+          {/* <a href="/api/auth/login" className="text-blue-400 font-medium hover:underline">
             Iniciar sesión
-          </a>
+          </a> */}
+
+          <Link
+            to="/api/auth/login"
+            className="text-blue-400 font-medium hover:underline"
+          >
+            Iniciar Sesión
+          </Link>
         </div>
       </div>
     </div>

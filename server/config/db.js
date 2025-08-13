@@ -83,4 +83,5 @@ pool
     )
   );
 
+export const client = () => pool.connect();
 export const query = (text, params) => pool.query(text, params);

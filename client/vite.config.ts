@@ -5,11 +5,17 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   base: "/",
   plugins: [react()],
+  // server: {
+  //   host: '0.0.0.0', // sigue funcionando para local
+  //   allowedHosts: ['.onrender.com'], // permite todos los subdominios de render
+  //   // o más específico:
+  //   // allowedHosts: ['fluxshop-app-1.onrender.com'],
+  // },
   server: {
-    host: '0.0.0.0', // sigue funcionando para local
-    allowedHosts: ['.onrender.com'], // permite todos los subdominios de render
-    // o más específico:
-    // allowedHosts: ['fluxshop-app-1.onrender.com'],
+    port: 5173,
+    strictPort: true,
+    host: "0.0.0.0",
+    origin: "http://localhost:5173"
   },
   preview: {
     port: 5173,

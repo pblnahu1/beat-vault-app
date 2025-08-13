@@ -27,6 +27,8 @@ import {
   pausedAccountAndLogout,
   getProfileUser
 } from "../controllers/profile.js";
+import { createPurchase } from "../controllers/purchaseController.js";
+import { getPurchaseHistory } from "../controllers/getUserPurchase.js";
 
 const r = express.Router();
 
@@ -108,5 +110,9 @@ r.put("/cart/:productId", ensureToken, addOrUpdateCartItem);
 r.delete("/cart/clear", ensureToken, clearCartItems);
 r.delete("/cart/:productId", ensureToken, removeCartItem);
 r.get("/cart/count", ensureToken, getCartItemCount);
+
+// purchases history and purchase items
+r.get("/api/purchases/history", ensureToken, getPurchaseHistory);
+r.post("/api/cart/purchase", ensureToken, createPurchase);
 
 export default r;

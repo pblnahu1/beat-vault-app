@@ -1,6 +1,7 @@
 import { useState, useEffect, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../services/authService";
+import { useLoader } from "./useLoader";
 
 interface UseRegisterReturn {
     email: string;
@@ -17,9 +18,11 @@ interface UseRegisterReturn {
     setRole: (role: number) => void;
     handleTogglePassword: () => void;
     handleSubmit: (e: FormEvent) => Promise<void>;
+    successMessage: string | null;
 }
 
 export const useRegister = (): UseRegisterReturn => {
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [username, setUsername] = useState<string>("");
@@ -29,15 +32,23 @@ export const useRegister = (): UseRegisterReturn => {
     const [role, setRole] = useState<number>(2);
     const navigate = useNavigate();
 
+    const {setLoading} = useLoader();
+
     const handleTogglePassword = (): void => {
         setShowPassword((prevShowPassword) => !prevShowPassword);
     };
 
     const handleSubmit = async (e: FormEvent): Promise<void> => {
         e.preventDefault();
+        setLoading(true);
         try {
             await register(email, password, username, role);
-            navigate(`/dashboard/${username}`)
+            setSuccessMessage("Cuenta creada! Serás redirigido para que inicies sesión...")
+            setTimeout(() => {
+                setSuccessMessage(null);
+                // navigate(`/dashboard/${username}`)
+                navigate(`/api/auth/login`)
+            }, 3500);
         } catch (error) {
             if(error instanceof Error){
                 console.error(error.message);
@@ -46,6 +57,8 @@ export const useRegister = (): UseRegisterReturn => {
                 console.error("Error desconocido");
                 setError("Error desconocido durante el registro");
             }
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -76,6 +89,7 @@ export const useRegister = (): UseRegisterReturn => {
         handleTogglePassword,
         handleSubmit,
         role,
-        setRole
+        setRole,
+        successMessage
     }
 }
