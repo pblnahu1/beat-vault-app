@@ -1,11 +1,12 @@
 import { User, UpdateProfilePayload, UpdateProfileResponse } from "../types/user.ts";
+import { apiClient } from "../api/apiClient.ts";
 
-interface RegisterRequest{
-    email: string;
-    password: string;
-    username: string;
-    role_id?: number;
-}
+// interface RegisterRequest{
+//     email: string;
+//     password: string;
+//     username: string;
+//     role_id?: number;
+// }
 
 interface RegisterResponse {
     id?: number | string;
@@ -14,15 +15,15 @@ interface RegisterResponse {
     role_id?: number;
 }
 
-interface ErrorResponse {
-    message: string;
-}
+// interface ErrorResponse {
+//     message: string;
+// }
  
-const BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'; 
+// const BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'; 
 
-if(!BASE_URL) {
-    throw new Error("BACKEND_URL no está definido en el .env");
-}
+// if(!BASE_URL) {
+//     throw new Error("BACKEND_URL no está definido en el .env");
+// }
 
 /**
  * Función para iniciar sesión
@@ -32,54 +33,37 @@ if(!BASE_URL) {
  */
 
 export const login = async (email: string, password: string): Promise<User> => {
-    try {
-        const response = await fetch(`${BASE_URL}/api/auth/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({email, password}),
-        });
+  try {
+    const data = await apiClient("/api/auth/login", {
+      method: "POST",
+      body: { email, password },
+    });
 
-        
-        const data = await response.json();
-        
-        if(!response.ok){
-            if(response.status === 401 && data.reactivable) {
-                throw new Error("REACTIVATION_REQUIRED")
-            }
+    if (!data.token) throw new Error("No se recibió token del servidor");
 
-            if(response.status === 401) {
-                throw new Error("Credenciales incorrectas");
-            }
+    const userData: User = {
+      id_u: data.user.id_u,
+      username: data.user.username,
+      email: data.user.email,
+      token: data.token,
+      role_id: data.user.role_id,
+    };
 
-            throw new Error(data.message || "Error en el servidor"); //500
-        }
+    localStorage.setItem('authToken', userData.token);
+    new AuthService().setCurrentUser(userData, data.token);
 
-        const token = data.token;
-        const userInfo = data.user;
-
-        const userData: User = {
-            id_u: userInfo.id_u,
-            username: userInfo.username,
-            email: userInfo.email,
-            token: token,
-            role_id: userInfo.role_id
-        }
-
-        localStorage.setItem('authToken', userData.token);
-
-        const authService = new AuthService();
-        authService.setCurrentUser(userData, token);
-
-        return userData; // retorno el token cuando lo necesite
-    } catch (error) {
-        if(error instanceof Error){
-            throw new Error(error.message || "Error desconocido");
-        }
-        throw new Error("Error desconocido");
+    return userData;
+  } catch (error) {
+    if (error instanceof Error) {
+      if(error.message === "REACTIVATION_REQUIRED") {
+        throw new Error("REACTIVATION_REQUIRED");
+      }
+      throw error;
     }
+    throw new Error("Error desconocido");
+  }
 };
+
 
 /**
  * Función para registrar un nuevo usuario
@@ -90,187 +74,144 @@ export const login = async (email: string, password: string): Promise<User> => {
  */
 
 export const register = async (
-    email: string,
-    password: string,
-    username: string,
-    role: number
+  email: string,
+  password: string,
+  username: string,
+  role: number
 ): Promise<RegisterResponse> => {
-    try {
-        const role_id = role ? Number(role) : undefined;
-        const userData: RegisterRequest = {
-            email,
-            password,
-            username,
-            role_id
-        };
-
-        const response = await fetch(`${BASE_URL}/api/auth/create-account`, {
-            method: "POST",
-            headers:{
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userData),
-        });
-
-        if(!response.ok){
-            const errData = await response.json() as ErrorResponse;
-            throw new Error(errData.message || "Error al registrar usuario");
-        }
-
-        return await response.json() as RegisterResponse; // puedo retornar el usuario creado cuando lo necesite
-    } catch (error) {
-        if(error instanceof Error){
-            throw new Error(error.message || "Error desconocido");
-        }
-
-        throw new Error("Error desconocido");
-    }
+  try {
+    const role_id = role ? Number(role) : undefined;
+    return await apiClient("/api/auth/create-account", {
+      method: "POST",
+      body: { email, password, username, role_id },
+    });
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new Error("Error desconocido");
+  }
 };
 
 class AuthService {
-    // private currentUser: User | null = null;
 
-    getToken(): string | null {
-        return localStorage.getItem('authToken');
+  getToken(): string | null {
+    return localStorage.getItem('authToken');
+  }
+
+  async getProfile(token: string): Promise<{ data: User }> {
+    try {
+      const data = await apiClient('/api/auth/profile', {
+        token,
+      });
+      return { data };
+    } catch (error) {
+      throw new Error((error as Error).message || "No se pudo obtener el perfil del usuario");
     }
+  }
 
-    async getProfile(token: string): Promise<{ data: User }> {
-        const response = await fetch(`${BASE_URL}/api/auth/profile`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || "No se pudo obtener el perfil del usuario");
-        }
-
-        const data: User = await response.json();
-        return {data};
-    }
-
-
-    getCurrentUser(): User | null {        
-        const userStr = localStorage.getItem('currentUser');
-        if (userStr) {
-            try {
-                return JSON.parse(userStr);
-            } catch {
-                return null;
-            }
-        }
+  getCurrentUser(): User | null {
+    const userStr = localStorage.getItem('currentUser');
+    if (userStr) {
+      try {
+        return JSON.parse(userStr);
+      } catch {
         return null;
+      }
     }
+    return null;
+  }
 
-    async getUserIdByEmail(email: string): Promise<string> {
-        const res = await fetch(`${BASE_URL}/api/users/id-by-email?email=${email}`);
-        const data = await res.json();
-
-        if (!res.ok) throw new Error(data.message || "No se pudo obtener el ID de usuario");
-        return data.id_u;
+  async getUserIdByEmail(email: string): Promise<string> {
+    try {
+      const data = await apiClient(`/api/users/id-by-email?email=${encodeURIComponent(email)}`);
+      return data.id_u;
+    } catch (error) {
+      throw new Error((error as Error).message || "No se pudo obtener el ID de usuario");
     }
+  }
 
+  setCurrentUser(user: User, token: string): void {
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    localStorage.setItem('authToken', token);
+  }
 
-    setCurrentUser(user: User, token: string): void {
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        localStorage.setItem('authToken', token);
-    }
+  logout(): void {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('cart-storage');
+    localStorage.removeItem('currentUser');
+  }
 
-    logout(): void {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('cart-storage');
-        localStorage.removeItem('currentUser');
-    }
+  async paused_account_and_logout(): Promise<void> {
+    const userStr = localStorage.getItem('currentUser');
+    const user = userStr ? JSON.parse(userStr) : null;
 
-    paused_account_and_logout(): void {
-        const userStr = localStorage.getItem('currentUser');
-        const user = userStr ? JSON.parse(userStr) : null;
-
-        if(user?.id_u) {
-            fetch(`${BASE_URL}/api/users/paused-account`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({id_u: user.id_u})
-            }).catch((err) => {
-                console.error("Error al pausar cuenta en el servidor: ", err);
-            });
-        }
-
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('cart-storage');
-        localStorage.removeItem('currentUser');
-    }
-
-    delete_account_forever(): void {
-        const userStr = localStorage.getItem('currentUser');
-        const user = userStr ? JSON.parse(userStr) : null;
-
-        if(user?.id_u){
-            fetch(`${BASE_URL}/api/users/${user.id_u}`, {
-                method: 'DELETE',
-            }).catch(err => console.error("Error al eliminar la cuenta: ", err));
-        }
-
-        //limpieza total
-        this.logout()
-    }
-
-    async reactivate_account_and_login(userId: string): Promise<{ token: string, username: string, role_id: number }> {
-        const res = await fetch(`${BASE_URL}/api/users/${userId}/reactivate-account`, {
-            method: 'PATCH',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id_u: userId })
+    if (user?.id_u) {
+      try {
+        await apiClient('/api/users/paused-account', {
+          method: "POST",
+          body: { id_u: user.id_u },
         });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            throw new Error(data.message || "Error al reactivar la cuenta");
-        }
-
-        if (!data.token || !data.username) {
-            throw new Error("Faltan datos después de la reactivación");
-        }
-
-        localStorage.setItem("authToken", data.token);
-
-        return {
-            token: data.token,
-            username: data.username,
-            role_id: data.role_id || 2 // default value
-        };
+      } catch (error) {
+        console.error("Error al pausar cuenta en el servidor: ", (error as Error).message);
+      }
     }
 
+    this.logout();
+  }
 
-    isAuthenticated(): boolean {
-        const token = this.getToken();
-        const user = this.getCurrentUser();
-        return !!(token && user);
-    }
+  async delete_account_forever(): Promise<void> {
+    const userStr = localStorage.getItem('currentUser');
+    const user = userStr ? JSON.parse(userStr) : null;
 
-    async updateProfile(id_u: number, payload: UpdateProfilePayload, token: string): Promise<UpdateProfileResponse> {
-        const res = await fetch(`${BASE_URL}/api/users/${id_u}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(payload),
+    if (user?.id_u) {
+      try {
+        await apiClient(`/api/users/${user.id_u}`, {
+          method: 'DELETE',
         });
-
-        if (!res.ok) {
-            const error = await res.json();
-            throw new Error(error?.message || "Error al actualizar el perfil");
-        }
-
-        const data = await res.json();
-        return { data, token };
+      } catch (error) {
+        console.error("Error al eliminar la cuenta: ", (error as Error).message);
+      }
     }
+
+    this.logout();
+  }
+
+  async reactivate_account_and_login(userId: string): Promise<{ token: string, username: string, role_id: number }> {
+    const data = await apiClient(`/api/users/${userId}/reactivate-account`, {
+      method: "PATCH",
+      body: { id_u: userId }
+    });
+
+    if (!data.token || !data.username) {
+      throw new Error("Faltan datos después de la reactivación");
+    }
+
+    localStorage.setItem("authToken", data.token);
+
+    return {
+      token: data.token,
+      username: data.username,
+      role_id: data.role_id || 2,
+    };
+  }
+
+  isAuthenticated(): boolean {
+    const token = this.getToken();
+    const user = this.getCurrentUser();
+    return !!(token && user);
+  }
+
+  async updateProfile(id_u: number, payload: UpdateProfilePayload, token: string): Promise<UpdateProfileResponse> {
+    try {
+      const data = await apiClient(`/api/users/${id_u}`, {
+        method: "PUT",
+        body: payload,
+        token,
+      });
+      return { data, token };
+    } catch (error) {
+      throw new Error((error as Error).message || "Error al actualizar el perfil");
+    }
+  }
 }
 
 export default new AuthService();
