@@ -2,6 +2,7 @@ import { useState, useEffect, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import authService, { login } from "../services/authService";
 import { useCart } from "../store/useCart";
+import { useLoader } from "./useLoader";
 
 interface UseLoginReturn {
     email: string;
@@ -23,6 +24,7 @@ export const useLogin = (): UseLoginReturn => {
     const [isSubmitDisabled, setIsSubmitDisabled] = useState<boolean>(true);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const navigate = useNavigate();
+    const {setLoading} = useLoader();
 
     const {loadCart, syncWithBackend} = useCart();
   
@@ -33,6 +35,7 @@ export const useLogin = (): UseLoginReturn => {
     const handleSubmit = async (e: FormEvent): Promise<void> => {
       e.preventDefault();
       setErrorMessage(null);
+      setLoading(true);
 
       try {
         const {token, username, id_u, needsReactivation, role_id} = await login(email, password);
@@ -148,6 +151,8 @@ export const useLogin = (): UseLoginReturn => {
         } else {
           setErrorMessage("Error desconocido al iniciar sesión");
         }
+      } finally {
+        setLoading(false);
       }
     };
 

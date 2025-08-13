@@ -1,10 +1,10 @@
 import {useState, useEffect} from "react";
 import { Product } from "../types/prodCart";
 import { getProducts, getProductById, getProductsByCategory } from "../services/productService";
+import { useLoader } from "./useLoader";
 
 interface UseProductsReturn {
     products: Product[];
-    loading: boolean;
     error: string | null;
     fetchProducts: () => Promise<void>;
     fetchProductById: (id: number) => Promise<Product | null>;
@@ -13,8 +13,8 @@ interface UseProductsReturn {
 
 export const useProducts = (): UseProductsReturn => {
     const [products, setProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const {setLoading} = useLoader();
 
     const fetchProducts = async (): Promise<void> => {
         try {
@@ -67,7 +67,6 @@ export const useProducts = (): UseProductsReturn => {
 
     return {
         products,
-        loading,
         error,
         fetchProducts,
         fetchProductById,
