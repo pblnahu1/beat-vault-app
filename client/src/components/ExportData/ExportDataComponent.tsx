@@ -20,13 +20,6 @@ export function ExportDataComponent() {
       icon: <Database className="w-5 h-5" />,
       format: 'CSV'
     },
-    {
-      id: 'reviews',
-      title: 'Reseñas y Valoraciones',
-      description: 'Todas tus opiniones sobre productos',
-      icon: <FileText className="w-5 h-5" />,
-      format: 'PDF'
-    }
   ];
 
   const handleExport = async (optionId) => {
@@ -55,6 +48,14 @@ export function ExportDataComponent() {
         <div className="bg-blue-900/20 border border-blue-800/50 rounded-2xl p-4">
           <p className="text-blue-300 text-sm">
             <strong>Privacidad:</strong> Tus datos se exportan de forma segura y solo tú puedes acceder a ellos.
+          </p>
+        </div>
+      </div>
+
+      <div className="mb-6">
+        <div className="bg-yellow-900/20 border border-yellow-800/50 rounded-2xl p-4">
+          <p className="text-yellow-300 text-sm">
+            <strong>Noticia:</strong> Por el momento podrás exportar tu Historial de Pedidos/Compras y tus Datos del Perfil en formato CSV. Próximamente implementaremos en formato PDF.
           </p>
         </div>
       </div>
