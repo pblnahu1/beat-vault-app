@@ -2,6 +2,21 @@ import bcrypt from "bcryptjs";
 import { query } from "../config/db.js";
 
 /**
+ * Para almacenar los refresh tokens
+ * @param {number} userId 
+ * @param {string} refreshToken 
+ */
+export const saveRefreshToken = async (userId, refreshToken) => {
+  await query("UPDATE users SET refresh_token = $1 WHERE id_u = $2", [refreshToken, userId]);
+};
+
+export const getRefreshToken = async (userId) => {
+  const result = await query("SELECT refresh_token FROM users WHERE id_u = $1", [userId]);
+  return result.rows[0]?.refresh_token;
+};
+
+
+/**
  * Busco el id solamente del usuario
  * @param {number} id
  * @returns
