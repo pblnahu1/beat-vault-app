@@ -80,19 +80,14 @@ export const useLogin = (): UseLoginReturn => {
         // return navigate(`/dashboard/${username}`);
 
         if (token) {
-          console.log("Token OK. Bienvenido!")
           localStorage.setItem("authToken", token);
           
           try {
-            console.log('Inicializando el carrito después del login exitoso');
             await loadCart();  
-
             // tiempo de espera para sincronizacion
             setTimeout(() => {
               syncWithBackend();
             }, 3000);
-
-            console.log('Carrito correctamente sincronizado')
           } catch (error) {
             console.error('Error inicializando el carrito: ', error);
             // no bloquea el login si falla la sincronizacion por eso el trycatch solo para esto
@@ -159,7 +154,6 @@ export const useLogin = (): UseLoginReturn => {
     // configuro listeners de conectividad una sola vez
     useEffect(() => {
       const handleOnline = () => {
-        console.log('Connection restored, syncing cart...');
         const token = localStorage.getItem('authToken');
         if(token){
           syncWithBackend();
