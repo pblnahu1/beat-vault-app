@@ -1,29 +1,12 @@
 import { User, UpdateProfilePayload, UpdateProfileResponse } from "../types/user.ts";
 import { apiClient } from "../api/apiClient.ts";
 
-// interface RegisterRequest{
-//     email: string;
-//     password: string;
-//     username: string;
-//     role_id?: number;
-// }
-
 interface RegisterResponse {
     id?: number | string;
     email?: string;
     username?: string;
     role_id?: number;
 }
-
-// interface ErrorResponse {
-//     message: string;
-// }
- 
-// const BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'; 
-
-// if(!BASE_URL) {
-//     throw new Error("BACKEND_URL no está definido en el .env");
-// }
 
 /**
  * Función para iniciar sesión
@@ -39,18 +22,18 @@ export const login = async (email: string, password: string): Promise<User> => {
       body: { email, password },
     });
 
-    if (!data.token) throw new Error("No se recibió token del servidor");
+    if (!data.accessToken) throw new Error("No se recibió token del servidor");
 
     const userData: User = {
       id_u: data.user.id_u,
       username: data.user.username,
       email: data.user.email,
-      token: data.token,
+      token: data.accessToken,
       role_id: data.user.role_id,
     };
 
     localStorage.setItem('authToken', userData.token);
-    new AuthService().setCurrentUser(userData, data.token);
+    new AuthService().setCurrentUser(userData, data.accessToken);
 
     return userData;
   } catch (error) {
