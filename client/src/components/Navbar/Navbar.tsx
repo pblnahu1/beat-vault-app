@@ -30,12 +30,12 @@ export const Navbar: React.FC = () => {
   }
 
   return (
-    <nav className="bg-zinc-950 shadow-md">
+    <nav className="bg-stone-900 shadow-md border-b-2 border-b-stone-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <Link to="/" className="flex items-center gap-2 text-xl font-semibold">
-            <img src="/logo_cart.svg" alt="Logo Cart" className="w-6 h-6 bg-white rounded-xl" />
-            <span className="text-slate-50 uppercase">Fluxshop</span>
+            <img src="/logo_cart.svg" alt="Logo Cart" className="w-10 h-10 bg-indigo-100 rounded-xl" />
+            {/* <span className="text-slate-50 uppercase">BeatVault</span> */}
           </Link>
 
           {/* Desktop menu */}
