@@ -11,7 +11,7 @@ export const CartItem: React.FC<CartItemProps> = ({ item }) => {
   const { updateQuantity, removeItem } = useCart();
 
   return (
-    <div className="flex items-center gap-4 py-4 border-b">
+    <div className="flex items-center gap-4 py-4">
       <img
         src={item.image}
         alt={item.name}
@@ -43,7 +43,7 @@ export const CartItem: React.FC<CartItemProps> = ({ item }) => {
         </div>
       </div>
       <div className="text-right">
-        <p className="font-semibold text-blue-700">${(item.price * item.quantity).toFixed(2)}</p>
+        <p className="font-semibold text-green-700">${(item.price * item.quantity).toFixed(2)}</p>
       </div>
     </div>
   );

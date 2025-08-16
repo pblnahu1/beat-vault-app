@@ -28,7 +28,7 @@ export const Cart: React.FC = () => {
   // 3) Si hay items, mostramos la UI del carrito
   return (
     <div className="min-h-screen flex items-center justify-center py-8">
-      <div className="w-full max-w-4xl bg-slate-950/90 backdrop-blur-md rounded-2xl shadow-2xl p-6 md:p-10">
+      <div className="w-full max-w-4xl bg-zinc-950/90 backdrop-blur-md rounded-2xl shadow-2xl p-6 md:p-10 border border-stone-700">
         <div className="flex items-center gap-3 mb-8">
           <ShoppingCart size={32} className="text-blue-600" />
           <h2 className="text-2xl font-bold text-slate-50 uppercase">Tu Carrito</h2>
@@ -38,10 +38,10 @@ export const Cart: React.FC = () => {
           <CartItem key={item.id} item={item} />
         ))}
 
-        <div className="mt-8 border-t pt-6">
+        <div className="mt-4 border-t border-stone-700 pt-6">
           <div className="flex justify-between items-center mb-6">
             <span className="text-lg font-semibold text-slate-50">Total:</span>
-            <span className="text-2xl font-bold text-blue-700">${total.toFixed(2)}</span>
+            <span className="text-2xl font-bold text-green-600">${total.toFixed(2)}</span>
           </div>
           <div className="flex flex-col md:flex-row gap-4">
             <button
