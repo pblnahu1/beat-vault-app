@@ -3,19 +3,7 @@ import { useNavigate } from "react-router-dom";
 import authService, { login } from "../services/authService";
 import { useCart } from "../store/useCart";
 import { useLoader } from "./useLoader";
-
-interface UseLoginReturn {
-    email: string;
-    setEmail: (email: string) => void;
-    password: string;
-    setPassword: (password: string) => void;
-    showPassword: boolean;
-    setShowPassword: (showPassword: boolean) => void;
-    isSubmitDisabled: boolean;
-    errorMessage: string | null;
-    handleTogglePassword: () => void;
-    handleSubmit: (e: FormEvent) => Promise<void>;
-}
+import { UseLoginReturn } from "../types/auth";
 
 export const useLogin = (): UseLoginReturn => {
     const [email, setEmail] = useState<string>("");
@@ -80,19 +68,14 @@ export const useLogin = (): UseLoginReturn => {
         // return navigate(`/dashboard/${username}`);
 
         if (token) {
-          console.log("Token OK. Bienvenido!")
           localStorage.setItem("authToken", token);
           
           try {
-            console.log('Inicializando el carrito después del login exitoso');
             await loadCart();  
-
             // tiempo de espera para sincronizacion
             setTimeout(() => {
               syncWithBackend();
             }, 3000);
-
-            console.log('Carrito correctamente sincronizado')
           } catch (error) {
             console.error('Error inicializando el carrito: ', error);
             // no bloquea el login si falla la sincronizacion por eso el trycatch solo para esto
@@ -159,7 +142,6 @@ export const useLogin = (): UseLoginReturn => {
     // configuro listeners de conectividad una sola vez
     useEffect(() => {
       const handleOnline = () => {
-        console.log('Connection restored, syncing cart...');
         const token = localStorage.getItem('authToken');
         if(token){
           syncWithBackend();

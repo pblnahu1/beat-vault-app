@@ -13,6 +13,7 @@ import bodyParser from "body-parser";
 import {PORT, FRONTEND_URL} from "./config/config.js"
 import publicRoutes from "./routes/publicRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import { seedProducts } from "./seeds/products.seed.js";
 // import hashPasswordExec from "./scripts/hashPasswordExec.js";
 
 const app = express()
@@ -30,6 +31,8 @@ app.use(bodyParser.json());
 // para los productos
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 app.use("/static", express.static(path.join(__dirname, "public")));
+
+await seedProducts();
 
 app.use(publicRoutes);
 app.use("/admin", adminRoutes);

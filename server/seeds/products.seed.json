@@ -1,0 +1,86 @@
+[
+  {
+    "name": "Gustavo Cerati: SIEMPRE ES HOY",
+    "description": "",
+    "price": 199.99,
+    "image": "/products_screen/product_1.jpg",
+    "category": "Albums"
+  },
+  {
+    "name": "The Beatles: ABBEY ROOM",
+    "description": "",
+    "price": 199.99,
+    "image": "/products_screen/product_2.jpg",
+    "category": "Albums"
+  },
+  {
+    "name": "Tame Impala: CURRENTS",
+    "description": "",
+    "price": 199.99,
+    "image": "/products_screen/product_3.jpg",
+    "category": "Albums"
+  },
+  {
+    "name": "Travis Scott: UTOPIA",
+    "description": "",
+    "price": 199.99,
+    "image": "/products_screen/product_4.jpg",
+    "category": "Albums"
+  },
+  {
+    "name": "Bad Bunny: DEBÍ TIRAR MÁS FOTOS",
+    "description": "",
+    "price": 199.99,
+    "image": "/products_screen/product_5.jpg",
+    "category": "Albums"
+  },
+  {
+    "name": "Coldplay: PARACHUTES",
+    "description": "",
+    "price": 199.99,
+    "image": "/products_screen/product_6.jpg",
+    "category": "Albums"
+  },
+  {
+    "name": "Kendrik Lamar: GNX",
+    "description": "",
+    "price": 199.99,
+    "image": "/products_screen/product_7.jpg",
+    "category": "Albums"
+  },
+  {
+    "name": "Gustavo Cerati: AHÍ VAMOS",
+    "description": "",
+    "price": 199.99,
+    "image": "/products_screen/product_8.jpg",
+    "category": "Albums"
+  },
+  {
+    "name": "Bad Bunny: UN VERANO SIN TI",
+    "description": "",
+    "price": 199.99,
+    "image": "/products_screen/product_9.jpg",
+    "category": "Albums"
+  },
+  {
+    "name": "Arctic Monkeys: AM",
+    "description": "",
+    "price": 199.99,
+    "image": "/products_screen/product_10.jpg",
+    "category": "Albums"
+  },
+  {
+    "name": "The Weeknd: AFTER HOURS",
+    "description": "",
+    "price": 199.99,
+    "image": "/products_screen/product_11.jpg",
+    "category": "Albums"
+  },
+  {
+    "name": "Frank Ocean: BLONDE",
+    "description": "",
+    "price": 199.99,
+    "image": "/products_screen/product_12.jpg",
+    "category": "Albums"
+  }
+]

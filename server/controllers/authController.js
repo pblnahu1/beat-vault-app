@@ -8,6 +8,7 @@ import {
   roleCheckId,
   updateLastLogin,
   authenticateUser,
+  saveRefreshToken
 } from "../services/userService.js";
 
 // 🔐 LOGIN
@@ -31,7 +32,8 @@ const loginUser = async (req, res) => {
 
     if (!user.is_active) {
       const reactivation = await reactivateUserAccount(user.id_u);
-      const token = generateToken({
+
+      const { accessToken, refreshToken } = generateToken({
         id_u: reactivation.id_u,
         email: reactivation.email,
         username: reactivation.username,
@@ -39,10 +41,14 @@ const loginUser = async (req, res) => {
         permissions: user.permissions,
       });
 
+      // Guardar refresh token en la BD
+      await saveRefreshToken(reactivation.id_u, refreshToken);
+
       return res.status(200).json({
         message: "Tu cuenta estaba desactivada, se reactivó automáticamente.",
         reactivated: true,
-        token,
+        accessToken,
+        refreshToken,
         user: {
           id_u: reactivation.id_u,
           email: reactivation.email,
@@ -56,7 +62,7 @@ const loginUser = async (req, res) => {
 
     await updateLastLogin(user.id_u);
 
-    const token = generateToken({
+    const { accessToken, refreshToken } = generateToken({
       id_u: user.id_u,
       email: user.email,
       username: user.username,
@@ -64,9 +70,13 @@ const loginUser = async (req, res) => {
       permissions: user.permissions,
     });
 
+    // Guardar refresh token en la BD
+    await saveRefreshToken(user.id_u, refreshToken);
+
     res.status(200).json({
       success: true,
-      token,
+      accessToken,
+      refreshToken,
       user: {
         id_u: user.id_u,
         email: user.email,
@@ -82,7 +92,6 @@ const loginUser = async (req, res) => {
     res.status(500).json({ message: "Error en el servidor" });
   }
 };
-
 // REGISTER
 const registerUser = async (req, res) => {
   try {

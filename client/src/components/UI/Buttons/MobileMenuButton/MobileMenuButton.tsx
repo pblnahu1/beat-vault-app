@@ -1,9 +1,5 @@
 import { Menu, X } from 'lucide-react';
-
-interface MobileMenuButtonProps {
-  menuOpen: boolean;
-  setMenuOpen: (open: boolean) => void;
-}
+import { MobileMenuButtonProps } from '../../../../types/navBar';
 
 export const MobileMenuButton: React.FC<MobileMenuButtonProps> = ({ menuOpen, setMenuOpen }) => (
   <button

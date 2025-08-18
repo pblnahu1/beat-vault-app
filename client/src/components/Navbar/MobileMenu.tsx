@@ -1,16 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { NavLinks } from './NavLinks';
-import { AccountActions } from './AccountActions';
+import React, { FC } from 'react';
 import { SearchBar } from '../UI/SearchComponent';
-import { Store, X } from 'lucide-react';
+import { UserCog2, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { ButtonGestion } from '../UI/Buttons/ButtonGestionProps';
+import { LogoutButton } from '../UI/Buttons/LogoutButton';
+import { MobileMenuProps } from '../../types/navBar';
 
-export const MobileMenu = ({ navLinks, token, username, handleSearch, setMenuOpen }: any) => (
+export const MobileMenu: FC<MobileMenuProps> = ({ navLinks, token, username, handleSearch, setMenuOpen }) => (
   <div className="md:hidden bg-zinc-950/95 backdrop-blur-md fixed inset-0 z-50 flex flex-col">
     <div className="flex items-center justify-between px-4 py-4 border-b border-zinc-800">
       <Link to="/" className="flex items-center gap-2 text-xl font-semibold" onClick={() => setMenuOpen(false)}>
-        <Store className="text-blue-600" />
-        <span className="text-slate-50 uppercase">Fluxshop</span>
+        <img src="/logo_cart.svg" alt="Logo Cart" className="w-10 h-10 bg-indigo-100 rounded-xl" />
       </Link>
       <button
         className="text-slate-50"
@@ -23,10 +23,47 @@ export const MobileMenu = ({ navLinks, token, username, handleSearch, setMenuOpe
     <div className="px-4 py-6 flex flex-col gap-6 flex-1 overflow-y-auto">
       <SearchBar onSearch={handleSearch} />
       <nav className="flex flex-col gap-2">
-        <NavLinks navLinks={navLinks} onClick={() => setMenuOpen(false)} />
+        {navLinks.map(({ to, label, icon, badge }) => (
+          <Link
+            key={to}
+            to={to}
+            className="flex items-center gap-3 text-lg text-slate-50 hover:bg-zinc-900 rounded-lg px-3 py-2 transition relative"
+            onClick={() => setMenuOpen(false)}
+          >
+            {icon && (
+              <span className="relative">
+                {React.createElement(icon)}
+                {badge && (
+                  <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {badge}
+                  </span>
+                )}
+              </span>
+            )}
+            {label}
+          </Link>
+        ))}
       </nav>
       <div className="mt-auto flex flex-col gap-2">
-        <AccountActions token={token} username={username} onClose={() => setMenuOpen(false)} />
+        {token && username ? (
+          <>
+            <ButtonGestion
+              username={username}
+              className="ml-2"
+              children="Gestioná tu cuenta"
+            />
+            <LogoutButton />
+          </>
+        ) : (
+          <Link
+            to="/api/auth"
+            className="flex items-center gap-2 text-slate-50 hover:bg-zinc-900 rounded-lg px-3 py-2 transition"
+            onClick={() => setMenuOpen(false)}
+          >
+            <UserCog2 />
+            <span>Cuenta</span>
+          </Link>
+        )}
       </div>
     </div>
   </div>

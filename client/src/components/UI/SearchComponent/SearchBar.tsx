@@ -1,27 +1,23 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { Search } from 'lucide-react'
-
-interface SearchBarProps {
-    placeholder?: string;
-    onSearch: (query: string) => void;
-}
+import { SearchBarProps } from '../../../types/navBar';
 
 export const SearchBar: React.FC<SearchBarProps> = ({
-    placeholder = "Buscar productos...",
-    onSearch,
+  placeholder = "Buscar productos...",
+  onSearch,
 }) => {
 
-    const [query, setQuery] = useState("");
+  const [query, setQuery] = useState("");
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        onSearch(query.trim());
-    }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSearch(query.trim());
+  }
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex items-center bg-zinc-900 rounded-lg shadow px-3 py-2 w-full max-w-md"
+      className="flex items-center bg-zinc-700 rounded-lg shadow px-2 py-1 w-full"
     >
       <input
         type="text"

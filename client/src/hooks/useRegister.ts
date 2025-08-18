@@ -2,24 +2,7 @@ import { useState, useEffect, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../services/authService";
 import { useLoader } from "./useLoader";
-
-interface UseRegisterReturn {
-    email: string;
-    setEmail: (email: string) => void;
-    password: string;
-    setPassword: (password: string) => void;
-    username: string;
-    setUsername: (username: string) => void;
-    showPassword: boolean;
-    setShowPassword: (showPassword: boolean) => void;
-    isSubmitDisabled: boolean;
-    error: string | null;
-    role: number;
-    setRole: (role: number) => void;
-    handleTogglePassword: () => void;
-    handleSubmit: (e: FormEvent) => Promise<void>;
-    successMessage: string | null;
-}
+import { UseRegisterReturn } from "../types/auth";
 
 export const useRegister = (): UseRegisterReturn => {
     const [successMessage, setSuccessMessage] = useState<string | null>(null);

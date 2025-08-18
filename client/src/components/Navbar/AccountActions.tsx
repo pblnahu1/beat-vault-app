@@ -5,7 +5,7 @@ import { UserCog2 } from 'lucide-react';
 
 export const AccountActions = ({ token, username, onClose }: {
     token: string | null,
-    username?: string,
+    username?: string | null | undefined,
     onClose?: () => void
 }) => (
     token && username ? (
