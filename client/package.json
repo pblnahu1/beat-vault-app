@@ -1,8 +1,16 @@
 {
-  "name": "modern-ecommerce",
+  "name": "beat-vault",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pblnahu1/beat-vault-app"
+  },
+  "bugs": {
+    "url": "https://github.com/pblnahu1/beat-vault-app/issues"
+  },
+  "homepage": "https://github.com/pblnahu1/beat-vault-app",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
