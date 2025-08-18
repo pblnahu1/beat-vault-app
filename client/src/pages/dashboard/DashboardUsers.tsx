@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { useManagementUsers } from "../../hooks/useManagementUsers";
 import { DashboardHeaderUsers, DashboardNavigationUsers, DashboardOverviewCardsUsers, DashboardSectionContentUsers } from "../../components/DashboardUsers";
+// import { ROLES } from "../../components/DashboardUsers/navItemsDashboard";
+// import { AdminProducts } from "../../components/ProductManagementUserAdmin/admin/AdminProducts";
 
 export default function DashboardLayout() {
   const currentUser = useManagementUsers();
@@ -16,6 +18,14 @@ export default function DashboardLayout() {
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+
+  const isActiveSection = () => {
+    if(activeSection === 'allCards') {
+      return <DashboardOverviewCardsUsers onSectionChange={handleSectionChange} />
+    } else {
+      return <DashboardSectionContentUsers activeSection={activeSection} />
+    }
+  }
 
   return (
     <div className="min-h-screen text-white">
@@ -33,11 +43,7 @@ export default function DashboardLayout() {
       />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {activeSection === 'allCards' ? (
-          <DashboardOverviewCardsUsers onSectionChange={handleSectionChange} />
-        ) : (
-          <DashboardSectionContentUsers activeSection={activeSection} />
-        )}
+        {isActiveSection()}
       </main>
     </div>
   );

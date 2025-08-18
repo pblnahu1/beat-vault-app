@@ -1,6 +1,9 @@
 // src/services/productService.ts
 import { apiClient } from "../core/apiClient";
 import { Product } from "../types/prodCart";
+import authService from "./authService";
+
+const getAuthToken = () => authService.getToken() || "";
 
 export const getProducts = async (): Promise<Product[]> => {
   return apiClient<Product[]>("/products");
@@ -11,9 +14,10 @@ export const getProductById = async (id: number): Promise<Product> => {
 };
 
 export const createProducto = async (product: Omit<Product, "id">): Promise<Product> => {
-  return apiClient<Product>("/product", {
+  return apiClient<Product>("/admin/products/create", {
     method: "POST",
     body: product,
+    token: getAuthToken(),
   });
 };
 
@@ -21,15 +25,17 @@ export const updateProduct = async (
   id: number,
   product: Partial<Product>
 ): Promise<Product> => {
-  return apiClient<Product>(`/product/${id}`, {
+  return apiClient<Product>(`/admin/products/update/${id}`, {
     method: "PUT",
     body: product,
+    token: getAuthToken(),
   });
 };
 
 export const deleteProduct = async (id: number): Promise<void> => {
-  return apiClient<void>(`/product/${id}`, {
+  return apiClient<void>(`/admin/products/delete/${id}`, {
     method: "DELETE",
+    token: getAuthToken(),
   });
 };
 

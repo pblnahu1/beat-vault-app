@@ -1,4 +1,5 @@
-import { User, HistoryIcon, LayoutDashboard, DownloadCloud } from "lucide-react";
+/* eslint-disable react-refresh/only-export-components */
+import { User, HistoryIcon, LayoutDashboard, DownloadCloud, ListPlusIcon } from "lucide-react";
 
 const navItems = [
   {
@@ -23,6 +24,12 @@ const navItems = [
     label: "Exportar tus datos",
     icon: <DownloadCloud />,
     description: "Podés exportar tus datos personales en un archivo PDF o CSV"
+  },
+  {
+    id: 'admin-products',
+    label: "Administración de Productos",
+    icon: <ListPlusIcon />,
+    description: "Sólo para usuarios administradores. Podés administrar los productos: agregar, eliminar y editar nuevos productos o existentes."
   }
 ];
 
@@ -30,6 +37,11 @@ const roleNames: Record<number, string> = {
   1: "Administrador",
   2: "Usuario Común",
 };
+
+export const ROLES = {
+  ADMIN: 1,
+  CUSTOMER: 2,
+} as const;
 
 export {
   navItems,

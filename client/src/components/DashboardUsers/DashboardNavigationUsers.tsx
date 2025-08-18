@@ -1,5 +1,7 @@
 // src/pages/dashboard/components/DashboardNavigation.tsx
 import { navItems } from "./navItemsDashboard";
+import { useManagementUsers } from "../../hooks/useManagementUsers";
+import { ROLES } from "./navItemsDashboard";
 
 interface DashboardNavigationProps {
   activeSection: string;
@@ -12,12 +14,20 @@ export function DashboardNavigationUsers({
   isMobileMenuOpen, 
   onSectionChange 
 }: DashboardNavigationProps) {
+  const currentUser = useManagementUsers();
   return (
     <nav className="bg-gray-900/50 backdrop-blur-sm border-b border-gray-800 sticky top-16 z-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Desktop Navigation */}
         <div className="hidden sm:flex space-x-1 py-3 overflow-x-auto">
-          {navItems.map((item) => (
+          {navItems
+            .filter((item) => {
+              if(item.id==='admin-products' && currentUser?.role_id !== ROLES.ADMIN){
+                return false;
+              }
+              return true;
+            })
+            .map((item) => (
             <button
               key={item.id}
               onClick={() => onSectionChange(item.id)}

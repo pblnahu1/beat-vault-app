@@ -16,6 +16,9 @@ export interface UseProductsReturn {
   fetchProducts: () => Promise<void>;
   fetchProductById: (id: number) => Promise<Product | null>;
   fetchProductsByCategory: (category: string) => Promise<void>;
+  addProduct: (product: Omit<Product, "id">) => Promise<void>;
+  editProduct: (id: number, product: Partial<Product>) => Promise<void>;
+  removeProduct: (id: number) => Promise<void>;
 }
 export interface AddToCartButtonProps {
   isLogged: boolean;
