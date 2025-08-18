@@ -1,58 +1,59 @@
 import dotenv from "dotenv";
 dotenv.config();
-// import { query } from "../../config/db.js";
+import fs from "fs";
+import path from "path";
+import multer from "multer";
 import { deleteProductById, findProductById, insertProduct, updateProductById } from "../../services/productService.js";
 
-// constante base para URL de imágenes (mejor que hardcodear directamente dentro del map)
 const IMAGE_BASE_URL = process.env.IMAGE_BASE_URL;
+
+const __dirname = path.resolve(); // para ESM
+const UPLOAD_DIR = path.join(__dirname, "public/products_screen");
+const SEED_PATH = path.join(__dirname, "seeds/products.seed.json");
+
+if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+
+// Configuración de multer
+const storage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, UPLOAD_DIR),
+  filename: (_req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    const name = path.basename(file.originalname, ext).replace(/\s+/g, "_");
+    cb(null, `${name}-${Date.now()}${ext}`);
+  },
+});
+export const upload = multer({ storage });
 
 /**
  * Crear un nuevo producto (Solo para usuario admin)
  */
 
 export const createProduct = async (req, res) => {
-    try {
-        const {name, description, price, image, category} = req.body;
-
-        if(!name || !description || !price || !image || !category) {
-            return res.status(400).json({
-                success: false,
-                error: "Todos los campos son requeridos"
-            });
-        }
-
-        // const QUERY = await query(
-        //     "INSERT INTO fluxshop_products (name_p, description_p, price_p, image_p, category_p) VALUES ($1, $2, $3, $4, $5) RETURNING *", [name, description, price, image, category]
-        // );
-
-        // const p = QUERY.rows[0];
-        // const product = {
-        //     id: p.id_p,
-        //     name: p.name_p,
-        //     description: p.description_p,
-        //     price: p.price_p,
-        //     image: `${IMAGE_BASE_URL}/${p.image_p}`,
-        //     category: p.category_p
-        // }
-
-        // res.status(201).json(product);
-
-
-        const newProductId = await insertProduct(name, description, price, image, category);
-        res.status(201).json({
-            success: true,
-            message: "Producto creado exitosamente",
-            productId: newProductId
-        })
-
-    } catch (error) {
-        console.error("Error al crear producto: ",error);
-        res.status(500).json({
-            success:false,
-            error: "Error al crear el produccto"
-        })
+  try {
+    const { name, description, price, category } = req.body;
+    if (!req.file || !name || !description || !price || !category) {
+      return res.status(400).json({ success: false, error: "Todos los campos son requeridos" });
     }
-}
+
+    const image = `/products_screen/${req.file.filename}`;
+    const newProductId = await insertProduct(name, description, Number(price), image, category);
+
+    // Actualizo seed JSON
+    const seedData = JSON.parse(fs.readFileSync(SEED_PATH, "utf-8"));
+    seedData.push({ name, description, price: Number(price), image, category });
+    fs.writeFileSync(SEED_PATH, JSON.stringify(seedData, null, 2));
+
+    res.status(201).json({
+      success: true,
+      message: "Producto creado exitosamente",
+      productId: newProductId,
+      imageUrl: image,
+    });
+  } catch (error) {
+    console.error("Error al crear producto: ", error);
+    res.status(500).json({ success: false, error: "Error al crear el producto" });
+  }
+};
 
 /**
  * Actualizar un producto existente (solo para user admin)
