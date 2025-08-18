@@ -1,4 +1,4 @@
-import { apiClient } from "../api/apiClient"
+import { apiClient } from "../core/apiClient"
 import authService from "./authService";
 
 export const orderService = {

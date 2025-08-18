@@ -1,25 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// uso zustand para un mejor manejo de datos del carrito
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { CartItem, Product } from '../types/prodCart';
+import { CartItem } from '../types/prodCart';
 import cartService from '../services/cartService';
 import AuthService from '../services/authService';
-
-interface CartStore {
-  items: CartItem[];
-  isLoading: boolean;
-  error: string | null;
-  total: number;
-  addItem: (product: Product) => Promise<void>;
-  removeItem: (productId: number) => Promise<void>;
-  updateQuantity: (cartId: number, productCartId: number, quantity: number) => Promise<void>;
-  clearCart: () => Promise<void>;
-  syncWithBackend: () => Promise<void>;
-  loadCart: () => Promise<void>;
-  setError: (error: string | null) => void;
-  setLoading: (loading: boolean) => void;
-  resetCartLocal: () => void;
-}
+import { CartStore } from '../types/prodCart';
 
 const calculateTotal = (items: CartItem[]) => {
   const total = items.reduce((sum, item) => {

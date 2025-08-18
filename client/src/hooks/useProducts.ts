@@ -2,14 +2,7 @@ import {useState, useEffect} from "react";
 import { Product } from "../types/prodCart";
 import { getProducts, getProductById, getProductsByCategory } from "../services/productService";
 import { useLoader } from "./useLoader";
-
-interface UseProductsReturn {
-    products: Product[];
-    error: string | null;
-    fetchProducts: () => Promise<void>;
-    fetchProductById: (id: number) => Promise<Product | null>;
-    fetchProductsByCategory: (category: string) => Promise<void>;
-}
+import { UseProductsReturn } from "../types/prodCart";
 
 export const useProducts = (): UseProductsReturn => {
     const [products, setProducts] = useState<Product[]>([]);

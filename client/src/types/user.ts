@@ -4,7 +4,7 @@ export interface User {
   username: string;
   token: string;
   needsReactivation?:boolean;
-  role_id: number; // Agregado para manejar roles
+  role_id: number; 
 }
 
 export interface UpdateProfilePayload {

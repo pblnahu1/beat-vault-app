@@ -1,14 +1,5 @@
 import cartService from "../../services/cartService.ts";
-
-interface HandleBuyClickProps {
-  clearCart: () => void;
-}
-
-// type PurchaseResult = {
-//   success: boolean;
-//   purchaseId?: string;
-//   message?: string;
-// }
+import { HandleBuyClickProps } from "../../types/prodCart.ts";
 
 const handleBuyClick = async ({clearCart}: HandleBuyClickProps): Promise<void> => {
   const result = await cartService.handlePurchase();

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 export const NavLinks = ({ navLinks, onClick }: { navLinks: any[], onClick?: () => void }) => (
@@ -12,7 +13,7 @@ export const NavLinks = ({ navLinks, onClick }: { navLinks: any[], onClick?: () 
       >
         {icon && (
           <span className="relative">
-            {icon}
+            {React.createElement(icon)}
             {badge && (
               <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                 {badge}

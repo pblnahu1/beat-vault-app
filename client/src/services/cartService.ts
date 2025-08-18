@@ -1,5 +1,5 @@
 // services/cartService.ts
-import { apiClient } from "../api/apiClient";
+import { apiClient } from "../core/apiClient";
 import { CartResponse } from "../types/prodCart";
 import AuthService from "./authService";
 

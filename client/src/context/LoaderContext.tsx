@@ -1,10 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useState, ReactNode } from "react";
-
-type LoaderContextType = {
-    loading: boolean;
-    setLoading: (value: boolean) => void;
-}
+import { LoaderContextType } from "../types/loader";
 
 export const LoaderContext = createContext<LoaderContextType | undefined>(undefined);
 

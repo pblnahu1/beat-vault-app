@@ -1,5 +1,5 @@
 // src/services/productService.ts
-import { apiClient } from "../api/apiClient";
+import { apiClient } from "../core/apiClient";
 import { Product } from "../types/prodCart";
 
 export const getProducts = async (): Promise<Product[]> => {

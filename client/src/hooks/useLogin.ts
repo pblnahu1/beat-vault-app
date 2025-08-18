@@ -3,19 +3,7 @@ import { useNavigate } from "react-router-dom";
 import authService, { login } from "../services/authService";
 import { useCart } from "../store/useCart";
 import { useLoader } from "./useLoader";
-
-interface UseLoginReturn {
-    email: string;
-    setEmail: (email: string) => void;
-    password: string;
-    setPassword: (password: string) => void;
-    showPassword: boolean;
-    setShowPassword: (showPassword: boolean) => void;
-    isSubmitDisabled: boolean;
-    errorMessage: string | null;
-    handleTogglePassword: () => void;
-    handleSubmit: (e: FormEvent) => Promise<void>;
-}
+import { UseLoginReturn } from "../types/auth";
 
 export const useLogin = (): UseLoginReturn => {
     const [email, setEmail] = useState<string>("");

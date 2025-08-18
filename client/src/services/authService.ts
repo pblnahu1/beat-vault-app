@@ -1,12 +1,6 @@
 import { User, UpdateProfilePayload, UpdateProfileResponse } from "../types/user.ts";
-import { apiClient } from "../api/apiClient.ts";
-
-interface RegisterResponse {
-    id?: number | string;
-    email?: string;
-    username?: string;
-    role_id?: number;
-}
+import { apiClient } from "../core/apiClient.ts";
+import { RegisterResponse } from "../types/auth.ts";
 
 /**
  * Función para iniciar sesión
