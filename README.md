@@ -27,6 +27,8 @@ BeatVault es una aplicación de comercio electrónico sencilla pero potente. Per
 - Supabase
 - JWT para autenticación
 - Bcrypt para contraseñas
+- CSV-Writer para convertir objetos o matrices de JavaScript en una cadena CSV o escribirlos directamente en un archivo. (CsvStringifier para grandes datos)
+- JsPDF/PDFKIT para generar archivos PDF en JavaScript
 
 **DevOps & Herramientas**
 - Docker y Docker Compose
@@ -79,6 +81,7 @@ El proyecto está organizado en dos grandes módulos:
     - `/cart/count`: Contar cuántos productos tengo en el carrito
     - `/api/purchases/history`: Verificar todo el historial de compras
     - `/api/cart/purchase`: Insertar los productos del carrito que compré (no literalmente)
+    - `/api/export-data`: Exporta datos en formato PDF o CSV (get method)
     - **Protected Route**
     - `/dashboard/:username`: Dashboard del usuario con login/register exitoso (get method)
 - **Persistencia**: PostgreSQL, dockerizada y Supabase.
