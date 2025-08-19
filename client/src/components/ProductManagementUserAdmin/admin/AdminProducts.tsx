@@ -92,9 +92,6 @@ export function AdminProducts() {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8">
-      <h1 className="text-3xl sm:text-4xl font-bold text-white text-center sm:text-left">
-        Administrar Productos
-      </h1>
 
       <div className="bg-gray-800 p-6 rounded-xl shadow-md max-w-full mx-auto sm:mx-0 border border-stone-500">
         <h2 className="text-xl font-semibold text-indigo-400 mb-4">Crear Producto</h2>

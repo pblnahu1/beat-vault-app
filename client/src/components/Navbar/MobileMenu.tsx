@@ -1,12 +1,11 @@
 import React, { FC } from 'react';
-import { SearchBar } from '../UI/SearchComponent';
 import { UserCog2, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ButtonGestion } from '../UI/Buttons/ButtonGestionProps';
 import { LogoutButton } from '../UI/Buttons/LogoutButton';
 import { MobileMenuProps } from '../../types/navBar';
 
-export const MobileMenu: FC<MobileMenuProps> = ({ navLinks, token, username, handleSearch, setMenuOpen }) => (
+export const MobileMenu: FC<MobileMenuProps> = ({ navLinks, token, username, setMenuOpen }) => (
   <div className="md:hidden bg-zinc-950/95 backdrop-blur-md fixed inset-0 z-50 flex flex-col">
     <div className="flex items-center justify-between px-4 py-4 border-b border-zinc-800">
       <Link to="/" className="flex items-center gap-2 text-xl font-semibold" onClick={() => setMenuOpen(false)}>
@@ -21,7 +20,6 @@ export const MobileMenu: FC<MobileMenuProps> = ({ navLinks, token, username, han
       </button>
     </div>
     <div className="px-4 py-6 flex flex-col gap-6 flex-1 overflow-y-auto">
-      <SearchBar onSearch={handleSearch} />
       <nav className="flex flex-col gap-2">
         {navLinks.map(({ to, label, icon, badge }) => (
           <Link

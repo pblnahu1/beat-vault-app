@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import { SearchBar } from "../UI/SearchComponent";
 import { NavLinks } from "./NavLinks";
 import { AccountActions } from "./AccountActions";
 import { MobileMenu } from "./MobileMenu";
@@ -8,7 +7,7 @@ import { MobileMenuButton } from "../UI/Buttons/MobileMenuButton";
 import { useNavbar } from "../../hooks/useNavbar";
 
 export const Navbar: FC = () => {
-  const { menuOpen, setMenuOpen, navLinks, token, username, handleSearch } = useNavbar();
+  const { menuOpen, setMenuOpen, navLinks, token, username } = useNavbar();
   return (
     <nav className="bg-stone-900 shadow-md border-b-2 border-b-stone-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -21,9 +20,6 @@ export const Navbar: FC = () => {
             />
           </Link>
           <div className="hidden md:flex gap-8 items-center">
-            <div className="w-64 mr-6">
-              <SearchBar onSearch={handleSearch} />
-            </div>
             <NavLinks navLinks={navLinks} />
             <AccountActions token={token} username={username} />
           </div>
@@ -36,7 +32,6 @@ export const Navbar: FC = () => {
           navLinks={navLinks}
           token={token}
           username={username}
-          handleSearch={handleSearch}
           setMenuOpen={setMenuOpen}
         />
       )}

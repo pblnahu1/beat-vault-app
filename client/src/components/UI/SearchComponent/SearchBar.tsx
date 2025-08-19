@@ -1,38 +1,37 @@
-import React, { useState } from 'react'
-import { Search } from 'lucide-react'
-import { SearchBarProps } from '../../../types/navBar';
+import React from 'react';
 
-export const SearchBar: React.FC<SearchBarProps> = ({
-  placeholder = "Buscar productos...",
-  onSearch,
+interface SearchBarProps {
+  searchTerm: string;
+  setSearchTerm: (v: string) => void;
+  categoryFilter: string;
+  setCategoryFilter: (v: string) => void;
+  categories: string[];
+}
+
+export const SearchBar: React.FC<SearchBarProps> = ({ 
+  searchTerm, setSearchTerm, 
+  categoryFilter, setCategoryFilter, 
+  categories 
 }) => {
-
-  const [query, setQuery] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSearch(query.trim());
-  }
-
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex items-center bg-zinc-700 rounded-lg shadow px-2 py-1 w-full"
-    >
+    <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 mb-8">
       <input
         type="text"
-        className="flex-1 bg-transparent outline-none text-slate-100 placeholder:text-slate-400 px-2"
-        placeholder={placeholder}
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Buscar por nombre..."
+        className="p-2 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <button
-        type="submit"
-        className="text-blue-500 hover:text-blue-400 transition-colors p-1"
-        aria-label="Buscar"
+      <select
+        className="p-2 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+        value={categoryFilter}
+        onChange={(e) => setCategoryFilter(e.target.value)}
       >
-        <Search size={22} />
-      </button>
-    </form>
-  )
-}
+        <option value="">Todas las categorías</option>
+        {categories.map((cat) => (
+          <option key={cat} value={cat}>{cat}</option>
+        ))}
+      </select>
+    </div>
+  );
+};
