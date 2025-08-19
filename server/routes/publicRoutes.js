@@ -29,6 +29,7 @@ import {
 } from "../controllers/profile.js";
 import { createPurchase } from "../controllers/purchaseController.js";
 import { getPurchaseHistory } from "../controllers/getUserPurchase.js";
+import { exportUserData } from "../controllers/exportController.js";
 
 const r = express.Router();
 
@@ -114,5 +115,13 @@ r.get("/cart/count", ensureToken, getCartItemCount);
 // purchases history and purchase items
 r.get("/api/purchases/history", ensureToken, getPurchaseHistory);
 r.post("/api/cart/purchase", ensureToken, createPurchase);
+
+// EXPORT DATA
+/**
+ * @route GET /export
+ * @desc Exporta los datos del usuario en formato CSV o PDF
+ * @access Private
+*/
+r.get("/api/export-data", ensureToken, exportUserData);
 
 export default r;
