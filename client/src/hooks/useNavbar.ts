@@ -21,9 +21,5 @@ export const useNavbar = () => {
     { to: "/cart", label: "Carrito", icon: ShoppingCart, badge: itemCount > 0 ? itemCount : undefined }
   ];
 
-  const handleSearch = (query: string) => {
-    console.log("Buscando: ", query);
-  };
-
-  return { menuOpen, setMenuOpen, navLinks, token, username, handleSearch };
+  return { menuOpen, setMenuOpen, navLinks, token, username};
 };

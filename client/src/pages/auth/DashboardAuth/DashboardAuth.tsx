@@ -22,7 +22,7 @@ export default function DashboardAuth() {
 
   const renderTitle = (): React.ReactNode => {
     return (
-      <h1 className="text-3xl md:text-4xl font-extrabold mb-6 text-slate-50 uppercase">
+      <h1 className="text-2xl md:text-4xl font-extrabold mb-6 text-slate-50 uppercase">
         {title}
       </h1>
     );
@@ -85,7 +85,7 @@ export default function DashboardAuth() {
 
   const renderContent = (): React.ReactNode => {
     return (
-      <div className="w-[1300px] h-[520px] md:h-[600px] mx-auto flex flex-col justify-center items-center text-center bg-gradient-to-br from-indigo-700 via-indigo-900 to-blue-950 rounded-3xl shadow-lg px-20">
+      <div className="w-[90%] md:w-[1300px] mx-auto mt-10 flex flex-col justify-center items-center text-center bg-gradient-to-br from-indigo-700 via-indigo-900 to-blue-950 rounded-3xl shadow-lg p-8 md:p-20">
         {renderIcon()}
         {renderTitle()}
         {renderSubtitle()}

@@ -5,17 +5,26 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  schedule:
+    - cron: "0 */6 * * *" # corre cada 6 horas
 
 jobs:
-  test:
+  supabase-keepalive:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout código
-        uses: actions/checkout@v4
+      - name: Checkout código 
+        uses: actions/checkout@v4 
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-      - name: Build containers (Docker compose)
-        run: docker compose build
+      - name: Instalar dependencias
+        run: cd server && npm install
+
+      - name: Run Supabase script
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: cd server && node scripts/supabase_keepalive.js

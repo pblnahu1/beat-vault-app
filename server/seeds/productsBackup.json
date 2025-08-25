@@ -82,12 +82,5 @@
     "price": 199.99,
     "image": "/products_screen/product_12.jpg",
     "category": "Albums"
-  },
-  {
-    "name": "Logo the weeknd",
-    "description": "",
-    "price": 99,
-    "image": "/products_screen/50f2a0d9068766aa206e4f04ab74636e-1755549363260.jpg",
-    "category": "Logos"
   }
 ]
