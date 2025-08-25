@@ -1,8 +1,8 @@
 /** TODO: Code */
 // Este script, será una automatización para interactuar con la Base de Datos en Supabase y eliminarlos según un intervalo de tiempo. Servirá para mantener el free trial que nos brinda supabase. 
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
 import { createClient } from '@supabase/supabase-js'
-dotenv.config();
+// dotenv.config();
 
 const SUPABASE_URL = "https://fiytqkeoolnmspmbjijo.supabase.co"
 const SUPABASE_KEY = process.env.SUPABASE_KEY
