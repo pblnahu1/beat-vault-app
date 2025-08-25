@@ -27,4 +27,4 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-        run: cd server && node scripts/supabase-keepalive.js
+        run: cd server && node scripts/supabase_keepalive.js
