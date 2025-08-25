@@ -9,10 +9,10 @@ on:
     - cron: "0 */6 * * *" # corre cada 6 horas
 
 jobs:
-  test:
+  supabase-keepalive:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout código
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up Node.js
@@ -21,10 +21,10 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: cd server && npm install
 
       - name: Run Supabase script
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-        run: node supabase-keepalive.js
+        run: cd server && node scripts/supabase-keepalive.js
