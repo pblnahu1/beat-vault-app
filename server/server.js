@@ -15,6 +15,8 @@ import publicRoutes from "./routes/publicRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import { seedProducts } from "./seeds/products.seed.js";
 // import hashPasswordExec from "./scripts/hashPasswordExec.js";
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./config-swagger-documentation-api-rest/swagger-documentation-api-rest.js";
 
 const app = express()
 
@@ -38,6 +40,8 @@ app.use(publicRoutes);
 app.use("/admin", adminRoutes);
 
 // hashPasswordExec();
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`Servidor corriendo en puerto http://0.0.0.0:${PORT}`);
